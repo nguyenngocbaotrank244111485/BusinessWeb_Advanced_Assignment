@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Product, ProductService } from '../services/product-service';
 
 @Component({
@@ -19,7 +19,10 @@ export class PrintifyHomepage implements OnInit {
   searchTerm = '';
   brokenImageIds = new Set<Product['_id']>();
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit(): void {
     this.loadProducts();
@@ -42,11 +45,13 @@ export class PrintifyHomepage implements OnInit {
         ];
 
         this.isLoading = false;
+        this.cdr.markForCheck();
       },
       error: (error) => {
         console.error('Lỗi tải sản phẩm:', error);
         this.errorMessage = 'Không thể tải sản phẩm.';
         this.isLoading = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -87,12 +92,12 @@ export class PrintifyHomepage implements OnInit {
 
   // Hiển thị tên danh mục
   categoryLabel(category: string): string {
-    return category;
+    return this.productService.categoryLabel(category);
   }
 
   // Icon danh mục
   categoryIcon(category: string): string {
-    const name = category.toLowerCase();
+    const name = this.categoryLabel(category).toLowerCase();
 
     if (name.includes('áo')) return '👕';
     if (name.includes('ly') || name.includes('cốc')) return '☕';
