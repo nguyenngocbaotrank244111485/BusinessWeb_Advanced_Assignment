@@ -1,11 +1,11 @@
 [
   {
-    "_id": "prd_tee",
+    "_id": "prd001",
     "name": "Áo thun Cotton Basic",
     "category": "ao-thun",
     "price": 180000,
     "description": "Áo thun cotton 100%, form regular, in thiết kế theo yêu cầu.",
-    "img_display": "/images/products/tee.png",
+    "img_display": "images/products/prd001_white.webp",
     "img_detail": [
       "/images/products/tee_1.png",
       "/images/products/tee_2.png"
@@ -38,7 +38,7 @@
     "updatedAt": "2026-11-08T06:34:47.624Z"
   },
   {
-    "_id": "prd_mug",
+    "_id": "prd",
     "name": "Cốc sứ In Hình",
     "category": "coc-su",
     "price": 120000,

@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+  "start": "node index.js",
+  "dev": "nodemon index.js",
+  "seed:survey": "node scripts/seed-survey.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -11,10 +14,13 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "connect-mongo": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^18.0.10",
     "express": "^5.3.0",
-    "mongodb": "^7.8.0"
+    "express-session": "^1.19.0",
+    "helmet": "^8.3.0",
+    "mongodb": "^7.9.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
