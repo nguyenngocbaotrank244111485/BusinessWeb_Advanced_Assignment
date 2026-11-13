@@ -26,7 +26,4 @@
 - **Tồn kho thấp**: `prd604-clear` (5), `prd604-white` (4), `prd404-white` (3) → có data cho filter "tồn kho thấp"
 - **Sản phẩm đã ẩn**: `prd605` (Móc khóa Mica vuông) `isActive=false` ở admin, tự động ẩn khỏi customer → demo được rule BR22 "không xóa cứng"
 
-### 🔗 Tạo Pull Request
-GitHub gợi ý link: https://github.com/nguyenngocbaotrank244111485/BusinessWeb_Advanced_Assignment/pull/new/thai
 
-Bạn mở link trên để tạo PR cho leader review nhé. Nếu muốn tôi chỉnh gì trong data (giá, mô tả, số lượng stock, thêm/bớt khách hàng) thì cứ nói!
