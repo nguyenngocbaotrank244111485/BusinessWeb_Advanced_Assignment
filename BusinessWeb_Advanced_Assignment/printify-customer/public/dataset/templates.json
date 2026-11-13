@@ -3,7 +3,7 @@
     "_id": "tpl_tee_minimal",
     "name": "Tối giản chữ đen",
     "description": "Mẫu chữ đơn giản giữa ngực.",
-    "productId": "prd_tee",
+    "productId": "prd101",
     "status": "ACTIVE",
     "styleTags": [
       "minimal",
@@ -33,7 +33,7 @@
     "_id": "tpl_tee_retro",
     "name": "Retro sunset",
     "description": "Họa tiết hoàng hôn phong cách retro.",
-    "productId": "prd_tee",
+    "productId": "prd101",
     "status": "ACTIVE",
     "styleTags": [
       "retro",

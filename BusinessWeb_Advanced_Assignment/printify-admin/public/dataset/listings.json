@@ -3,7 +3,7 @@
     "_id": "lst_001",
     "sellerId": "usr_c2",
     "designId": "dsg_c2_tee_art",
-    "productId": "prd_tee",
+    "productId": "prd101",
     "title": "Wave Art - họa tiết sóng biển",
     "description": "Họa tiết sóng biển tối giản, hợp áo thun màu sáng.",
     "tags": [
@@ -27,7 +27,7 @@
     "_id": "lst_002",
     "sellerId": "usr_c2",
     "designId": "dsg_c2_mug_art",
-    "productId": "prd_mug",
+    "productId": "prd301",
     "title": "Fan Art nhân vật",
     "description": "Hình fan art nhân vật hoạt hình.",
     "tags": [

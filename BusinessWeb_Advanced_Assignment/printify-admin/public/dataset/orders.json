@@ -7,9 +7,9 @@
     "items": [
       {
         "orderItemId": "oi_1001_1",
-        "productId": "prd_mug",
-        "productName": "Cốc sứ In Hình",
-        "variantId": "prd_mug-350ml-white",
+        "productId": "prd301",
+        "productName": "Cốc sứ In Hình 350ml",
+        "variantId": "prd301-white",
         "qty": 2,
         "unitPrice": 120000,
         "designId": null,
@@ -69,9 +69,9 @@
     "items": [
       {
         "orderItemId": "oi_1002_1",
-        "productId": "prd_tee",
+        "productId": "prd101",
         "productName": "Áo thun Cotton Basic",
-        "variantId": "prd_tee-M-white",
+        "variantId": "prd101-white-m",
         "qty": 3,
         "unitPrice": 180000,
         "designId": "dsg_c1_tee",
@@ -155,9 +155,9 @@
     "items": [
       {
         "orderItemId": "oi_1003_1",
-        "productId": "prd_tee",
+        "productId": "prd101",
         "productName": "Áo thun Cotton Basic",
-        "variantId": "prd_tee-L-black",
+        "variantId": "prd101-black-l",
         "qty": 1,
         "unitPrice": 180000,
         "designId": "dsg_c1_buyer",
@@ -265,9 +265,9 @@
     "items": [
       {
         "orderItemId": "oi_1004_1",
-        "productId": "prd_key",
-        "productName": "Móc khóa Acrylic",
-        "variantId": "prd_key-FREE-clear",
+        "productId": "prd604",
+        "productName": "Móc khóa Mica chữ nhật",
+        "variantId": "prd604-clear",
         "qty": 4,
         "unitPrice": 45000,
         "designId": null,

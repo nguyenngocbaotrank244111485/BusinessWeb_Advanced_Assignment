@@ -5,8 +5,8 @@
     "items": [
       {
         "_id": "ci_c1_1",
-        "productId": "prd_key",
-        "variantId": "prd_key-FREE-clear",
+        "productId": "prd604",
+        "variantId": "prd604-clear",
         "qty": 1,
         "selected": true,
         "designId": null,
@@ -21,8 +21,8 @@
     "items": [
       {
         "_id": "ci_c2_1",
-        "productId": "prd_tee",
-        "variantId": "prd_tee-M-white",
+        "productId": "prd101",
+        "variantId": "prd101-white-m",
         "qty": 2,
         "selected": true,
         "designId": null,
@@ -30,8 +30,8 @@
       },
       {
         "_id": "ci_c2_2",
-        "productId": "prd_mug",
-        "variantId": "prd_mug-350ml-white",
+        "productId": "prd301",
+        "variantId": "prd301-white",
         "qty": 1,
         "selected": false,
         "designId": null,

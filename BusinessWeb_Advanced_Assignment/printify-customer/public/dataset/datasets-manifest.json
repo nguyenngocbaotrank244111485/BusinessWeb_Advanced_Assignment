@@ -12,13 +12,13 @@
     {
       "file": "users-public.json",
       "kind": "array",
-      "count": 3,
+      "count": 8,
       "rule": "Chỉ role CUSTOMER; bỏ passwordHash, otp, failedLogins, lockedUntil, isDemo"
     },
     {
       "file": "products.json",
       "kind": "array",
-      "count": 3,
+      "count": 41,
       "rule": "Chỉ sản phẩm isActive=true"
     },
     {
