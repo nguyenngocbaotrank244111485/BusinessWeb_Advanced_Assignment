@@ -1,0 +1,174 @@
+<!-- C01: Homepage. Các đường dẫn sang màn hình chưa xây dựng sẽ hoạt động sau khi thêm Routing tương ứng. -->
+<div class="home-page">
+  <div class="announcement-bar">
+    <div class="container announcement-inner">
+      <span>✦ Từ ý tưởng thành sản phẩm mang dấu ấn riêng</span>
+      <span class="announcement-right">Thiết kế trực tuyến · Đặt in theo yêu cầu</span>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" routerLink="/" aria-label="PrintYourLife - Trang chủ">
+        <span class="brand-symbol" aria-hidden="true">P<span>✦</span></span>
+        <span class="brand-text">Print<span>Your</span>Life<small>MAKE IT YOURS</small></span>
+      </a>
+
+      <nav class="primary-nav" aria-label="Điều hướng chính">
+        <a routerLink="/" class="nav-current">Trang chủ</a>
+        <a routerLink="/products">Sản phẩm</a>
+        <a routerLink="/market">Marketplace</a>
+        <a routerLink="/about">Giới thiệu</a>
+      </nav>
+
+      <div class="header-search">
+        <span class="header-search-icon" aria-hidden="true">⌕</span>
+        <span class="sr-only">Tìm nhanh sản phẩm</span>
+        <input type="search" aria-label="Tìm nhanh sản phẩm" placeholder="Tìm sản phẩm..." [value]="searchTerm" (input)="onSearchInput($event)" />
+        <a href="#products" aria-label="Đến kết quả tìm kiếm" class="header-search-go">↗</a>
+      </div>
+
+      <div class="header-actions">
+        <a routerLink="/cart" class="cart-link" aria-label="Đi đến giỏ hàng">
+          <span aria-hidden="true">🛒</span><span class="cart-text">Giỏ hàng</span>
+        </a>
+        <a routerLink="/auth/login" class="auth-login">Đăng nhập</a>
+        <a routerLink="/auth/register" class="auth-register">Đăng ký</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero-layout">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> IN ẤN CÁ NHÂN HÓA • PRINTIFY</div>
+          <h1 id="hero-title">Ý tưởng của bạn.<br><span>Đậm chất riêng.</span></h1>
+          <p class="hero-lead">Chọn một sản phẩm bạn thích, thêm hình ảnh và câu chữ của riêng mình, rồi đặt in chỉ qua vài bước đơn giản.</p>
+          <div class="hero-buttons">
+            <a class="btn btn-violet" routerLink="/products">Khám phá sản phẩm <span aria-hidden="true">↗</span></a>
+            <a class="btn btn-outline" routerLink="/market">Xem Marketplace <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="hero-mini-steps" aria-label="Các bước đặt in">
+            <span><b>01</b> Chọn sản phẩm</span>
+            <span class="mini-separator" aria-hidden="true">•</span>
+            <span><b>02</b> Thiết kế</span>
+            <span class="mini-separator" aria-hidden="true">•</span>
+            <span><b>03</b> Đặt in</span>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-label="Minh họa sản phẩm in cá nhân hóa">
+          <div class="hero-orb hero-orb-one"></div>
+          <div class="hero-orb hero-orb-two"></div>
+          <div class="visual-note note-top">✦ Make it yours</div>
+          <div class="visual-canvas">
+            <div class="visual-tshirt"><span class="tshirt-art">YOUR<br>STORY <i>✳</i></span></div>
+          </div>
+          <div class="visual-badge badge-bottom">🎨 <span>Tự tay thiết kế<br><b>Đậm dấu ấn riêng</b></span></div>
+          <div class="visual-sticker" aria-hidden="true">♡</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="benefits-strip" aria-label="Điểm nổi bật của PrintYourLife">
+      <div class="container benefits-layout">
+        <div class="benefit"><div class="benefit-icon">✏️</div><div><strong>Tự thiết kế trực tuyến</strong><span>Thêm chữ, hình ảnh và họa tiết</span></div></div>
+        <div class="benefit"><div class="benefit-icon">🖼️</div><div><strong>Xem và duyệt mẫu in</strong><span>Kiểm tra ảnh mẫu trước khi in tiếp</span></div></div>
+        <div class="benefit"><div class="benefit-icon">🎨</div><div><strong>Marketplace sáng tạo</strong><span>Khám phá thiết kế của cộng đồng</span></div></div>
+      </div>
+    </section>
+
+    <section class="section categories-section" aria-labelledby="categories-heading">
+      <div class="container">
+        <div class="section-heading">
+          <div><div class="section-kicker">KHÁM PHÁ</div><h2 id="categories-heading">Danh mục sản phẩm</h2><p>Chọn chất liệu cho ý tưởng của bạn.</p></div>
+          <a class="text-link" routerLink="/products">Xem tất cả <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="category-grid" *ngIf="!isLoading && categories.length">
+          <a class="category-card" *ngFor="let category of categories" href="#products"
+             (click)="selectCategory(category)" [attr.aria-label]="'Xem sản phẩm thuộc danh mục ' + categoryLabel(category)">
+            <span class="category-card-icon" aria-hidden="true">{{ categoryIcon(category) }}</span>
+            <span class="category-card-name">{{ categoryLabel(category) }}</span>
+            <span class="category-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+        <p *ngIf="isLoading" class="info-message">Đang tải danh mục sản phẩm...</p>
+      </div>
+    </section>
+
+    <section class="section products-section" id="products" aria-labelledby="products-heading">
+      <div class="container">
+        <div class="section-heading products-heading">
+          <div><div class="section-kicker">DÀNH CHO BẠN</div><h2 id="products-heading">Sản phẩm nổi bật</h2><p>Các sản phẩm đang có trong cửa hàng PrintYourLife.</p></div>
+          <a class="text-link" routerLink="/products">Xem toàn bộ <span aria-hidden="true">→</span></a>
+        </div>
+
+        <div class="product-controls">
+          <div class="filter-buttons" aria-label="Lọc sản phẩm theo danh mục">
+            <button type="button" [class.selected]="activeCategory === 'all'" (click)="selectCategory('all')">Tất cả</button>
+            <button type="button" *ngFor="let category of categories" [class.selected]="activeCategory === category" (click)="selectCategory(category)">{{ categoryLabel(category) }}</button>
+          </div>
+          <label class="product-search">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <span class="sr-only">Tìm sản phẩm theo tên</span>
+            <input type="search" aria-label="Tìm nhanh sản phẩm" placeholder="Tìm sản phẩm..." [value]="searchTerm" (input)="onSearchInput($event)" />
+          </label>
+        </div>
+
+        <p class="info-message" *ngIf="isLoading">Đang tải sản phẩm...</p>
+        <p class="info-message error-message" role="alert" *ngIf="errorMessage">{{ errorMessage }}</p>
+        <div class="empty-state" *ngIf="!isLoading && !errorMessage && visibleProducts.length === 0">
+          <span aria-hidden="true">🔎</span><h3>Chưa tìm thấy sản phẩm phù hợp</h3>
+          <button type="button" (click)="clearFilters()" class="btn btn-violet">Xóa bộ lọc</button>
+        </div>
+
+        <div class="product-grid" *ngIf="!isLoading && !errorMessage && visibleProducts.length">
+          <article class="product-card" *ngFor="let product of visibleProducts">
+            <a [routerLink]="['/products', product._id]" class="product-image-wrap" [attr.aria-label]="'Xem chi tiết ' + product.name">
+              <span class="product-tag" *ngIf="product.allowCustomization">Tùy chỉnh được</span>
+              <img *ngIf="!brokenImageIds.has(product._id)" [src]="product.img_display" [alt]="product.name" loading="lazy" (error)="onProductImageError(product._id)" />
+              <span *ngIf="brokenImageIds.has(product._id) || !product.img_display" class="product-placeholder" aria-hidden="true">{{ productIcon(product.category) }}</span>
+            </a>
+            <div class="product-info">
+              <span class="product-category">{{ categoryLabel(product.category) }}</span>
+              <h3><a [routerLink]="['/products', product._id]">{{ product.name }}</a></h3>
+              <div class="price-row"><strong>{{ formatPrice(product.price) }}</strong><span>Giá sản phẩm</span></div>
+              <a [routerLink]="['/products', product._id]" class="product-button">{{ product.allowCustomization ? 'Xem & thiết kế' : 'Xem chi tiết' }} <span aria-hidden="true">→</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section how-section" aria-labelledby="how-heading">
+      <div class="container">
+        <div class="section-heading centered"><div><div class="section-kicker">ĐƠN GIẢN & DỄ DÙNG</div><h2 id="how-heading">Bắt đầu chỉ với 3 bước</h2><p>Từ sản phẩm có sẵn đến thiết kế mang phong cách của riêng bạn.</p></div></div>
+        <div class="steps-grid">
+          <div class="step-card"><span class="step-number">01</span><span class="step-emoji" aria-hidden="true">🛍️</span><h3>Chọn sản phẩm</h3><p>Khám phá các sản phẩm và lựa chọn mẫu, màu sắc, kích thước phù hợp.</p></div>
+          <div class="step-card"><span class="step-number">02</span><span class="step-emoji" aria-hidden="true">🎨</span><h3>Cá nhân hóa</h3><p>Đăng nhập để sử dụng Editor, thêm hình ảnh, chữ và xem trước thiết kế.</p></div>
+          <div class="step-card"><span class="step-number">03</span><span class="step-emoji" aria-hidden="true">📦</span><h3>Đặt in và theo dõi</h3><p>Đặt hàng, thanh toán mô phỏng và theo dõi tiến độ duyệt mẫu, sản xuất.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="marketplace-section" aria-labelledby="marketplace-heading">
+      <div class="container">
+        <div class="marketplace-panel">
+          <div class="marketplace-copy"><span class="marketplace-label">PRINTP MARKETPLACE</span><h2 id="marketplace-heading">Sáng tạo của bạn,<br>cảm hứng của mọi người.</h2><p>Khám phá thiết kế do cộng đồng chia sẻ hoặc đăng bán thiết kế của riêng bạn trên PrintYourLife.</p><a class="btn btn-light" routerLink="/market">Khám phá Marketplace <span aria-hidden="true">↗</span></a></div>
+          <div class="marketplace-art" aria-hidden="true"><span class="market-shape a">✦</span><span class="market-shape b">LOVE</span><span class="market-shape c">CREATE</span><span class="market-shape d">✳</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-main">
+      <div class="footer-about"><span class="footer-brand">Print<span>Your</span>Life</span><p>Nền tảng thiết kế và in ấn sản phẩm cá nhân hóa dành cho những ý tưởng độc đáo.</p></div>
+      <div class="footer-col"><h3>Khám phá</h3><a routerLink="/products">Sản phẩm</a><a routerLink="/market">Marketplace</a><a routerLink="/about">Giới thiệu</a></div>
+      <div class="footer-col"><h3>Tài khoản</h3><a routerLink="/auth/login">Đăng nhập</a><a routerLink="/auth/register">Đăng ký</a><a routerLink="/cart">Giỏ hàng</a></div>
+      <div class="footer-col"><h3>Thông tin</h3><span>Đồ án Phát triển Web Kinh doanh</span><span>Angular · Express · MongoDB</span></div>
+    </div>
+    <div class="container footer-bottom"><span>© 2026 PrintYourLife. All rights reserved.</span><span>Made for creativity ♡</span></div>
+  </footer>
+</div>
