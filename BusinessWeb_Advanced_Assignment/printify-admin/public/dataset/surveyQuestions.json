@@ -1,0 +1,34 @@
+[
+  {
+    "_id": "sq_pu_1",
+    "dimension": "PU",
+    "text": "Trang web giúp tôi thiết kế sản phẩm nhanh hơn.",
+    "scaleType": "LIKERT_5",
+    "orderIndex": 1,
+    "isActive": true
+  },
+  {
+    "_id": "sq_eou_1",
+    "dimension": "EOU",
+    "text": "Tôi thấy trình thiết kế dễ sử dụng.",
+    "scaleType": "LIKERT_5",
+    "orderIndex": 2,
+    "isActive": true
+  },
+  {
+    "_id": "sq_sat_1",
+    "dimension": "SAT",
+    "text": "Tôi hài lòng với trải nghiệm đặt hàng.",
+    "scaleType": "LIKERT_5",
+    "orderIndex": 3,
+    "isActive": true
+  },
+  {
+    "_id": "sq_pi_1",
+    "dimension": "PI",
+    "text": "Tôi sẵn sàng tiếp tục dùng trang web này.",
+    "scaleType": "LIKERT_5",
+    "orderIndex": 4,
+    "isActive": true
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "_id": "faq_1",
+    "category": "Đặt hàng",
+    "question": "Tôi thanh toán đơn hàng như thế nào?",
+    "answer": "Quét QR tĩnh trong vòng 10 phút rồi bấm Tôi đã thanh toán; Staff sẽ xác nhận trong 24 giờ.",
+    "tags": [
+      "thanh toán",
+      "qr"
+    ],
+    "isActive": true
+  },
+  {
+    "_id": "faq_2",
+    "category": "Hoàn hàng",
+    "question": "Tôi có thể hoàn hàng trong bao lâu?",
+    "answer": "Bạn có thể gửi yêu cầu hoàn hàng trong 7 ngày kể từ khi nhận hàng, tối đa 2 lần mỗi đơn.",
+    "tags": [
+      "hoàn hàng",
+      "7 ngày"
+    ],
+    "isActive": true
+  }
+]

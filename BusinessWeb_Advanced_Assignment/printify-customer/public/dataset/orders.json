@@ -1,0 +1,319 @@
+[
+  {
+    "_id": "ord_1001",
+    "userId": "usr_c1",
+    "orderStatus": "PENDING_PAYMENT",
+    "paymentStatus": "PENDING",
+    "items": [
+      {
+        "orderItemId": "oi_1001_1",
+        "productId": "prd_mug",
+        "productName": "Cốc sứ In Hình",
+        "variantId": "prd_mug-350ml-white",
+        "qty": 2,
+        "unitPrice": 120000,
+        "designId": null,
+        "requiresSample": false,
+        "sampleStatus": "NOT_REQUIRED",
+        "sampleReprintCount": 0,
+        "sampleReprints": [],
+        "editRequest": null,
+        "listingSnapshot": null,
+        "printFileUrl": null
+      }
+    ],
+    "shippingInfo": {
+      "name": "Nguyễn Minh An",
+      "phone": "0901234567",
+      "province": "TP. Hồ Chí Minh",
+      "ward": "Phường Bến Nghé",
+      "detail": "12 Nguyễn Huệ",
+      "note": "Giao giờ hành chính"
+    },
+    "totals": {
+      "productSubtotal": 240000,
+      "designFees": 0,
+      "discount": 0,
+      "shipping": 20000,
+      "total": 260000
+    },
+    "paymentOpenedAt": "2026-11-13T06:31:47.624Z",
+    "paymentClaimedAt": null,
+    "paidAt": null,
+    "paymentRejectedReason": null,
+    "cancelReason": null,
+    "cancelledAt": null,
+    "firstSampleStartedAt": null,
+    "printCompletedAt": null,
+    "shippedAt": null,
+    "deliveredAt": null,
+    "trackingCode": null,
+    "timeline": [
+      {
+        "status": "PENDING_PAYMENT",
+        "occurredAt": "2026-11-13T06:31:47.624Z",
+        "actorId": "usr_c1",
+        "note": "Tạo đơn, trừ kho, mở QR 10 phút"
+      }
+    ],
+    "createdAt": "2026-11-13T06:31:47.624Z",
+    "updatedAt": "2026-11-13T06:31:47.624Z"
+  },
+  {
+    "_id": "ord_1002",
+    "userId": "usr_c1",
+    "orderStatus": "PRINT_CONFIRMED",
+    "paymentStatus": "PAID",
+    "items": [
+      {
+        "orderItemId": "oi_1002_1",
+        "productId": "prd_tee",
+        "productName": "Áo thun Cotton Basic",
+        "variantId": "prd_tee-M-white",
+        "qty": 3,
+        "unitPrice": 180000,
+        "designId": "dsg_c1_tee",
+        "requiresSample": true,
+        "sampleStatus": "APPROVED",
+        "sampleReprintCount": 0,
+        "sampleReprints": [],
+        "editRequest": null,
+        "listingSnapshot": null,
+        "printFileUrl": "/uploads/print/ord_1002_oi_1002_1.png"
+      }
+    ],
+    "shippingInfo": {
+      "name": "Nguyễn Minh An",
+      "phone": "0901234567",
+      "province": "TP. Hồ Chí Minh",
+      "ward": "Phường Bến Nghé",
+      "detail": "12 Nguyễn Huệ",
+      "note": "Giao giờ hành chính"
+    },
+    "totals": {
+      "productSubtotal": 540000,
+      "designFees": 0,
+      "discount": 0,
+      "shipping": 20000,
+      "total": 560000
+    },
+    "paymentOpenedAt": "2026-11-10T06:34:47.624Z",
+    "paymentClaimedAt": "2026-11-10T06:38:47.624Z",
+    "paidAt": "2026-11-10T07:04:47.624Z",
+    "paymentRejectedReason": null,
+    "cancelReason": null,
+    "cancelledAt": null,
+    "firstSampleStartedAt": "2026-11-10T08:34:47.624Z",
+    "printCompletedAt": null,
+    "shippedAt": null,
+    "deliveredAt": null,
+    "trackingCode": null,
+    "timeline": [
+      {
+        "status": "PENDING_PAYMENT",
+        "occurredAt": "2026-11-10T06:34:47.624Z",
+        "actorId": "usr_c1",
+        "note": "Tạo đơn, trừ kho, mở QR 10 phút"
+      },
+      {
+        "status": "PENDING_STAFF_CONFIRMATION",
+        "occurredAt": "2026-11-10T06:38:47.624Z",
+        "actorId": "usr_c1",
+        "note": "Khách báo đã thanh toán"
+      },
+      {
+        "status": "SAMPLE_PRINTING",
+        "occurredAt": "2026-11-10T07:04:47.624Z",
+        "actorId": "usr_staff",
+        "note": "Staff xác nhận thanh toán, tạo job mẫu"
+      },
+      {
+        "status": "SAMPLE_REVIEW",
+        "occurredAt": "2026-11-10T10:34:47.624Z",
+        "actorId": "usr_staff",
+        "note": "Mẫu hoàn tất, chờ khách duyệt"
+      },
+      {
+        "status": "PRINT_CONFIRMED",
+        "occurredAt": "2026-11-11T06:34:47.624Z",
+        "actorId": "usr_c1",
+        "note": "Khách duyệt mẫu, hệ thống tạo job in chính thức"
+      }
+    ],
+    "createdAt": "2026-11-10T06:34:47.624Z",
+    "updatedAt": "2026-11-12T06:34:47.624Z"
+  },
+  {
+    "_id": "ord_1003",
+    "userId": "usr_c1",
+    "orderStatus": "COMPLETED",
+    "paymentStatus": "PAID",
+    "items": [
+      {
+        "orderItemId": "oi_1003_1",
+        "productId": "prd_tee",
+        "productName": "Áo thun Cotton Basic",
+        "variantId": "prd_tee-L-black",
+        "qty": 1,
+        "unitPrice": 180000,
+        "designId": "dsg_c1_buyer",
+        "requiresSample": true,
+        "sampleStatus": "APPROVED",
+        "sampleReprintCount": 0,
+        "sampleReprints": [],
+        "editRequest": null,
+        "listingSnapshot": {
+          "listingId": "lst_001",
+          "sellerId": "usr_c2",
+          "sellerPrice": 50000,
+          "platformFee": 5000,
+          "buyerDesignFee": 55000
+        },
+        "printFileUrl": "/uploads/print/ord_1003_oi_1003_1.png"
+      }
+    ],
+    "shippingInfo": {
+      "name": "Nguyễn Minh An",
+      "phone": "0901234567",
+      "province": "TP. Hồ Chí Minh",
+      "ward": "Phường Bến Nghé",
+      "detail": "12 Nguyễn Huệ",
+      "note": "Giao giờ hành chính"
+    },
+    "totals": {
+      "productSubtotal": 180000,
+      "designFees": 55000,
+      "discount": 0,
+      "shipping": 20000,
+      "total": 255000
+    },
+    "paymentOpenedAt": "2026-11-07T06:34:47.624Z",
+    "paymentClaimedAt": "2026-11-07T06:39:47.624Z",
+    "paidAt": "2026-11-07T07:34:47.624Z",
+    "paymentRejectedReason": null,
+    "cancelReason": null,
+    "cancelledAt": null,
+    "firstSampleStartedAt": "2026-11-07T08:34:47.624Z",
+    "printCompletedAt": "2026-11-08T06:34:47.624Z",
+    "shippedAt": "2026-11-10T06:34:47.624Z",
+    "deliveredAt": "2026-11-11T06:34:47.624Z",
+    "trackingCode": "PFY123456789VN",
+    "timeline": [
+      {
+        "status": "PENDING_PAYMENT",
+        "occurredAt": "2026-11-07T06:34:47.624Z",
+        "actorId": "usr_c1",
+        "note": "Tạo đơn, trừ kho, mở QR 10 phút"
+      },
+      {
+        "status": "PENDING_STAFF_CONFIRMATION",
+        "occurredAt": "2026-11-07T06:39:47.624Z",
+        "actorId": "usr_c1",
+        "note": "Khách báo đã thanh toán"
+      },
+      {
+        "status": "SAMPLE_PRINTING",
+        "occurredAt": "2026-11-07T07:34:47.624Z",
+        "actorId": "usr_staff",
+        "note": "Staff xác nhận thanh toán, tạo job mẫu"
+      },
+      {
+        "status": "SAMPLE_REVIEW",
+        "occurredAt": "2026-11-07T10:34:47.624Z",
+        "actorId": "usr_staff",
+        "note": "Mẫu hoàn tất, chờ khách duyệt"
+      },
+      {
+        "status": "PRINT_CONFIRMED",
+        "occurredAt": "2026-11-08T06:34:47.624Z",
+        "actorId": "usr_c1",
+        "note": "Khách duyệt mẫu"
+      },
+      {
+        "status": "PRINT_COMPLETED",
+        "occurredAt": "2026-11-08T06:34:47.624Z",
+        "actorId": "SYSTEM",
+        "note": "qty=1: mẫu đã duyệt là thành phẩm, không có job MAIN_PRINT"
+      },
+      {
+        "status": "SHIPPING",
+        "occurredAt": "2026-11-10T06:34:47.624Z",
+        "actorId": "usr_staff",
+        "note": "Bàn giao vận chuyển"
+      },
+      {
+        "status": "COMPLETED",
+        "occurredAt": "2026-11-11T06:34:47.624Z",
+        "actorId": "usr_staff",
+        "note": "Giao thành công"
+      }
+    ],
+    "createdAt": "2026-11-07T06:34:47.624Z",
+    "updatedAt": "2026-11-11T06:34:47.624Z"
+  },
+  {
+    "_id": "ord_1004",
+    "userId": "usr_c2",
+    "orderStatus": "CANCELLED",
+    "paymentStatus": "EXPIRED",
+    "items": [
+      {
+        "orderItemId": "oi_1004_1",
+        "productId": "prd_key",
+        "productName": "Móc khóa Acrylic",
+        "variantId": "prd_key-FREE-clear",
+        "qty": 4,
+        "unitPrice": 45000,
+        "designId": null,
+        "requiresSample": false,
+        "sampleStatus": "NOT_REQUIRED",
+        "sampleReprintCount": 0,
+        "sampleReprints": [],
+        "editRequest": null,
+        "listingSnapshot": null,
+        "printFileUrl": null
+      }
+    ],
+    "shippingInfo": {
+      "name": "Trần Bảo Châu",
+      "phone": "0912345678",
+      "province": "TP. Hồ Chí Minh",
+      "ward": "Phường Bến Nghé",
+      "detail": "45 Lê Lợi"
+    },
+    "totals": {
+      "productSubtotal": 180000,
+      "designFees": 0,
+      "discount": 0,
+      "shipping": 20000,
+      "total": 200000
+    },
+    "paymentOpenedAt": "2026-11-13T06:09:47.624Z",
+    "paymentClaimedAt": null,
+    "paidAt": null,
+    "paymentRejectedReason": null,
+    "cancelReason": "Quá 10 phút chưa báo đã thanh toán",
+    "cancelledAt": "2026-11-13T06:19:47.624Z",
+    "firstSampleStartedAt": null,
+    "printCompletedAt": null,
+    "shippedAt": null,
+    "deliveredAt": null,
+    "trackingCode": null,
+    "timeline": [
+      {
+        "status": "PENDING_PAYMENT",
+        "occurredAt": "2026-11-13T06:09:47.624Z",
+        "actorId": "usr_c2",
+        "note": "Tạo đơn, trừ kho, mở QR 10 phút"
+      },
+      {
+        "status": "CANCELLED",
+        "occurredAt": "2026-11-13T06:19:47.624Z",
+        "actorId": "SYSTEM",
+        "note": "Hết 10 phút, hoàn kho một lần"
+      }
+    ],
+    "createdAt": "2026-11-13T06:09:47.624Z",
+    "updatedAt": "2026-11-13T06:19:47.624Z"
+  }
+]

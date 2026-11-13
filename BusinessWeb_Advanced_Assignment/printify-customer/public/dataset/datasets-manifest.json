@@ -1,0 +1,117 @@
+{
+  "app": "customer",
+  "generatedFrom": "seed/out (build-seed.js)",
+  "note": "Dữ liệu tĩnh giai đoạn mock; sau khi có API thì lấy từ printify-server. Dự án thật không đặt dữ liệu bí mật trong public/.",
+  "files": [
+    {
+      "file": "appConfig.json",
+      "kind": "object",
+      "count": 1,
+      "rule": "Chỉ tham số UI cần dùng (phí, hạn, QR); bỏ tham số bảo mật/phiên Admin"
+    },
+    {
+      "file": "users-public.json",
+      "kind": "array",
+      "count": 3,
+      "rule": "Chỉ role CUSTOMER; bỏ passwordHash, otp, failedLogins, lockedUntil, isDemo"
+    },
+    {
+      "file": "products.json",
+      "kind": "array",
+      "count": 3,
+      "rule": "Chỉ sản phẩm isActive=true"
+    },
+    {
+      "file": "templates.json",
+      "kind": "array",
+      "count": 2,
+      "rule": "Chỉ template ACTIVE"
+    },
+    {
+      "file": "listings.json",
+      "kind": "array",
+      "count": 2,
+      "rule": "APPROVED (công khai) + tin của Customer demo; bỏ protectedAssetId, reviewedBy"
+    },
+    {
+      "file": "designs.json",
+      "kind": "array",
+      "count": 4,
+      "rule": "Thiết kế của Customer demo; thiết kế nguồn của listing và thiết kế dùng Marketplace bỏ canvasJSON (file trong public/ ai cũng tải được, artwork gốc không được lộ); thiết kế Buyer còn bỏ protectedAssetId"
+    },
+    {
+      "file": "carts.json",
+      "kind": "array",
+      "count": 2,
+      "rule": "Giỏ hàng của Customer demo"
+    },
+    {
+      "file": "orders.json",
+      "kind": "array",
+      "count": 4,
+      "rule": "Đơn của Customer demo; bỏ idempotencyKey, stockDeductedAt, stockRestoredAt (nội bộ)"
+    },
+    {
+      "file": "productionJobs.json",
+      "kind": "array",
+      "count": 3,
+      "rule": "Job của đơn Customer; chỉ field khách cần (trạng thái, ảnh mẫu); bỏ printFileUrl, additionalStockDeductedQty, startedAt"
+    },
+    {
+      "file": "returnRequests.json",
+      "kind": "array",
+      "count": 2,
+      "rule": "Yêu cầu hoàn hàng của Customer demo"
+    },
+    {
+      "file": "refunds.json",
+      "kind": "array",
+      "count": 1,
+      "rule": "Hoàn tiền của đơn Customer; bỏ approvedBy, processedBy, idempotencyKey"
+    },
+    {
+      "file": "designSales.json",
+      "kind": "array",
+      "count": 1,
+      "rule": "Doanh số thiết kế của Seller (màn \"doanh số của tôi\")"
+    },
+    {
+      "file": "notifications.json",
+      "kind": "array",
+      "count": 3,
+      "rule": "Thông báo của Customer demo"
+    },
+    {
+      "file": "views.json",
+      "kind": "array",
+      "count": 3,
+      "rule": "Lịch sử xem của Customer demo (gợi ý \"đã xem gần đây\")"
+    },
+    {
+      "file": "surveyQuestions.json",
+      "kind": "array",
+      "count": 4,
+      "rule": "Câu hỏi khảo sát đang bật"
+    },
+    {
+      "file": "surveyResponses.json",
+      "kind": "array",
+      "count": 2,
+      "rule": "Phản hồi khảo sát của Customer demo (để biết đã khảo sát hay chưa)"
+    },
+    {
+      "file": "faqs.json",
+      "kind": "array",
+      "count": 2,
+      "rule": "Chỉ FAQ isActive=true (chatbot)"
+    }
+  ],
+  "notIncluded": [
+    "inventoryMovements",
+    "auditLogs",
+    "chatLogs",
+    "recommendationEvents",
+    "users (bản đầy đủ có passwordHash/otp)",
+    "sessions"
+  ]
+}

@@ -1,0 +1,92 @@
+[
+  {
+    "_id": "tpl_tee_minimal",
+    "name": "Tối giản chữ đen",
+    "description": "Mẫu chữ đơn giản giữa ngực.",
+    "productId": "prd_tee",
+    "status": "ACTIVE",
+    "styleTags": [
+      "minimal",
+      "text"
+    ],
+    "canvasJSON": {
+      "version": "5.3.1",
+      "background": "transparent",
+      "objects": [
+        {
+          "type": "textbox",
+          "left": 120,
+          "top": 160,
+          "width": 220,
+          "fontSize": 32,
+          "fill": "#111111",
+          "text": "YOUR TEXT"
+        }
+      ]
+    },
+    "previewUrl": "/images/templates/tee_minimal.png",
+    "usageCount": 12,
+    "createdAt": "2026-09-24T06:34:47.624Z",
+    "updatedAt": "2026-11-03T06:34:47.624Z"
+  },
+  {
+    "_id": "tpl_tee_retro",
+    "name": "Retro sunset",
+    "description": "Họa tiết hoàng hôn phong cách retro.",
+    "productId": "prd_tee",
+    "status": "ACTIVE",
+    "styleTags": [
+      "retro",
+      "graphic"
+    ],
+    "canvasJSON": {
+      "version": "5.3.1",
+      "background": "transparent",
+      "objects": [
+        {
+          "type": "textbox",
+          "left": 120,
+          "top": 160,
+          "width": 220,
+          "fontSize": 32,
+          "fill": "#e4572e",
+          "text": "SUNSET"
+        }
+      ]
+    },
+    "previewUrl": "/images/templates/tee_retro.png",
+    "usageCount": 7,
+    "createdAt": "2026-10-04T06:34:47.624Z",
+    "updatedAt": "2026-11-05T06:34:47.624Z"
+  },
+  {
+    "_id": "tpl_mug_floral",
+    "name": "Hoa văn pastel",
+    "description": "Hoa văn pastel quanh cốc.",
+    "productId": "prd_mug",
+    "status": "INACTIVE",
+    "styleTags": [
+      "floral",
+      "pastel"
+    ],
+    "canvasJSON": {
+      "version": "5.3.1",
+      "background": "transparent",
+      "objects": [
+        {
+          "type": "textbox",
+          "left": 120,
+          "top": 160,
+          "width": 220,
+          "fontSize": 32,
+          "fill": "#8e6c8a",
+          "text": "FLORAL"
+        }
+      ]
+    },
+    "previewUrl": "/images/templates/mug_floral.png",
+    "usageCount": 3,
+    "createdAt": "2026-10-09T06:34:47.624Z",
+    "updatedAt": "2026-11-10T06:34:47.624Z"
+  }
+]

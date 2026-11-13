@@ -1,0 +1,38 @@
+[
+  {
+    "_id": "ntf_1",
+    "userId": "usr_c1",
+    "type": "ORDER_STATUS",
+    "title": "Đơn ord_1002 đã sang in chính thức",
+    "body": "Mẫu đã được duyệt, đơn đang được in.",
+    "link": "/account/orders/ord_1002",
+    "isRead": false,
+    "deliveryStatus": "SENT",
+    "attemptCount": 1,
+    "createdAt": "2026-11-11T06:34:47.624Z"
+  },
+  {
+    "_id": "ntf_2",
+    "userId": "usr_c1",
+    "type": "ORDER_PAYMENT",
+    "title": "Đơn ord_1001 đang chờ thanh toán",
+    "body": "Hoàn tất thanh toán trong 10 phút để giữ đơn.",
+    "link": "/account/orders/ord_1001",
+    "isRead": true,
+    "deliveryStatus": "SENT",
+    "attemptCount": 1,
+    "createdAt": "2026-11-13T06:31:47.624Z"
+  },
+  {
+    "_id": "ntf_3",
+    "userId": "usr_c2",
+    "type": "DESIGN_SALE",
+    "title": "Có người dùng thiết kế của bạn",
+    "body": "Thiết kế Wave Art vừa được ghi nhận một lượt mua.",
+    "link": "/market/my-sales",
+    "isRead": false,
+    "deliveryStatus": "PENDING",
+    "attemptCount": 0,
+    "createdAt": "2026-11-07T07:34:47.624Z"
+  }
+]

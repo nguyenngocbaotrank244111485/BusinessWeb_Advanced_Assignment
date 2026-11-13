@@ -1,0 +1,16 @@
+[
+  {
+    "_id": "ref_1003_1",
+    "originalOrderId": "ord_1003",
+    "returnRequestId": "ret_1003_2",
+    "status": "PENDING_APPROVAL",
+    "amount": 180000,
+    "reason": "Hoàn tiền sản phẩm lỗi in",
+    "note": "Chờ Superadmin duyệt theo từng khoản",
+    "requestedAt": "2026-11-12T12:34:47.624Z",
+    "approvedAt": null,
+    "approvedBy": null,
+    "processedAt": null,
+    "processedBy": null
+  }
+]

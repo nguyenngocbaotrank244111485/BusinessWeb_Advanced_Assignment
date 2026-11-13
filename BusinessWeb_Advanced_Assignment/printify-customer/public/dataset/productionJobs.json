@@ -1,0 +1,38 @@
+[
+  {
+    "_id": "job_1002_s1",
+    "jobType": "SAMPLE",
+    "originalOrderId": "ord_1002",
+    "orderItemId": "oi_1002_1",
+    "qty": 1,
+    "sampleCycle": 1,
+    "status": "COMPLETED",
+    "samplePhotoUrl": "/uploads/samples/job_1002_s1.jpg",
+    "createdAt": "2026-11-10T07:04:47.624Z",
+    "updatedAt": "2026-11-10T10:34:47.624Z"
+  },
+  {
+    "_id": "job_1002_m1",
+    "jobType": "MAIN_PRINT",
+    "originalOrderId": "ord_1002",
+    "orderItemId": "oi_1002_1",
+    "qty": 2,
+    "sampleCycle": null,
+    "status": "IN_PROGRESS",
+    "samplePhotoUrl": null,
+    "createdAt": "2026-11-11T06:34:47.624Z",
+    "updatedAt": "2026-11-12T06:34:47.624Z"
+  },
+  {
+    "_id": "job_1003_s1",
+    "jobType": "SAMPLE",
+    "originalOrderId": "ord_1003",
+    "orderItemId": "oi_1003_1",
+    "qty": 1,
+    "sampleCycle": 1,
+    "status": "COMPLETED",
+    "samplePhotoUrl": "/uploads/samples/job_1003_s1.jpg",
+    "createdAt": "2026-11-07T07:34:47.624Z",
+    "updatedAt": "2026-11-07T10:34:47.624Z"
+  }
+]

@@ -1,0 +1,66 @@
+[
+  {
+    "_id": "sr_c1",
+    "userId": "usr_c1",
+    "answers": [
+      {
+        "questionId": "sq_pu_1",
+        "questionText": "Trang web giúp tôi thiết kế sản phẩm nhanh hơn.",
+        "dimension": "PU",
+        "score": 5
+      },
+      {
+        "questionId": "sq_eou_1",
+        "questionText": "Tôi thấy trình thiết kế dễ sử dụng.",
+        "dimension": "EOU",
+        "score": 4
+      },
+      {
+        "questionId": "sq_sat_1",
+        "questionText": "Tôi hài lòng với trải nghiệm đặt hàng.",
+        "dimension": "SAT",
+        "score": 4
+      },
+      {
+        "questionId": "sq_pi_1",
+        "questionText": "Tôi sẵn sàng tiếp tục dùng trang web này.",
+        "dimension": "PI",
+        "score": 5
+      }
+    ],
+    "comment": "Editor dễ dùng.",
+    "submittedAt": "2026-11-12T06:34:47.624Z"
+  },
+  {
+    "_id": "sr_c2",
+    "userId": "usr_c2",
+    "answers": [
+      {
+        "questionId": "sq_pu_1",
+        "questionText": "Trang web giúp tôi thiết kế sản phẩm nhanh hơn.",
+        "dimension": "PU",
+        "score": 4
+      },
+      {
+        "questionId": "sq_eou_1",
+        "questionText": "Tôi thấy trình thiết kế dễ sử dụng.",
+        "dimension": "EOU",
+        "score": 4
+      },
+      {
+        "questionId": "sq_sat_1",
+        "questionText": "Tôi hài lòng với trải nghiệm đặt hàng.",
+        "dimension": "SAT",
+        "score": 3
+      },
+      {
+        "questionId": "sq_pi_1",
+        "questionText": "Tôi sẵn sàng tiếp tục dùng trang web này.",
+        "dimension": "PI",
+        "score": 4
+      }
+    ],
+    "comment": "",
+    "submittedAt": "2026-11-13T04:34:47.624Z"
+  }
+]

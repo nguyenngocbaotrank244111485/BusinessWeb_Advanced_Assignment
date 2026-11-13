@@ -1,0 +1,47 @@
+[
+  {
+    "_id": "ret_1003_1",
+    "orderId": "ord_1003",
+    "userId": "usr_c1",
+    "attempt": 1,
+    "status": "REJECTED",
+    "reason": "DEFECTIVE_PRINT",
+    "description": "Màu in nhìn nhạt hơn so với ảnh mẫu đã duyệt.",
+    "evidenceImages": [
+      "/uploads/returns/ret_1003_1_a.jpg"
+    ],
+    "orderItemIds": [
+      "oi_1003_1"
+    ],
+    "productionJobIds": [],
+    "resolution": "NONE",
+    "refundAmount": 0,
+    "adminNote": "Ảnh minh chứng không thấy lỗi in",
+    "rejectedAt": "2026-11-12T06:34:47.624Z",
+    "resolvedAt": "2026-11-12T06:34:47.624Z",
+    "createdAt": "2026-11-11T18:34:47.624Z"
+  },
+  {
+    "_id": "ret_1003_2",
+    "orderId": "ord_1003",
+    "userId": "usr_c1",
+    "attempt": 2,
+    "status": "APPROVED",
+    "reason": "DEFECTIVE_PRINT",
+    "description": "Hình in bị lệch khỏi vùng in, chụp kèm 2 ảnh góc khác nhau.",
+    "evidenceImages": [
+      "/uploads/returns/ret_1003_2_a.jpg",
+      "/uploads/returns/ret_1003_2_b.jpg"
+    ],
+    "orderItemIds": [
+      "oi_1003_1"
+    ],
+    "productionJobIds": [],
+    "resolution": "REFUND",
+    "refundAmount": 180000,
+    "adminNote": "Chấp nhận hoàn tiền sản phẩm",
+    "rejectedAt": null,
+    "resolvedAt": "2026-11-12T12:34:47.624Z",
+    "createdAt": "2026-11-12T10:34:47.624Z"
+  }
+]

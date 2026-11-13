@@ -1,0 +1,17 @@
+[
+  {
+    "_id": "sale_1003_1",
+    "orderId": "ord_1003",
+    "orderItemId": "oi_1003_1",
+    "listingId": "lst_001",
+    "sellerId": "usr_c2",
+    "buyerId": "usr_c1",
+    "sellerPrice": 50000,
+    "platformFee": 5000,
+    "buyerDesignFee": 55000,
+    "status": "RECORDED",
+    "reversedAmount": 0,
+    "reversedAt": null,
+    "recordedAt": "2026-11-07T07:34:47.624Z"
+  }
+]

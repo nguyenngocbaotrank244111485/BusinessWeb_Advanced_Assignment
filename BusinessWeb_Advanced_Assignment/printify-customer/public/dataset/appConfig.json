@@ -1,0 +1,16 @@
+{
+  "shippingFeeVnd": 20000,
+  "discountRate": 0.05,
+  "discountThresholdVnd": 5000000,
+  "platformFeeRate": 0.1,
+  "orderPaymentMinutes": 10,
+  "staffReviewHours": 24,
+  "sampleEditHours": 48,
+  "sampleFeePaymentMinutes": 10,
+  "returnWindowDays": 7,
+  "maxReturnsPerOrder": 2,
+  "otpExpirySeconds": 60,
+  "otpResendCooldownSeconds": 60,
+  "customerIdleSessionMinutes": 120,
+  "qrImageUrl": "/images/qr/static-qr.png"
+}

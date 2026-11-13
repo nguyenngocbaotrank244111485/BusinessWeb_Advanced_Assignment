@@ -1,0 +1,94 @@
+[
+  {
+    "_id": "prd_tee",
+    "name": "Áo thun Cotton Basic",
+    "category": "ao-thun",
+    "price": 180000,
+    "description": "Áo thun cotton 100%, form regular, in thiết kế theo yêu cầu.",
+    "img_display": "/images/products/tee.png",
+    "img_detail": [
+      "/images/products/tee_1.png",
+      "/images/products/tee_2.png"
+    ],
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "isActive": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.28,
+      "y": 0.22,
+      "width": 0.44,
+      "height": 0.5
+    },
+    "variants": [
+      {
+        "_id": "prd_tee-M-white",
+        "size": "M",
+        "color": "white",
+        "stock": 37
+      },
+      {
+        "_id": "prd_tee-L-black",
+        "size": "L",
+        "color": "black",
+        "stock": 24
+      }
+    ],
+    "createdAt": "2026-09-14T06:34:47.624Z",
+    "updatedAt": "2026-11-08T06:34:47.624Z"
+  },
+  {
+    "_id": "prd_mug",
+    "name": "Cốc sứ In Hình",
+    "category": "coc-su",
+    "price": 120000,
+    "description": "Cốc sứ trắng 350ml, in nhiệt bền màu.",
+    "img_display": "/images/products/mug.png",
+    "img_detail": [
+      "/images/products/mug_1.png"
+    ],
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "isActive": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.2,
+      "y": 0.25,
+      "width": 0.6,
+      "height": 0.5
+    },
+    "variants": [
+      {
+        "_id": "prd_mug-350ml-white",
+        "size": "350ml",
+        "color": "white",
+        "stock": 38
+      }
+    ],
+    "createdAt": "2026-09-14T06:34:47.624Z",
+    "updatedAt": "2026-11-12T06:34:47.624Z"
+  },
+  {
+    "_id": "prd_key",
+    "name": "Móc khóa Acrylic",
+    "category": "phu-kien",
+    "price": 45000,
+    "description": "Móc khóa acrylic trong suốt, bán sẵn không tùy chỉnh.",
+    "img_display": "/images/products/key.png",
+    "img_detail": [],
+    "allowCustomization": false,
+    "allowMarketplace": false,
+    "isActive": true,
+    "lowStockThreshold": 5,
+    "variants": [
+      {
+        "_id": "prd_key-FREE-clear",
+        "size": "FREE",
+        "color": "clear",
+        "stock": 5
+      }
+    ],
+    "createdAt": "2026-09-14T06:34:47.624Z",
+    "updatedAt": "2026-11-13T06:19:47.624Z"
+  }
+]

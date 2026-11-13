@@ -1,0 +1,22 @@
+{
+  "_id": "default",
+  "adminIdleSessionMinutes": 30,
+  "customerIdleSessionMinutes": 120,
+  "discountRate": 0.05,
+  "discountThresholdVnd": 5000000,
+  "loginLockMinutes": 10,
+  "maxFailedLogins": 5,
+  "maxReturnsPerOrder": 2,
+  "orderPaymentMinutes": 10,
+  "otpExpirySeconds": 60,
+  "otpLockMinutes": 10,
+  "otpMaxAttempts": 3,
+  "otpResendCooldownSeconds": 60,
+  "platformFeeRate": 0.1,
+  "qrImageUrl": "/images/qr/static-qr.png",
+  "returnWindowDays": 7,
+  "sampleEditHours": 48,
+  "sampleFeePaymentMinutes": 10,
+  "shippingFeeVnd": 20000,
+  "staffReviewHours": 24
+}

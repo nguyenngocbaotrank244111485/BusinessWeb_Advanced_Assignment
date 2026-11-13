@@ -1,0 +1,49 @@
+[
+  {
+    "_id": "lst_001",
+    "sellerId": "usr_c2",
+    "designId": "dsg_c2_tee_art",
+    "productId": "prd_tee",
+    "title": "Wave Art - họa tiết sóng biển",
+    "description": "Họa tiết sóng biển tối giản, hợp áo thun màu sáng.",
+    "tags": [
+      "wave",
+      "minimal"
+    ],
+    "sellerPrice": 50000,
+    "platformFee": 5000,
+    "buyerDesignFee": 55000,
+    "watermarkUrl": "/market/lst_001_wm.png",
+    "licenseScope": "PRINT_ON_FIXED_PRODUCT",
+    "imageAssetScope": "WATERMARK_PREVIEW_ONLY",
+    "acceptedCopyright": true,
+    "status": "APPROVED",
+    "reviewedBy": "usr_sa",
+    "reviewedAt": "2026-10-31T06:34:47.624Z",
+    "reviewNote": "Đạt yêu cầu",
+    "createdAt": "2026-10-30T06:34:47.624Z"
+  },
+  {
+    "_id": "lst_002",
+    "sellerId": "usr_c2",
+    "designId": "dsg_c2_mug_art",
+    "productId": "prd_mug",
+    "title": "Fan Art nhân vật",
+    "description": "Hình fan art nhân vật hoạt hình.",
+    "tags": [
+      "fanart"
+    ],
+    "sellerPrice": 30000,
+    "platformFee": 3000,
+    "buyerDesignFee": 33000,
+    "watermarkUrl": "/market/lst_002_wm.png",
+    "licenseScope": "PRINT_ON_FIXED_PRODUCT",
+    "imageAssetScope": "WATERMARK_PREVIEW_ONLY",
+    "acceptedCopyright": true,
+    "status": "REJECTED",
+    "reviewedBy": "usr_sa",
+    "reviewedAt": "2026-11-02T06:34:47.624Z",
+    "reviewNote": "Hình có dấu hiệu vi phạm bản quyền",
+    "createdAt": "2026-11-01T06:34:47.624Z"
+  }
+]

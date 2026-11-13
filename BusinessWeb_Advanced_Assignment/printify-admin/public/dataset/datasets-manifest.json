@@ -1,0 +1,122 @@
+{
+  "app": "admin",
+  "generatedFrom": "seed/out (build-seed.js)",
+  "note": "Dữ liệu tĩnh giai đoạn mock; sau khi có API thì lấy từ printify-server. Dự án thật không đặt dữ liệu bí mật trong public/.",
+  "files": [
+    {
+      "file": "appConfig.json",
+      "kind": "object",
+      "count": 1,
+      "rule": "Toàn bộ tham số cấu hình"
+    },
+    {
+      "file": "users-public.json",
+      "kind": "array",
+      "count": 5,
+      "rule": "Mọi role; bỏ passwordHash, otp, failedLogins, lockedUntil, isDemo"
+    },
+    {
+      "file": "products.json",
+      "kind": "array",
+      "count": 3,
+      "rule": "Tất cả sản phẩm (kể cả đã ẩn) kèm tồn kho"
+    },
+    {
+      "file": "templates.json",
+      "kind": "array",
+      "count": 3,
+      "rule": "Tất cả template"
+    },
+    {
+      "file": "listings.json",
+      "kind": "array",
+      "count": 2,
+      "rule": "Mọi trạng thái (hàng đợi duyệt); bỏ protectedAssetId"
+    },
+    {
+      "file": "orders.json",
+      "kind": "array",
+      "count": 4,
+      "rule": "Tất cả đơn; bỏ idempotencyKey"
+    },
+    {
+      "file": "productionJobs.json",
+      "kind": "array",
+      "count": 3,
+      "rule": "Tất cả job (hàng đợi sản xuất)"
+    },
+    {
+      "file": "inventoryMovements.json",
+      "kind": "array",
+      "count": 8,
+      "rule": "Sổ kho đầy đủ"
+    },
+    {
+      "file": "returnRequests.json",
+      "kind": "array",
+      "count": 2,
+      "rule": "Tất cả yêu cầu hoàn hàng"
+    },
+    {
+      "file": "refunds.json",
+      "kind": "array",
+      "count": 1,
+      "rule": "Tất cả hoàn tiền (kèm người duyệt/xử lý)"
+    },
+    {
+      "file": "designSales.json",
+      "kind": "array",
+      "count": 1,
+      "rule": "Tất cả doanh số thiết kế"
+    },
+    {
+      "file": "views.json",
+      "kind": "array",
+      "count": 3,
+      "rule": "Dùng cho dashboard (sản phẩm được xem nhiều)"
+    },
+    {
+      "file": "recommendationEvents.json",
+      "kind": "array",
+      "count": 3,
+      "rule": "Dùng cho dashboard (CTR gợi ý)"
+    },
+    {
+      "file": "surveyQuestions.json",
+      "kind": "array",
+      "count": 4,
+      "rule": "Tất cả câu hỏi khảo sát"
+    },
+    {
+      "file": "surveyResponses.json",
+      "kind": "array",
+      "count": 2,
+      "rule": "Tất cả phản hồi (thống kê TAM)"
+    },
+    {
+      "file": "faqs.json",
+      "kind": "array",
+      "count": 3,
+      "rule": "Tất cả FAQ (quản lý)"
+    },
+    {
+      "file": "chatLogs.json",
+      "kind": "array",
+      "count": 2,
+      "rule": "Nhật ký chatbot"
+    },
+    {
+      "file": "auditLogs.json",
+      "kind": "array",
+      "count": 3,
+      "rule": "Nhật ký thao tác"
+    }
+  ],
+  "notIncluded": [
+    "designs (xem qua previewUrl/watermarkUrl của listing và printFileUrl của job)",
+    "carts",
+    "notifications",
+    "users (bản đầy đủ có passwordHash/otp)",
+    "sessions"
+  ]
+}
