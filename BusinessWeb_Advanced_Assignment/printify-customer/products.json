@@ -1,0 +1,71 @@
+[
+  {
+  "_id": "prd101",
+  "name": "Áo thun Cotton Basic",
+  "category": "ao-thun",
+  "price": 180000,
+  "description": "Áo thun cotton 100%, form regular, in thiết kế theo yêu cầu.",
+  "img_display": "images/products/prd101_white_shirt.webp",
+  "img_detail": [
+    "images/products/prd101_detail1.webp"
+  ],
+  "variants": [
+    {
+      "_id": "prd101-white-m",
+      "color": "white",
+      "size": "M",
+      "stock": 20,
+      "imageUrl": "images/products/prd101_white_shirt.webp"
+    },
+    {
+      "_id": "prd101-white-L",
+      "color": "white",
+      "size": "L",
+      "stock": 10,
+      "imageUrl": "images/products/prd101_white_shirt.webp"
+    },
+    {
+      "_id": "prd101-black-m",
+      "color": "black",
+      "size": "M",
+      "stock": 15,
+      "imageUrl": "images/products/prd101_black_shirt.webp"
+    },
+    {
+      "_id": "prd101-black-L",
+      "color": "black",
+      "size": "L",
+      "stock": 12,
+      "imageUrl": "images/products/prd101_black_shirt.webp"
+    }
+  ]
+},
+{
+  "_id": "prd201",
+  "name": "Cốc sứ In Hình",
+  "category": "coc-su",
+  "price": 120000,
+  "description": "Cốc sứ in hình, chất liệu cao cấp, phù hợp làm quà tặng.",
+  "img_display": "images/products/prd201_white_mug.webp",
+  "img_detail": [
+    "images/products/prd201_white_mug.webp",
+    "images/products/prd201_black_mug.jpg"
+  ],
+  "variants": [
+    {
+      "_id": "prd201-white",
+      "color": "white",
+      "size": null,
+      "stock": 50,
+      "imageUrl": "images/products/prd201_white_mug.webp"
+    },
+    {
+      "_id": "prd201-black",
+      "color": "black",
+      "size": null,
+      "stock": 30,
+      "imageUrl": "images/products/prd201_black_mug.jpg"
+    }
+  ]
+}
+]
