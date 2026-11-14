@@ -1,15 +1,7 @@
-import { TestBed } from '@angular/core/testing';
-import { SurveyCustomer } from './survey-customer';
+import { surveyCustomerGuard } from './survey-customer';
 
-describe('SurveyCustomer', () => {
-  let service: SurveyCustomer;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(SurveyCustomer);
-  });
-
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+describe('surveyCustomerGuard', () => {
+  it('is a CanActivate function', () => {
+    expect(typeof surveyCustomerGuard).toBe('function');
   });
 });

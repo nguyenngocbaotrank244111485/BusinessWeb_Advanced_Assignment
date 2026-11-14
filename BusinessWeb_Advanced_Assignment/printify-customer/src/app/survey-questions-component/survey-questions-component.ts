@@ -9,12 +9,14 @@ import {
 } from '@angular/forms';
 import { SurveyQuestion, SurveyQuestionsResponse, TamDimension } from '../models/survey.model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { RouterLink } from '@angular/router';
 
 type QuestionGroup = { code: TamDimension; title: string; questions: SurveyQuestion[] };
 
 @Component({
   selector: 'app-survey-questions-component',
-  standalone: false,
+  standalone: true,
+  imports: [ReactiveFormsModule, RouterLink],
   styleUrl: './survey-questions-component.css',
   templateUrl: './survey-questions-component.html',
 })
