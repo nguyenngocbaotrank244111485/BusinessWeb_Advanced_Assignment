@@ -179,7 +179,7 @@
  .hero-layout { gap:25px; }
  .marketplace-panel { padding:43px 42px; }
 }
-@media(max-width:880px) {
+@media(max-width:960px) {
  .header-inner { flex-wrap:wrap; padding-block:14px; gap:15px; }
  .primary-nav { order:3; width:100%; margin:0; gap:22px; }
  .header-actions { margin-left:auto; }

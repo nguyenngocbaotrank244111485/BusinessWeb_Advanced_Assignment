@@ -44,6 +44,7 @@ export class Navbar {
     if (url.startsWith('/products')) return 'products';
     if (url.startsWith('/market')) return 'market';
     if (url.startsWith('/about')) return 'about';
+    if (url.startsWith('/survey')) return 'survey';
     return url === '/' ? 'home' : '';
   }
 }

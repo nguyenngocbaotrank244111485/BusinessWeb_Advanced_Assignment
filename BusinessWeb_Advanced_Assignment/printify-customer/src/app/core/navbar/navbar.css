@@ -33,7 +33,16 @@ button.auth-login { background: #fff; font: inherit; font-size: 13px; font-weigh
 .auth-register { padding: 10px 14px; border-radius: var(--pf-radius-sm); background: var(--pf-primary); color: #fff; font-size: 13px; font-weight: 770; }
 .auth-register:hover { background: var(--pf-primary-dark); }
 
-@media (max-width: 900px) {
+/* Laptop nhỏ: header đủ chỗ cho menu + chuông + tài khoản (không tràn ngang) */
+@media (max-width: 1300px) {
+  .header-inner { gap: 14px; }
+  .primary-nav { gap: 16px; margin-left: 6px; }
+  .header-search { width: 150px; }
+  .cart-text { display: none; }
+  .user-name { display: none; }
+  .user-chip { padding-right: 4px; }
+}
+@media (max-width: 1040px) {
   .header-inner { flex-wrap: wrap; padding-block: 12px; gap: 12px; }
   .primary-nav { order: 3; width: 100%; margin: 0; overflow-x: auto; }
   .header-search { order: 4; width: 100%; margin: 0; }

@@ -22,6 +22,8 @@ const routes: Routes = [
     path: 'auth/register',
     loadComponent: () => import('./register-component/register-component').then((m) => m.RegisterComponent),
   },
+  // C23 Khảo sát TAM: đặc tả ghi /survey -> chuyển về trang đang dùng
+  { path: 'survey', redirectTo: 'survey-question', pathMatch: 'full' },
   {
     path: 'survey-question',
     component: SurveyQuestionsComponent,

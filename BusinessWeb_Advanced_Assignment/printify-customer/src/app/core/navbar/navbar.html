@@ -10,6 +10,7 @@
       <a routerLink="/products" [class.nav-current]="active() === 'products'">Sản phẩm</a>
       <a routerLink="/market" [class.nav-current]="active() === 'market'">Marketplace</a>
       <a routerLink="/about" [class.nav-current]="active() === 'about'">Giới thiệu</a>
+      <a routerLink="/survey-question" [class.nav-current]="active() === 'survey'" title="Khảo sát trải nghiệm PrintiFy (TAM)">Khảo sát</a>
     </nav>
 
     <form class="header-search" role="search" (submit)="$event.preventDefault(); search(box)">
