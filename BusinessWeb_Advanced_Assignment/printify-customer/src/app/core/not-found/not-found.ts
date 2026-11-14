@@ -21,7 +21,7 @@ import { ActivatedRoute } from '@angular/router';
   `,
   styles: [`
     :host { display: block; min-height: calc(100vh - 77px); padding: 70px 16px; background: linear-gradient(140deg, #faf6fe, var(--pf-orchid) 60%, var(--pf-pink-50)); }
-    .wrap { width: min(560px, 100%); margin: 0 auto; padding: 44px 24px; text-align: center; background: #fff; border-radius: 24px; box-shadow: 0 24px 50px #8b57c41a; }
+    .wrap { box-sizing: border-box; width: min(560px, 100%); margin: 0 auto; padding: 44px 24px; text-align: center; background: #fff; border-radius: 24px; box-shadow: 0 24px 50px #8b57c41a; }
     .icon { font-size: 48px; }
     h1 { margin: 12px 0 8px; font-size: 26px; color: var(--pf-ink); }
     p { margin: 0; color: var(--pf-muted); }

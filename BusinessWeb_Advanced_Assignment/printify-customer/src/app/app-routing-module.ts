@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { PrintifyHomepage } from './printify-homepage/printify-homepage';
 import { ShopLayout } from './core/layout/shop-layout/shop-layout';
 import { NotFound } from './core/not-found/not-found';
+import { DemoLogin } from './core/demo-login/demo-login';
 
 const routes: Routes = [
   {
@@ -16,6 +17,13 @@ const routes: Routes = [
   },
   // /products và /products/:slug nằm trong shop/shop-routing-module.ts
 
+  // Marketplace: tải lazy (Ch.IV 4.4.2)
+  {
+    path: 'market',
+    component: ShopLayout,
+    loadChildren: () => import('./market/market-module').then((m) => m.MarketModule),
+  },
+
   // Các màn hình chưa xây dựng: tạm hiện trang "đang xây dựng".
   // Ai làm màn nào thì thay NotFound bằng component (hoặc loadChildren) tương ứng.
   {
@@ -25,9 +33,9 @@ const routes: Routes = [
       { path: 'cart', component: NotFound, data: { title: 'Giỏ hàng' } },
       { path: 'checkout', component: NotFound, data: { title: 'Thanh toán' } },
       { path: 'editor/:productId', component: NotFound, data: { title: 'Thiết kế sản phẩm' } },
-      { path: 'market', component: NotFound, data: { title: 'Marketplace' } },
       { path: 'about', component: NotFound, data: { title: 'Giới thiệu' } },
-      { path: 'auth/login', component: NotFound, data: { title: 'Đăng nhập' } },
+      // Đăng nhập tạm để demo – thay bằng trang đăng nhập thật của Trân Phạm
+      { path: 'auth/login', component: DemoLogin, title: 'Đăng nhập | PrintiFy' },
       { path: 'auth/register', component: NotFound, data: { title: 'Đăng ký' } },
       { path: '**', component: NotFound, title: 'Không tìm thấy trang | PrintiFy' },
     ],

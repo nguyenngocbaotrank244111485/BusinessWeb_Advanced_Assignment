@@ -1,0 +1,65 @@
+<main class="page">
+  <section class="banner">
+    <div class="container banner-inner">
+      <div class="banner-copy">
+        <nav class="breadcrumb" aria-label="Breadcrumb"><a routerLink="/">Trang chủ</a><span>/</span>Marketplace</nav>
+        <h1>Khám phá mẫu thiết kế</h1>
+        <p>Chọn thiết kế của cộng đồng PrintiFy và in ngay trên sản phẩm đi kèm. Người bán nhận tiền mỗi lần thiết kế được dùng.</p>
+      </div>
+      <a class="btn-sell" routerLink="/market/my-listings">＋ Đăng bán thiết kế</a>
+    </div>
+  </section>
+
+  <div class="container content">
+    @if (notFound()) {
+      <div class="notice" role="alert">Thiết kế “{{ notFound() }}” không tồn tại hoặc chưa được duyệt. Mời bạn xem các thiết kế khác nhé.</div>
+    }
+
+    <div class="toolbar">
+      <label class="search">
+        <span aria-hidden="true">⌕</span>
+        <input type="search" placeholder="Tìm tên thiết kế, tag, người bán..." [value]="keyword()" (input)="onType($any($event.target).value)" aria-label="Tìm thiết kế" />
+      </label>
+      <label class="select">
+        <span>Sản phẩm</span>
+        <select (change)="onProduct($any($event.target).value)" aria-label="Lọc theo sản phẩm">
+          <option value="" [selected]="!productId()">Tất cả sản phẩm</option>
+          @for (p of productOptions(); track p._id) {
+            <option [value]="p._id" [selected]="productId() === p._id">{{ p.name }}</option>
+          }
+        </select>
+      </label>
+    </div>
+
+    @if (!market.loaded()) {
+      <div class="grid">
+        @for (i of [1, 2, 3, 4]; track i) { <div class="skeleton"></div> }
+      </div>
+    } @else if (market.error()) {
+      <app-empty-state icon="⚠️" title="Có lỗi xảy ra" [message]="market.error()"></app-empty-state>
+    } @else {
+      <p class="count">Có <b>{{ filtered().length }}</b> thiết kế @if (keyword()) { cho “{{ keyword() }}” }</p>
+      @if (filtered().length === 0) {
+        <app-empty-state icon="🎨" title="Chưa có thiết kế phù hợp" message="Thử từ khóa khác hoặc bỏ bộ lọc sản phẩm nhé."
+          [actionText]="hasFilter() ? 'Xóa bộ lọc' : ''" (action)="clearFilters()"></app-empty-state>
+      } @else {
+        <div class="grid">
+          @for (l of paged(); track l._id) {
+            <app-listing-card [listing]="l" [imageUrl]="market.imageUrl(l.watermarkUrl)"
+              [sellerName]="sellerName(l.sellerId)" [product]="productMap().get(l.productId)"></app-listing-card>
+          }
+        </div>
+        <app-pagination [page]="page()" [totalPages]="totalPages()" (pageChange)="onPage($event)"></app-pagination>
+      }
+    }
+
+    <section class="how" aria-labelledby="how-title">
+      <h2 id="how-title">Marketplace hoạt động thế nào?</h2>
+      <ol>
+        <li><b>Chọn thiết kế</b><span>Mỗi thiết kế gắn với một sản phẩm cố định, ví dụ áo thun hay cốc sứ.</span></li>
+        <li><b>Tùy chỉnh thêm</b><span>Mở Editor để thêm chữ hoặc ảnh của bạn lên trên thiết kế.</span></li>
+        <li><b>Đặt in</b><span>Phí thiết kế tính một lần cho mỗi dòng sản phẩm trong đơn, không nhân theo số lượng.</span></li>
+      </ol>
+    </section>
+  </div>
+</main>

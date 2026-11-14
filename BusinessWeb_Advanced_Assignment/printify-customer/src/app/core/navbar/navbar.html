@@ -25,8 +25,13 @@
           <span class="cart-badge">{{ cart.count() }}</span>
         }
       </a>
-      <a routerLink="/auth/login" class="auth-login">Đăng nhập</a>
-      <a routerLink="/auth/register" class="auth-register">Đăng ký</a>
+      @if (auth.user(); as u) {
+        <span class="user-chip" [title]="u.email"><span class="user-avatar" aria-hidden="true">{{ u.name.charAt(0) }}</span><span class="user-name">{{ u.name }}</span></span>
+        <button type="button" class="auth-login" (click)="logout()">Đăng xuất</button>
+      } @else {
+        <a routerLink="/auth/login" [queryParams]="{ returnUrl: returnUrl }" class="auth-login">Đăng nhập</a>
+        <a routerLink="/auth/register" class="auth-register">Đăng ký</a>
+      }
     </div>
   </div>
 </header>

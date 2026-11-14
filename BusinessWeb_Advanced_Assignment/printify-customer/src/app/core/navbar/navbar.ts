@@ -3,6 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { filter, map } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CartService } from '../../services/cart-service';
+import { AuthService } from '../../services/auth-service';
 
 /** Thanh điều hướng chung: logo, menu, ô tìm kiếm, giỏ hàng, đăng nhập */
 @Component({
@@ -13,6 +14,7 @@ import { CartService } from '../../services/cart-service';
 })
 export class Navbar {
   readonly cart = inject(CartService);
+  readonly auth = inject(AuthService);
   private readonly router = inject(Router);
 
   /** Mục menu đang chọn, tính theo URL hiện tại */
@@ -27,6 +29,16 @@ export class Navbar {
   search(input: HTMLInputElement): void {
     const q = input.value.trim();
     this.router.navigate(['/products'], { queryParams: q ? { q } : {} });
+  }
+
+  logout(): void {
+    this.auth.logout();
+    this.router.navigateByUrl('/');
+  }
+
+  /** Đường dẫn hiện tại, để đăng nhập xong quay lại đúng trang */
+  get returnUrl(): string {
+    return this.router.url.startsWith('/auth') ? '/' : this.router.url;
   }
 
   private section(url: string): string {

@@ -1,0 +1,68 @@
+<main class="page">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a routerLink="/market">Marketplace</a><span>/</span>Tin đăng của tôi</nav>
+    <header class="head">
+      <div>
+        <h1>Tin đăng của tôi</h1>
+        <p>Đăng bán quyền sử dụng thiết kế bạn tự tạo. Mỗi tin cần được PrintiFy duyệt trước khi hiện công khai.</p>
+      </div>
+      <button type="button" class="btn-new" (click)="newListing()" [disabled]="sellableCount() === 0"
+        [title]="sellableCount() === 0 ? 'Bạn chưa có thiết kế nào có thể đăng bán' : ''">＋ Đăng bán thiết kế</button>
+    </header>
+
+    <div class="stats">
+      <div><b>{{ count('APPROVED') }}</b><span>tin đang bán</span></div>
+      <div><b>{{ count('PENDING_REVIEW') }}</b><span>tin chờ duyệt</span></div>
+      <div><b>{{ sellableCount() }}</b><span>thiết kế có thể đăng</span></div>
+      <div><b>{{ count('REJECTED') }}</b><span>tin cần sửa lại</span></div>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Lọc theo trạng thái">
+      @for (f of filters; track f.value) {
+        <button type="button" role="tab" [attr.aria-selected]="filter() === f.value" [class.active]="filter() === f.value" (click)="filter.set(f.value)">
+          {{ f.label }} <small>{{ count(f.value) }}</small>
+        </button>
+      }
+    </div>
+
+    @if (!market.loaded()) {
+      <div class="skeleton"></div>
+    } @else if (visible().length === 0) {
+      <app-empty-state icon="🖼️" [title]="mine().length ? 'Không có tin ở trạng thái này' : 'Bạn chưa đăng bán thiết kế nào'"
+        [message]="mine().length ? '' : 'Lưu thiết kế trong Editor rồi đăng bán để nhận tiền mỗi lần có người dùng.'"
+        [actionText]="sellableCount() ? 'Đăng bán thiết kế' : ''" (action)="newListing()"></app-empty-state>
+    } @else {
+      <ul class="list">
+        @for (l of visible(); track l._id) {
+          <li class="row">
+            <img class="thumb" [src]="market.imageUrl(l.watermarkUrl)" [alt]="l.title" appImgFallback />
+            <div class="main">
+              <div class="title-line">
+                <b>{{ l.title }}</b>
+                <app-status-badge [label]="labels[l.status]" [tone]="tones[l.status]"></app-status-badge>
+              </div>
+              <span class="meta">{{ product(l)?.name ?? l.productId }} · Đăng {{ l.createdAt | date: 'dd/MM/yyyy' }}</span>
+              <span class="meta">Bạn nhận <b>{{ l.sellerPrice | vnd }}</b> · Người mua trả {{ l.buyerDesignFee | vnd }}</span>
+              @if (l.status === 'REJECTED' && l.reviewNote) {
+                <p class="review">Lý do từ chối: {{ l.reviewNote }}</p>
+              }
+            </div>
+            <div class="actions">
+              @if (confirmUnlist() === l._id) {
+                <span class="confirm">Gỡ tin này?</span>
+                <button type="button" class="danger" (click)="unlist(l)">Gỡ</button>
+                <button type="button" (click)="confirmUnlist.set(null)">Không</button>
+              } @else {
+                <a [routerLink]="['/market', l._id]">Xem</a>
+                @if (canEdit(l)) { <a [routerLink]="['/market/my-listings', l._id, 'edit']">{{ l.status === 'REJECTED' ? 'Sửa & gửi lại' : 'Sửa' }}</a> }
+                @if (canUnlist(l)) { <button type="button" (click)="confirmUnlist.set(l._id)">Gỡ</button> }
+              }
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+
+  @if (toast()) { <div class="toast" role="status">✅ {{ toast() }}</div> }
+</main>
