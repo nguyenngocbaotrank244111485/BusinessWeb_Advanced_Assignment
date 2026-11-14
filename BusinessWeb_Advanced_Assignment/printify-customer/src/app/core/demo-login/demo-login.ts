@@ -57,7 +57,7 @@ export class DemoLogin {
   });
 
   choose(user: PublicUser): void {
-    this.auth.login(user);
+    this.auth.loginLocal(user);
     const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
     // chỉ chấp nhận đường dẫn nội bộ
     this.router.navigateByUrl(returnUrl && returnUrl.startsWith('/') ? returnUrl : '/');

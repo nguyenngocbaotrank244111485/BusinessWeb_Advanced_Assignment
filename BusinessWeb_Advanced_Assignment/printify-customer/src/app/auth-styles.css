@@ -1,0 +1,304 @@
+
+:host {
+  display: block;
+  --pf-purple: #6042d9;
+  --pf-dark: #4430af;
+  --pf-text: #25213c;
+}
+
+.pf-auth-page {
+  min-height: 100vh;
+  padding: 48px 20px;
+  background: #f8f6fd;
+  color: var(--pf-text);
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+.pf-auth-shell {
+  width: min(1000px, 100%);
+  margin: auto;
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  background: white;
+  border: 1px solid #ebe7f5;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 65px rgba(55, 35, 120, .09);
+}
+
+.pf-auth-visual {
+  padding: 50px 42px;
+  background: linear-gradient(145deg, #4430af, #8a69e0);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.pf-auth-mark {
+  color: white;
+  text-decoration: none;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.pf-auth-mark span {
+  color: #dfc7ff;
+}
+
+.pf-auth-illustration {
+  width: 220px;
+  height: 220px;
+  margin: 42px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border: 2px solid rgba(255,255,255,.45);
+  border-radius: 28px;
+  background: rgba(255,255,255,.10);
+  transform: rotate(-5deg);
+  font-size: 28px;
+}
+
+.pf-auth-illustration span {
+  font-size: 30px;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.pf-auth-visual h2 {
+  font-size: 28px;
+  line-height: 1.3;
+  margin-bottom: 12px;
+}
+
+.pf-auth-visual p {
+  font-size: 14px;
+  line-height: 1.7;
+  opacity: .9;
+}
+
+.pf-auth-card {
+  padding: 45px 50px;
+}
+
+.pf-auth-breadcrumb {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+  color: #8a839a;
+  font-size: 13px;
+}
+
+.pf-auth-breadcrumb a,
+.pf-auth-home a,
+.pf-auth-switch a {
+  color: var(--pf-purple);
+  text-decoration: none;
+}
+
+.pf-auth-eyebrow {
+  color: var(--pf-purple);
+  letter-spacing: .12em;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.pf-auth-card h1 {
+  font-size: 32px;
+  margin: 10px 0;
+}
+
+.pf-auth-subtitle {
+  font-size: 14px;
+  color: #777184;
+  margin-bottom: 28px;
+}
+
+.pf-auth-card form,
+.pf-auth-modal form {
+  display: flex;
+  flex-direction: column;
+}
+
+.pf-auth-card label,
+.pf-auth-modal label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.pf-auth-card input,
+.pf-auth-modal input {
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  border: 1px solid #ded8ec;
+  border-radius: 11px;
+  background: #fcfbff;
+  box-sizing: border-box;
+  outline: none;
+  font: inherit;
+}
+
+.pf-auth-card input:focus,
+.pf-auth-modal input:focus {
+  border-color: var(--pf-purple);
+  box-shadow: 0 0 0 3px rgba(96, 66, 217, .12);
+}
+
+.pf-auth-password {
+  position: relative;
+}
+
+.pf-auth-password input {
+  padding-right: 65px;
+}
+
+.pf-auth-password button {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  padding: 6px 10px;
+  border: 0;
+  background: none;
+  color: var(--pf-purple);
+  cursor: pointer;
+}
+
+.pf-auth-primary {
+  width: 100%;
+  min-height: 48px;
+  padding: 13px 18px;
+  border: 0;
+  border-radius: 11px;
+  background: var(--pf-purple);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pf-auth-primary:hover {
+  background: var(--pf-dark);
+}
+
+.pf-auth-primary:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.pf-auth-error {
+  color: #b42345;
+  font-size: 12px;
+  margin: -10px 0 13px;
+}
+
+.pf-auth-alert {
+  background: #fff0f3;
+  border: 1px solid #ffcbd5;
+  color: #a41a43;
+  border-radius: 9px;
+  padding: 12px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.pf-auth-switch,
+.pf-auth-home {
+  margin-top: 22px;
+  text-align: center;
+  font-size: 13px;
+}
+
+.pf-auth-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(20, 14, 45, .65);
+}
+
+.pf-auth-modal {
+  position: relative;
+  width: min(440px, 100%);
+  padding: 30px;
+  border-radius: 20px;
+  background: white;
+  box-sizing: border-box;
+}
+
+.pf-auth-modal h2 {
+  margin: 12px 0;
+}
+
+.pf-auth-modal p {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.pf-auth-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  background: none;
+  border: 0;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.pf-auth-otp-icon {
+  font-size: 30px;
+  color: var(--pf-purple);
+}
+
+.pf-auth-otp-input {
+  text-align: center;
+  font-size: 24px !important;
+  letter-spacing: .3em;
+}
+
+.pf-auth-demo-otp {
+  padding: 10px;
+  border-radius: 8px;
+  background: #f3edff;
+  color: #6042d9;
+}
+
+.pf-auth-text-button {
+  display: block;
+  margin: 16px auto 0;
+  background: none;
+  border: 0;
+  color: var(--pf-purple);
+  cursor: pointer;
+}
+
+@media (max-width: 800px) {
+  .pf-auth-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .pf-auth-visual {
+    display: none;
+  }
+
+  .pf-auth-card {
+    padding: 32px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pf-auth-page {
+    padding: 20px 10px;
+  }
+
+  .pf-auth-card {
+    padding: 25px 18px;
+  }
+}
