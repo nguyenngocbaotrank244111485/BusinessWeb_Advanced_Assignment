@@ -1,0 +1,252 @@
+<section class="card">
+  <header class="head">
+    <div>
+      <h1>Tài khoản của tôi</h1>
+      <p>Quản lý thông tin cá nhân, sổ địa chỉ giao hàng và bảo mật tài khoản.</p>
+    </div>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button type="button" role="tab" [class.active]="tab() === 'info'" [attr.aria-selected]="tab() === 'info'" (click)="setTab('info')">Thông tin</button>
+    <button type="button" role="tab" [class.active]="tab() === 'addresses'" [attr.aria-selected]="tab() === 'addresses'" (click)="setTab('addresses')">
+      Sổ địa chỉ <small>{{ addresses().length }}/{{ maxAddresses }}</small>
+    </button>
+    <button type="button" role="tab" [class.active]="tab() === 'password'" [attr.aria-selected]="tab() === 'password'" (click)="setTab('password')">Đổi mật khẩu</button>
+  </div>
+
+  @if (loading()) {
+    <div class="skeleton"></div>
+  } @else if (profile(); as p) {
+    @switch (tab()) {
+      <!-- ================= THÔNG TIN ================= -->
+      @case ('info') {
+        <form class="info" [formGroup]="infoForm" (ngSubmit)="saveInfo()" novalidate>
+          <div class="avatar-box">
+            @if (avatarShown(); as src) {
+              <img class="avatar-lg" [src]="src" alt="Ảnh đại diện" />
+            } @else {
+              <span class="avatar-lg initial" aria-hidden="true">{{ (infoForm.value.name || p.name).charAt(0).toUpperCase() }}</span>
+            }
+            <label class="btn ghost small">
+              📷 Đổi ảnh
+              <input type="file" accept="image/jpeg,image/png,image/webp" hidden (change)="onAvatar($event)" />
+            </label>
+            @if (avatarShown()) {
+              <button type="button" class="link danger" (click)="removeAvatar()">Gỡ ảnh</button>
+            }
+            <p class="hint">JPG, PNG, WebP · tối đa 5 MB</p>
+          </div>
+
+          <div class="fields">
+            @if (membership(); as m) {
+              <div class="tier-card" [attr.data-tier]="m.tier.key">
+                <div class="tier-main">
+                  <span class="tier-icon" aria-hidden="true">{{ m.tier.icon }}</span>
+                  <div>
+                    <span class="tier-label">Hạng thành viên</span>
+                    <strong>Thành viên {{ m.tier.label }}</strong>
+                  </div>
+                  <div class="tier-points"><b>{{ m.points | number }}</b><span>điểm</span></div>
+                </div>
+                <div class="tier-bar" role="progressbar" [attr.aria-valuenow]="m.progress" aria-valuemin="0" aria-valuemax="100">
+                  <span [style.width.%]="m.progress"></span>
+                </div>
+                <p class="tier-note">
+                  Đã chi tiêu <b>{{ m.totalSpent | vnd }}</b>
+                  @if (m.next) { · còn <b>{{ m.remaining | vnd }}</b> để lên hạng {{ m.next.label }} }
+                  @else { · bạn đang ở hạng cao nhất 🎉 }
+                </p>
+                <ul class="tier-perks">@for (pk of m.tier.perks; track pk) { <li>{{ pk }}</li> }</ul>
+                <div class="tier-steps">
+                  @for (t of tiers; track t.key) {
+                    <span [class.on]="t.minSpent <= m.totalSpent">{{ t.icon }} {{ t.label }}<small>{{ t.minSpent ? ('từ ' + (t.minSpent | vnd)) : 'mặc định' }}</small></span>
+                  }
+                </div>
+              </div>
+            }
+            <label class="field">
+              <span>Họ và tên <b>*</b></span>
+              <input type="text" formControlName="name" maxlength="100" autocomplete="name" [class.err]="invalid('info', 'name')" />
+              @if (invalid('info', 'name')) { <em>Họ tên từ 2 đến 100 ký tự.</em> }
+            </label>
+            <div class="grid2">
+              <label class="field">
+                <span>Biệt danh</span>
+                <input type="text" formControlName="nickname" maxlength="30" placeholder="Tên thân mật (tùy chọn)" [class.err]="invalid('info', 'nickname')" />
+                @if (invalid('info', 'nickname')) { <em>Tối đa 30 ký tự.</em> }
+              </label>
+              <label class="field">
+                <span>Ngày sinh</span>
+                <input type="date" formControlName="birthday" min="1900-01-01" [max]="maxBirthday" autocomplete="bday" [class.err]="invalid('info', 'birthday')" />
+                @if (invalid('info', 'birthday')) { <em>Ngày sinh không hợp lệ.</em> }
+                @else { <em class="muted">Nhận ưu đãi vào tháng sinh nhật.</em> }
+              </label>
+            </div>
+            <label class="field">
+              <span>Email</span>
+              <input type="email" [value]="p.email" readonly disabled />
+              <em class="muted">Email dùng để đăng nhập nên không thể thay đổi.</em>
+            </label>
+            <div class="meta">
+              <div><span>Vai trò</span><b>Khách hàng</b></div>
+              <div><span>Trạng thái</span><b class="ok">{{ p.status === 'ACTIVE' || !p.status ? 'Đang hoạt động' : p.status }}</b></div>
+              @if (p.createdAt) { <div><span>Tham gia</span><b>{{ p.createdAt | date: 'dd/MM/yyyy' }}</b></div> }
+            </div>
+            <div class="actions">
+              <button type="button" class="btn ghost" (click)="resetInfo()" [disabled]="!infoForm.dirty && !infoChanged()">Hủy thay đổi</button>
+              <button type="submit" class="btn primary" [disabled]="!infoForm.dirty && !infoChanged()">Lưu thay đổi</button>
+            </div>
+          </div>
+        </form>
+      }
+
+      <!-- ================= SỔ ĐỊA CHỈ ================= -->
+      @case ('addresses') {
+        <div class="addr-head">
+          <p>Địa chỉ mặc định được chọn sẵn khi thanh toán. Tối đa {{ maxAddresses }} địa chỉ.</p>
+          <button type="button" class="btn primary" (click)="openAdd()" [disabled]="addresses().length >= maxAddresses">＋ Thêm địa chỉ</button>
+        </div>
+
+        @if (addresses().length) {
+          <div class="addr-grid">
+            @for (a of addresses(); track a._id) {
+              <article class="addr" [class.default]="a.isDefault">
+                <div class="addr-top">
+                  <strong>{{ a.name }}</strong>
+                  <span class="phone">{{ a.phone }}</span>
+                  @if (a.isDefault) { <span class="badge">Mặc định</span> }
+                </div>
+                <p>{{ a.detail }}</p>
+                <p class="muted">{{ a.ward }}, {{ a.province }}</p>
+                <div class="addr-actions">
+                  <button type="button" class="link" (click)="openEdit(a)">Sửa</button>
+                  @if (!a.isDefault) {
+                    <button type="button" class="link" (click)="setDefault(a)">Đặt mặc định</button>
+                  }
+                  <button type="button" class="link danger" (click)="confirmDelete.set(a)">Xóa</button>
+                </div>
+              </article>
+            }
+          </div>
+        } @else {
+          <div class="empty">
+            <div class="empty-icon" aria-hidden="true">📍</div>
+            <p>Bạn chưa lưu địa chỉ nào.</p>
+            <button type="button" class="btn primary" (click)="openAdd()">Thêm địa chỉ đầu tiên</button>
+          </div>
+        }
+      }
+
+      <!-- ================= ĐỔI MẬT KHẨU ================= -->
+      @case ('password') {
+        <form class="pw" [formGroup]="passwordForm" (ngSubmit)="changePassword()" novalidate>
+          <label class="field">
+            <span>Mật khẩu hiện tại <b>*</b></span>
+            <input [type]="showPw() ? 'text' : 'password'" formControlName="current" autocomplete="current-password" [class.err]="invalid('password', 'current')" />
+            @if (passwordForm.controls.current.hasError('wrong')) { <em>Mật khẩu hiện tại không đúng.</em> }
+            @else if (invalid('password', 'current')) { <em>Vui lòng nhập mật khẩu hiện tại.</em> }
+          </label>
+          <label class="field">
+            <span>Mật khẩu mới <b>*</b></span>
+            <input [type]="showPw() ? 'text' : 'password'" formControlName="next" autocomplete="new-password"
+              [class.err]="invalid('password', 'next') || (passwordForm.hasError('same') && passwordForm.controls.next.touched)" />
+            @if (invalid('password', 'next')) { <em>Tối thiểu 8 ký tự, gồm cả chữ và số.</em> }
+            @else if (passwordForm.hasError('same') && passwordForm.controls.next.touched) { <em>Mật khẩu mới phải khác mật khẩu hiện tại.</em> }
+          </label>
+          <label class="field">
+            <span>Nhập lại mật khẩu mới <b>*</b></span>
+            <input [type]="showPw() ? 'text' : 'password'" formControlName="confirm" autocomplete="new-password"
+              [class.err]="invalid('password', 'confirm') || (passwordForm.hasError('mismatch') && passwordForm.controls.confirm.touched)" />
+            @if (passwordForm.hasError('mismatch') && passwordForm.controls.confirm.touched) { <em>Mật khẩu nhập lại không khớp.</em> }
+          </label>
+          <label class="check"><input type="checkbox" [checked]="showPw()" (change)="showPw.set(!showPw())" /> Hiện mật khẩu</label>
+
+          <div class="actions">
+            <button type="submit" class="btn primary" [disabled]="pwBusy()">{{ pwBusy() ? 'Đang lưu…' : 'Đổi mật khẩu' }}</button>
+          </div>
+
+          <div class="logout-box">
+            <div>
+              <strong>Đăng xuất</strong>
+              <p>Thoát khỏi tài khoản trên thiết bị này. Giỏ hàng của tài khoản vẫn được giữ.</p>
+            </div>
+            <button type="button" class="btn outline-danger" (click)="logout()">↩ Đăng xuất</button>
+          </div>
+        </form>
+      }
+    }
+  } @else {
+    <div class="empty"><p>Không tải được hồ sơ. Vui lòng đăng nhập lại.</p></div>
+  }
+</section>
+
+<!-- ===== Dialog thêm / sửa địa chỉ ===== -->
+@if (dialog(); as d) {
+  <div class="backdrop" (click)="closeDialog()">
+    <form class="modal" role="dialog" aria-modal="true" [attr.aria-label]="d.mode === 'add' ? 'Thêm địa chỉ' : 'Sửa địa chỉ'"
+      [formGroup]="addressForm" (ngSubmit)="saveAddress()" (click)="$event.stopPropagation()" novalidate>
+      <div class="modal-head">
+        <h2>{{ d.mode === 'add' ? 'Thêm địa chỉ mới' : 'Sửa địa chỉ' }}</h2>
+        <button type="button" class="x" (click)="closeDialog()" aria-label="Đóng">✕</button>
+      </div>
+      <div class="grid2">
+        <label class="field">
+          <span>Họ tên người nhận <b>*</b></span>
+          <input type="text" formControlName="name" maxlength="100" autocomplete="name" [class.err]="invalid('address', 'name')" />
+          @if (invalid('address', 'name')) { <em>Từ 2 đến 100 ký tự.</em> }
+        </label>
+        <label class="field">
+          <span>Số điện thoại <b>*</b></span>
+          <input type="tel" formControlName="phone" maxlength="10" inputmode="numeric" autocomplete="tel" placeholder="0xxxxxxxxx" [class.err]="invalid('address', 'phone')" />
+          @if (invalid('address', 'phone')) { <em>Gồm 10 số, bắt đầu bằng 0.</em> }
+        </label>
+        <label class="field">
+          <span>Tỉnh / Thành phố <b>*</b></span>
+          <select formControlName="province" [class.err]="invalid('address', 'province')">
+            <option value="" disabled>— Chọn tỉnh/thành —</option>
+            @for (pv of provinces(); track pv) { <option [value]="pv">{{ pv }}</option> }
+            @if (addressForm.value.province && !provinces().includes(addressForm.value.province)) {
+              <option [value]="addressForm.value.province">{{ addressForm.value.province }}</option>
+            }
+          </select>
+          @if (invalid('address', 'province')) { <em>Vui lòng chọn tỉnh/thành.</em> }
+        </label>
+        <label class="field">
+          <span>Phường / Xã <b>*</b></span>
+          <input type="text" formControlName="ward" maxlength="100" list="ward-hints" [class.err]="invalid('address', 'ward')" />
+          <datalist id="ward-hints">@for (w of wardHints(); track w) { <option [value]="w"></option> }</datalist>
+          @if (invalid('address', 'ward')) { <em>Vui lòng nhập phường/xã.</em> }
+        </label>
+      </div>
+      <label class="field">
+        <span>Địa chỉ chi tiết <b>*</b></span>
+        <input type="text" formControlName="detail" maxlength="200" autocomplete="street-address" placeholder="Số nhà, tên đường…" [class.err]="invalid('address', 'detail')" />
+        @if (invalid('address', 'detail')) { <em>Tối đa 200 ký tự, không để trống.</em> }
+      </label>
+      <label class="check"><input type="checkbox" formControlName="isDefault" /> Đặt làm địa chỉ mặc định</label>
+      <div class="actions">
+        <button type="button" class="btn ghost" (click)="closeDialog()">Hủy</button>
+        <button type="submit" class="btn primary">{{ d.mode === 'add' ? 'Thêm địa chỉ' : 'Lưu' }}</button>
+      </div>
+    </form>
+  </div>
+}
+
+<!-- ===== Xác nhận xóa ===== -->
+@if (confirmDelete(); as a) {
+  <div class="backdrop" (click)="confirmDelete.set(null)">
+    <div class="modal small" role="alertdialog" aria-modal="true" aria-label="Xóa địa chỉ" (click)="$event.stopPropagation()">
+      <h2>Xóa địa chỉ này?</h2>
+      <p>{{ a.name }} · {{ a.phone }}<br />{{ a.detail }}, {{ a.ward }}, {{ a.province }}</p>
+      @if (a.isDefault && addresses().length > 1) { <p class="warn">Đây là địa chỉ mặc định. Địa chỉ còn lại đầu tiên sẽ thành mặc định.</p> }
+      <div class="actions">
+        <button type="button" class="btn ghost" (click)="confirmDelete.set(null)">Hủy</button>
+        <button type="button" class="btn danger" (click)="deleteAddress()">Xóa</button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (toast(); as t) {
+  <div class="toast" [class.error]="t.type === 'error'" role="status">{{ t.text }}</div>
+}

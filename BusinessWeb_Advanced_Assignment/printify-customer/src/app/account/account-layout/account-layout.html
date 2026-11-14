@@ -1,0 +1,34 @@
+<app-navbar></app-navbar>
+
+<div class="account container">
+  <aside class="side" aria-label="Menu tài khoản">
+    @if (profiles.profile(); as p) {
+      <div class="me">
+        @if (p.avatar) {
+          <img class="avatar" [src]="p.avatar" alt="" />
+        } @else {
+          <span class="avatar initial" aria-hidden="true">{{ initial(p.name) }}</span>
+        }
+        <div class="me-text">
+          <strong>{{ p.name }}</strong>
+          @if (p.nickname) { <span class="nick">“{{ p.nickname }}”</span> }
+          <span>{{ p.email }}</span>
+          @if (tierOf(p.membership?.totalSpent); as t) { <span class="tier" [attr.data-tier]="t.key">{{ t.icon }} Thành viên {{ t.label }}</span> }
+        </div>
+      </div>
+    }
+    <nav class="menu">
+      @for (m of menu; track m.link) {
+        <a [routerLink]="m.link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">
+          <span class="ico" aria-hidden="true">{{ m.icon }}</span>{{ m.label }}
+          @if (m.code === 'C19' && notifications.unread() > 0) { <span class="count">{{ notifications.unread() }}</span> }
+        </a>
+      }
+      <button type="button" class="logout" (click)="logout()"><span class="ico" aria-hidden="true">↩</span>Đăng xuất</button>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

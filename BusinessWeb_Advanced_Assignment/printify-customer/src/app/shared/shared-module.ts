@@ -7,11 +7,12 @@ import { EmptyState } from './empty-state/empty-state';
 import { VndPipe } from './pipes/vnd-pipe';
 import { StatusBadge } from './status-badge/status-badge';
 import { ImgFallbackDirective } from './img-fallback.directive';
+import { NotificationBell } from './notification-bell/notification-bell';
 
 /** Component/pipe dùng lại ở nhiều module (Ch.II 2.3: @Input/@Output) */
 @NgModule({
-  declarations: [ProductCard, Pagination, EmptyState, VndPipe, StatusBadge],
+  declarations: [ProductCard, Pagination, EmptyState, VndPipe, StatusBadge, NotificationBell],
   imports: [CommonModule, RouterModule, ImgFallbackDirective],
-  exports: [CommonModule, RouterModule, ImgFallbackDirective, ProductCard, Pagination, EmptyState, VndPipe, StatusBadge],
+  exports: [CommonModule, RouterModule, ImgFallbackDirective, ProductCard, Pagination, EmptyState, VndPipe, StatusBadge, NotificationBell],
 })
 export class SharedModule {}

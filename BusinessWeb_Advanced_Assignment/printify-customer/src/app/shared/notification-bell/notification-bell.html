@@ -1,0 +1,36 @@
+<button type="button" class="bell" (click)="toggle()" [attr.aria-expanded]="open()"
+  [attr.aria-label]="ns.unread() ? 'Thông báo, ' + ns.unread() + ' chưa đọc' : 'Thông báo'" [title]="'Thông báo'">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 22Zm7-6V11a7 7 0 0 0-5.5-6.84V3.5a1.5 1.5 0 0 0-3 0v.66A7 7 0 0 0 5 11v5l-2 2v1h18v-1l-2-2Z"/></svg>
+  @if (ns.unread() > 0) { <span class="dot" aria-hidden="true"></span> }
+</button>
+
+@if (open()) {
+  <div class="panel" role="dialog" aria-label="Thông báo">
+    <div class="panel-head">
+      <strong>Thông báo</strong>
+      @if (ns.unread() > 0) {
+        <button type="button" class="link" (click)="ns.markAllRead()">Đánh dấu đã đọc hết</button>
+      }
+    </div>
+    @if (latest().length) {
+      <ul>
+        @for (n of latest(); track n._id) {
+          <li>
+            <button type="button" class="item" [class.unread]="!n.isRead" (click)="openItem(n)">
+              <span class="ico" aria-hidden="true">{{ ns.iconOf(n.type) }}</span>
+              <span class="txt">
+                <b>{{ n.title }}</b>
+                <span>{{ n.body }}</span>
+                <small>{{ n.createdAt | date: 'HH:mm dd/MM/yyyy' }}</small>
+              </span>
+              @if (!n.isRead) { <span class="unread-dot" aria-label="chưa đọc"></span> }
+            </button>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="empty">Bạn chưa có thông báo nào.</p>
+    }
+    <button type="button" class="all" (click)="viewAll()">Xem tất cả thông báo →</button>
+  </div>
+}

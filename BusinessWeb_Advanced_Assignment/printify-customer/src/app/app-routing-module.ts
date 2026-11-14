@@ -41,6 +41,9 @@ const routes: Routes = [
     loadChildren: () => import('./market/market-module').then((m) => m.MarketModule),
   },
 
+  // Tài khoản (C18 + sidebar cho C11, C14, C19): tải lazy
+  { path: 'account', loadChildren: () => import('./account/account-module').then((m) => m.AccountModule) },
+
   // Các màn hình chưa xây dựng: tạm hiện trang "đang xây dựng".
   {
     path: '',

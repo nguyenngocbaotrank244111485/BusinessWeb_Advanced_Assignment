@@ -26,7 +26,8 @@
         }
       </a>
       @if (auth.user(); as u) {
-        <span class="user-chip" [title]="u.email"><span class="user-avatar" aria-hidden="true">{{ u.name.charAt(0) }}</span><span class="user-name">{{ u.name }}</span></span>
+        <app-notification-bell></app-notification-bell>
+        <a routerLink="/account/profile" class="user-chip" [title]="u.email + ' - Tài khoản của tôi'"><span class="user-avatar" aria-hidden="true">{{ u.name.charAt(0) }}</span><span class="user-name">{{ u.name }}</span></a>
         <button type="button" class="auth-login" (click)="logout()">Đăng xuất</button>
       } @else {
         <a routerLink="/auth/login" [queryParams]="{ returnUrl: returnUrl }" class="auth-login">Đăng nhập</a>

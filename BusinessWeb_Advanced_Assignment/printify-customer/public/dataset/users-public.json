@@ -17,7 +17,13 @@
       }
     ],
     "avatar": null,
-    "createdAt": "2026-10-24T06:34:47.624Z"
+    "createdAt": "2026-10-24T06:34:47.624Z",
+    "nickname": "Minh An",
+    "birthday": "2003-05-14",
+    "membership": {
+      "totalSpent": 5420000,
+      "points": 542
+    }
   },
   {
     "_id": "usr_c2",
