@@ -26,8 +26,6 @@ export const ORDER_TABS: { key: OrderTab; label: string }[] = [
 const DAY = 24 * 60 * 60 * 1000;
 /** Sau khi giao bao lâu thì tự chuyển "Hoàn thành" */
 export const AUTO_RECEIVE_MS = 3 * DAY;
-/** Hạn yêu cầu trả hàng tính từ lúc giao (C16) */
-export const RETURN_WINDOW_MS = 7 * DAY;
 
 /** Đơn chờ thanh toán đã quá 10 phút (server sẽ hủy; client hiển thị trước) */
 export function isPaymentExpired(o: Order, now = Date.now()): boolean {
@@ -115,10 +113,6 @@ export function designRejected(o: Order): boolean {
   return o.items.some((i) => i.designReview?.status === 'REJECTED');
 }
 
-export function canReturn(o: Order, now = Date.now()): boolean {
-  const t = tabOf(o, now);
-  return (t === 'delivered' || t === 'done') && !!o.deliveredAt && now - Date.parse(o.deliveredAt) <= RETURN_WINDOW_MS;
-}
 
 /** Lý do hủy đơn cho khách chọn */
 export const CANCEL_REASONS = [
@@ -132,3 +126,16 @@ export const CANCEL_REASONS = [
   'Lý do khác',
 ] as const;
 export const ADDRESS_REASON = 'Sai địa chỉ giao hàng';
+
+/**
+ * Trạng thái thanh toán (dùng chung Customer + Admin):
+ * PENDING -> (khách bấm "Tôi đã thanh toán") WAITING_STAFF -> PAID | REJECTED;
+ * quá hạn QR mà chưa báo đã trả -> EXPIRED.
+ */
+export const PAYMENT_STATUS_LABELS: Record<string, string> = {
+  PENDING: 'Chưa thanh toán',
+  WAITING_STAFF: 'Chờ PrintiFy xác nhận',
+  PAID: 'Đã thanh toán',
+  REJECTED: 'Không xác nhận được thanh toán',
+  EXPIRED: 'Hết hạn thanh toán',
+};

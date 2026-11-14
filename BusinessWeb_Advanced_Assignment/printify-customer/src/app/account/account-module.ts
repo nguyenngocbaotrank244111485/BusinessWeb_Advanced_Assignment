@@ -3,7 +3,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../shared/shared-module';
 import { CoreModule } from '../core/core-module';
-import { NotFound } from '../core/not-found/not-found';
 import { authGuard } from '../core/guards/auth-guard';
 import { AccountLayout } from './account-layout/account-layout';
 import { ProfilePage } from './profile-page/profile-page';
@@ -29,8 +28,6 @@ const routes: Routes = [
       { path: 'designs', component: DesignsPage, title: 'Thiết kế của tôi | PrintiFy' },
       { path: 'orders', component: OrdersPage, title: 'Đơn hàng của tôi | PrintiFy' },
       { path: 'orders/:orderId', component: OrderDetail, title: 'Chi tiết đơn hàng | PrintiFy' },
-      // C16 Gửi yêu cầu hoàn hàng: chưa làm
-      { path: 'orders/:orderId/return', component: NotFound, data: { title: 'Yêu cầu trả hàng / hoàn tiền' } },
       { path: 'notifications', component: NotificationsPage, title: 'Thông báo | PrintiFy' },
     ],
   },

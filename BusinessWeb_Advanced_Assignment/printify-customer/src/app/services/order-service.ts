@@ -79,7 +79,7 @@ export class OrderService {
     const updated: Order = {
       ...o,
       orderStatus: 'PENDING_STAFF_CONFIRMATION',
-      paymentStatus: 'CLAIMED',
+      paymentStatus: 'WAITING_STAFF',
       paymentClaimedAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

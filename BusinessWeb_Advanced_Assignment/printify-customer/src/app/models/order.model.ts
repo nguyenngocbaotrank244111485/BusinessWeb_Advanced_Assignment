@@ -83,7 +83,8 @@ export interface Order {
   _id: string;
   userId: string;
   orderStatus: OrderStatus;
-  paymentStatus: 'PENDING' | 'CLAIMED' | 'WAITING_STAFF' | 'PAID' | 'EXPIRED' | 'REJECTED' | string;
+  /** PENDING -> WAITING_STAFF -> PAID | REJECTED; quá hạn -> EXPIRED (xem PAYMENT_STATUS_LABELS) */
+  paymentStatus: 'PENDING' | 'WAITING_STAFF' | 'PAID' | 'EXPIRED' | 'REJECTED' | string;
   /** Mặc định BANK cho đơn cũ không có trường này */
   paymentMethod?: PaymentMethod;
   items: OrderItem[];

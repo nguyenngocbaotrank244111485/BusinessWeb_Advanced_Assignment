@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 import { Order, OrderItem } from '../../../models/order.model';
-import { canCancel, canReturn, cancelLocked, isPaymentExpired, paymentDeadline, statusLabel, tabOf } from '../../../models/order-status';
+import { canCancel, cancelLocked, PAYMENT_STATUS_LABELS, isPaymentExpired, paymentDeadline, statusLabel, tabOf } from '../../../models/order-status';
 import { OrderService, TimelineEntry } from '../../../services/order-service';
 import { AuthService } from '../../../services/auth-service';
 import { DesignService } from '../../../services/design-service';
@@ -97,7 +97,6 @@ export class OrderDetail {
   });
   readonly canCancel = computed(() => !!this.order() && canCancel(this.order()!, this.now()));
   readonly cancelLocked = computed(() => !!this.order() && cancelLocked(this.order()!, this.now()));
-  readonly canReturn = computed(() => !!this.order() && canReturn(this.order()!, this.now()));
   readonly timeline = computed(() => (this.order() ? [...this.ordersSvc.timeline(this.order()!)].reverse() : []));
   readonly paymentLeft = computed(() => {
     const o = this.order();
@@ -221,8 +220,8 @@ export class OrderDetail {
     this.showToast('ok', 'Cảm ơn bạn! Hãy để lại đánh giá cho đơn hàng nhé.');
   }
 
-  returnOrder(): void {
-    void this.router.navigate(['/account/orders', this.order()!._id, 'return']);
+  paymentLabel(s: string): string {
+    return PAYMENT_STATUS_LABELS[s] ?? s;
   }
 
   rebuy(): void {

@@ -5,7 +5,6 @@ import {
   ORDER_TABS,
   OrderTab,
   canCancel,
-  canReturn,
   cancelLocked,
   designRejected,
   statusLabel,
@@ -93,9 +92,6 @@ export class OrdersPage {
   cancelLocked(o: Order): boolean {
     return cancelLocked(o, this.now());
   }
-  canReturn(o: Order): boolean {
-    return canReturn(o, this.now());
-  }
   rejected(o: Order): boolean {
     return o.orderStatus === 'DESIGN_REVIEW' && designRejected(o);
   }
@@ -130,10 +126,6 @@ export class OrdersPage {
   received(o: Order): void {
     this.ordersSvc.confirmReceived(o._id);
     this.showToast('ok', 'Cảm ơn bạn! Đơn đã chuyển sang Hoàn thành. Hãy để lại đánh giá nhé.');
-  }
-
-  returnOrder(o: Order): void {
-    void this.router.navigate(['/account/orders', o._id, 'return']);
   }
 
   rebuy(o: Order): void {

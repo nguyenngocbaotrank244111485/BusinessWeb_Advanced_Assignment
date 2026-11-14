@@ -93,15 +93,9 @@
                   <button type="button" class="btn ghost" (click)="open(o)">Theo dõi đơn</button>
                 }
                 @case ('delivered') {
-                  @if (canReturn(o)) { <button type="button" class="btn ghost" (click)="returnOrder(o)">Trả hàng / Hoàn tiền</button> }
                   <button type="button" class="btn primary" (click)="received(o)">Đã nhận được hàng</button>
                 }
                 @case ('done') {
-                  @if (canReturn(o)) {
-                    <button type="button" class="btn ghost" (click)="returnOrder(o)">Trả hàng / Hoàn tiền</button>
-                  } @else {
-                    <button type="button" class="btn ghost" disabled title="Đã quá 7 ngày kể từ khi nhận hàng">Hết hạn trả hàng</button>
-                  }
                   <button type="button" class="btn ghost" (click)="rebuy(o)">Mua lại</button>
                   @if (o.review) {
                     <button type="button" class="btn ghost rated" (click)="open(o)">★ {{ o.review.rating }} · Đã đánh giá</button>
