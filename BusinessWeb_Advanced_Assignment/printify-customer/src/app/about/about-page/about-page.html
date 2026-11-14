@@ -1,0 +1,154 @@
+<main class="about">
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-text">
+        <nav class="breadcrumb" aria-label="Breadcrumb"><a routerLink="/">Trang chủ</a><span>/</span>Giới thiệu</nav>
+        <span class="eyebrow">Về PrintiFy</span>
+        <h1>Biến ý tưởng của bạn thành <em>món đồ có thật</em></h1>
+        <p class="lead">PrintiFy là nền tảng thiết kế và in ấn sản phẩm cá nhân hóa. Bạn chọn phôi, tự thiết kế ngay trên trình duyệt hoặc dùng mẫu của cộng đồng, rồi nhận về đúng món đồ mang dấu ấn của mình.</p>
+        <div class="cta">
+          <a routerLink="/products" class="btn primary">Bắt đầu thiết kế</a>
+          <a routerLink="/market" class="btn ghost">Khám phá Marketplace</a>
+        </div>
+      </div>
+      <div class="collage" aria-hidden="true">
+        @for (p of showcase(); track p._id; let i = $index) {
+          <div class="tile" [class]="'tile t' + i"><img [src]="p.img_display" alt="" appImgFallback /></div>
+        }
+        <span class="badge">Make it yours ✦</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Số liệu ===== -->
+  <section class="container stats" aria-label="PrintiFy trong vài con số">
+    <div class="stat"><b>{{ productCount() }}</b><span>mẫu phôi đang bán</span></div>
+    <div class="stat"><b>{{ categories().length }}</b><span>danh mục sản phẩm</span></div>
+    <div class="stat"><b>{{ designCount() }}</b><span>thiết kế trên Marketplace</span></div>
+    <div class="stat"><b>{{ cfg().shippingFeeVnd | vnd }}</b><span>phí giao mỗi đơn</span></div>
+  </section>
+
+  <!-- ===== Cách hoạt động ===== -->
+  <section class="container block">
+    <header class="head">
+      <span class="eyebrow">Cách PrintiFy hoạt động</span>
+      <h2>Từ ý tưởng tới tay bạn trong 4 bước</h2>
+    </header>
+    <ol class="steps">
+      @for (s of steps; track s.title; let i = $index) {
+        <li class="step">
+          <span class="num">{{ i + 1 }}</span>
+          <span class="step-icon" aria-hidden="true">{{ s.icon }}</span>
+          <h3>{{ s.title }}</h3>
+          <p>{{ s.text }}</p>
+        </li>
+      }
+    </ol>
+  </section>
+
+  <!-- ===== Marketplace cho người sáng tạo ===== -->
+  <section class="creator">
+    <div class="container creator-grid">
+      <div>
+        <span class="eyebrow light">Dành cho người sáng tạo</span>
+        <h2>Bán thiết kế của bạn trên Marketplace</h2>
+        <p>Thiết kế bạn tạo trên PrintiFy có thể đăng bán cho cả cộng đồng. Người mua chọn in mẫu của bạn lên bất kỳ sản phẩm nào có vùng in, mỗi lượt dùng bạn đều nhận tiền.</p>
+        <ul class="checks">
+          <li>Tự đặt giá thiết kế, PrintiFy chỉ thu thêm <b>{{ feePercent() }}% phí sàn</b> từ người mua</li>
+          <li>Tin đăng được duyệt trước khi hiện công khai</li>
+          <li>Chỉ hiện ảnh có watermark, file gốc luôn được giữ kín</li>
+          <li>Theo dõi lượt bán và tiền nhận trong My marketplace</li>
+        </ul>
+        <div class="cta">
+          <a routerLink="/market/my-listings" class="btn white">Mở My marketplace</a>
+          <a routerLink="/market" class="btn outline">Xem các thiết kế</a>
+        </div>
+      </div>
+      <div class="price-card" aria-label="Ví dụ chia tiền một lượt bán">
+        <span class="pc-title">Ví dụ 1 lượt bán</span>
+        <div class="pc-row"><span>Bạn đặt giá</span><b>50.000đ</b></div>
+        <div class="pc-row"><span>Phí sàn {{ feePercent() }}%</span><b>{{ 50000 * cfg().platformFeeRate | vnd }}</b></div>
+        <div class="pc-row total"><span>Người mua trả</span><b>{{ 50000 * (1 + cfg().platformFeeRate) | vnd }}</b></div>
+        <div class="pc-earn">Bạn nhận <b>50.000đ</b> cho mỗi lượt dùng</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Danh mục ===== -->
+  <section class="container block">
+    <header class="head">
+      <span class="eyebrow">Sản phẩm</span>
+      <h2>In được trên rất nhiều thứ</h2>
+    </header>
+    <div class="cats">
+      @for (c of categories(); track c.slug) {
+        <a class="cat" [routerLink]="['/products']" [queryParams]="{ category: c.slug }">
+          <span class="cat-img"><img [src]="categoryImage().get(c.slug)" [alt]="c.label" appImgFallback /></span>
+          <b>{{ c.label }}</b>
+          <small>{{ c.count }} sản phẩm</small>
+        </a>
+      }
+    </div>
+  </section>
+
+  <!-- ===== Cam kết ===== -->
+  <section class="container block">
+    <header class="head">
+      <span class="eyebrow">Cam kết của PrintiFy</span>
+      <h2>Yên tâm từ lúc thiết kế tới lúc nhận hàng</h2>
+    </header>
+    <div class="promises">
+      @for (p of promises; track p.title) {
+        <article class="promise">
+          <span class="p-icon" aria-hidden="true">{{ p.icon }}</span>
+          <h3>{{ p.title }}</h3>
+          <p>{{ p.text }}</p>
+        </article>
+      }
+    </div>
+    <div class="tiers" aria-label="Ưu đãi theo hạng thành viên">
+      <div class="tiers-head">
+        <b>Ưu đãi thành viên</b>
+        <span>Mua càng nhiều, hạng càng cao. Ưu đãi trừ thẳng vào tiền hàng ở giỏ và lúc thanh toán.</span>
+      </div>
+      @for (t of tiers; track t.key) {
+        <div class="tier" [class]="'tier ' + t.key.toLowerCase()">
+          <span class="t-icon" aria-hidden="true">{{ t.icon }}</span>
+          <b>Hạng {{ t.label }}</b>
+          <small>{{ t.minSpent ? 'Chi tiêu từ ' + (t.minSpent | vnd) : 'Khi tạo tài khoản' }}</small>
+          <em>{{ t.discountRate ? 'Giảm ' + (t.discountRate * 100 | number: '1.0-0') + '% tiền hàng' : 'Tích điểm, ưu đãi sinh nhật' }}</em>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ===== Câu hỏi thường gặp ===== -->
+  <section class="container block faq-block">
+    <header class="head">
+      <span class="eyebrow">Hỏi đáp</span>
+      <h2>Câu hỏi thường gặp</h2>
+    </header>
+    <div class="faqs">
+      @for (f of faqs(); track f.q; let i = $index) {
+        <div class="faq" [class.open]="openFaq() === i">
+          <button type="button" (click)="toggle(i)" [attr.aria-expanded]="openFaq() === i" [attr.aria-controls]="'faq-' + i">
+            <span>{{ f.q }}</span><span class="chev" aria-hidden="true">＋</span>
+          </button>
+          @if (openFaq() === i) {
+            <p [id]="'faq-' + i">{{ f.a }}</p>
+          }
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ===== Kêu gọi ===== -->
+  <section class="container">
+    <div class="final">
+      <h2>Sẵn sàng tạo món đồ của riêng bạn?</h2>
+      <p>Chọn một phôi bất kỳ và bắt đầu thiết kế, chỉ mất vài phút.</p>
+      <a routerLink="/products" class="btn white">Chọn sản phẩm ngay</a>
+    </div>
+  </section>
+</main>
