@@ -98,7 +98,7 @@
             <a class="edit" routerLink="/cart">Sửa giỏ hàng</a>
           </section>
 
-          <app-order-summary [totals]="totals()" [itemCount]="qty()" title="Thanh toán" [threshold]="cfg().discountThresholdVnd" [discountPercent]="cfg().discountRate * 100">
+          <app-order-summary [totals]="totals()" [itemCount]="qty()" title="Thanh toán" [discountLabel]="discount().label" [discountHint]="discount().hint">
             @if (error()) { <p class="err" role="alert">{{ error() }}</p> }
             <button type="submit" class="btn-pay" [disabled]="submitting() || !lines().length">
               {{ submitting() ? 'Đang tạo đơn...' : 'Thanh toán ' + (totals().total | vnd) }}

@@ -1,7 +1,8 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, firstValueFrom, map, of, shareReplay } from 'rxjs';
 import { AuthService } from './auth-service';
+import { MembershipInfo, membershipOf } from '../models/membership.model';
 
 /** Địa chỉ nhận hàng (users.addresses[] – Data Dictionary V4.2) */
 export interface Address {
@@ -46,6 +47,12 @@ export class ProfileService {
   private readonly auth = inject(AuthService);
 
   readonly profile = signal<Profile | null>(null);
+  /** Hạng thành viên của người đang đăng nhập (null = chưa đăng nhập / chưa tải) */
+  readonly membership = computed<MembershipInfo | null>(() => {
+    const p = this.profile();
+    if (!p || p._id !== this.auth.user()?._id) return null;
+    return membershipOf(p.membership?.totalSpent ?? 0, p.membership?.points ?? 0);
+  });
   readonly provinces$: Observable<string[]> = this.http
     .get<string[]>('/dataset/vn-provinces.json')
     .pipe(catchError(() => of([] as string[])), shareReplay(1));

@@ -11,6 +11,7 @@ import { ConfigService } from '../../services/config-service';
 import { OrderService } from '../../services/order-service';
 import { ProductService } from '../../services/product-service';
 import { ProfileService } from '../../services/profile-service';
+import { tierDiscount } from '../../models/membership.model';
 
 /** SĐT Việt Nam (BR09): 0 hoặc +84, đầu số di động 3/5/7/8/9, tổng 10 số */
 export const PHONE_VN = /^(0|\+84)(3|5|7|8|9)\d{8}$/;
@@ -50,6 +51,8 @@ export class CheckoutPage {
       (this.auth.user() as { addresses?: SavedAddress[] } | null)?.addresses ??
       [],
   );
+  /** Giảm giá theo hạng thành viên (C18) */
+  readonly discount = computed(() => tierDiscount(this.profiles.membership()));
   readonly addressChoice = signal<string>(''); // _id địa chỉ đã lưu hoặc 'new'
   readonly submitting = signal(false);
   readonly error = signal('');
@@ -75,7 +78,10 @@ export class CheckoutPage {
     });
   });
   readonly totals = computed(() =>
-    calcTotals(this.lines().map((l) => ({ unitPrice: l.price, quantity: l.item.quantity, designFee: l.item.designFee ?? 0 })), this.cfg()),
+    calcTotals(
+      this.lines().map((l) => ({ unitPrice: l.price, quantity: l.item.quantity, designFee: l.item.designFee ?? 0 })),
+      { ...this.cfg(), discountRate: this.discount().rate, discountThresholdVnd: 0 },
+    ),
   );
   readonly qty = computed(() => this.lines().reduce((s, l) => s + l.item.quantity, 0));
 

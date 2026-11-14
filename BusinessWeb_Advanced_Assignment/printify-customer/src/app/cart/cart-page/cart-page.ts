@@ -7,6 +7,8 @@ import { AuthService } from '../../services/auth-service';
 import { CartItem, CartService, MAX_QTY } from '../../services/cart-service';
 import { ConfigService } from '../../services/config-service';
 import { ProductService } from '../../services/product-service';
+import { ProfileService } from '../../services/profile-service';
+import { tierDiscount } from '../../models/membership.model';
 
 /** Một dòng giỏ kèm dữ liệu mới nhất để phát hiện giá đổi / hết hàng */
 export interface CartLine {
@@ -30,6 +32,10 @@ export class CartPage {
   readonly auth = inject(AuthService);
   readonly ps = inject(ProductService);
   readonly cfg = inject(ConfigService).config;
+  private readonly profiles = inject(ProfileService);
+  /** Giảm giá theo hạng thành viên (C18), khách vãng lai = 0% */
+  readonly discount = computed(() => tierDiscount(this.auth.isLoggedIn() ? this.profiles.membership() : null));
+  private readonly loadProfile = this.auth.isLoggedIn() ? void this.profiles.load() : undefined;
   private readonly router = inject(Router);
 
   readonly maxQty = MAX_QTY;
@@ -63,7 +69,7 @@ export class CartPage {
   readonly totals = computed(() =>
     calcTotals(
       this.selectedLines().map((l) => ({ unitPrice: l.currentPrice, quantity: l.item.quantity, designFee: l.item.designFee ?? 0 })),
-      this.cfg(),
+      { ...this.cfg(), discountRate: this.discount().rate, discountThresholdVnd: 0 },
     ),
   );
   readonly selectedQty = computed(() => this.selectedLines().reduce((s, l) => s + l.item.quantity, 0));
