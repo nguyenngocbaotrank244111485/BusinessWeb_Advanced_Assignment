@@ -105,3 +105,18 @@ h1, h2, h3 { color: var(--pf-ink); }
   .cats { grid-template-columns: repeat(2, 1fr); }
   .stats { margin-top: 16px; }
 }
+
+/* Ưu đãi thành viên (luật hạng C18) */
+.tiers { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 12px; margin-top: 18px; padding: 18px; border-radius: var(--pf-radius-lg); background: var(--pf-soft); align-items: stretch; }
+.tiers-head { display: grid; align-content: center; gap: 4px; }
+.tiers-head b { color: var(--pf-ink); }
+.tiers-head span { font-size: 13px; line-height: 1.5; color: var(--pf-muted); }
+.tier { display: grid; gap: 2px; padding: 14px; border-radius: var(--pf-radius); background: #fff; border: 1px solid var(--pf-line); }
+.tier.gold { border-color: #e9c46a; background: #fff9e8; }
+.tier.silver { border-color: #cfd4dc; }
+.t-icon { font-size: 22px; }
+.tier b { font-size: 15px; color: var(--pf-ink); }
+.tier small { font-size: 12px; color: var(--pf-muted); }
+.tier em { margin-top: 4px; font-style: normal; font-size: 13px; font-weight: 700; color: var(--pf-primary); }
+@media (max-width: 960px) { .tiers { grid-template-columns: repeat(3, 1fr); } .tiers-head { grid-column: 1 / -1; } }
+@media (max-width: 560px) { .tiers { grid-template-columns: 1fr; } }

@@ -13,15 +13,15 @@ import { OrderTotals } from '../../models/order.model';
         <div class="row"><span>Phí thiết kế Marketplace</span><span>{{ totals.designFees | vnd }}</span></div>
       }
       <div class="row" [class.good]="totals.discount">
-        <span>Giảm {{ discountPercent }}% (đơn từ {{ threshold | vnd }})</span>
+        <span>{{ discountLabel }}</span>
         <span>{{ totals.discount ? '−' + (totals.discount | vnd) : '0đ' }}</span>
       </div>
-      @if (!totals.discount && totals.productSubtotal > 0) {
-        <p class="hint">Mua thêm {{ threshold - totals.productSubtotal | vnd }} tiền hàng để được giảm {{ discountPercent }}%.</p>
+      @if (discountHint && totals.productSubtotal > 0) {
+        <p class="hint">{{ discountHint }}</p>
       }
       <div class="row"><span>Phí giao hàng</span><span>{{ totals.shipping | vnd }}</span></div>
       <div class="row total"><span>Tổng cộng</span><span>{{ totals.total | vnd }}</span></div>
-      <p class="note">Đã gồm VAT. Giảm giá chỉ tính trên tiền hàng, không áp vào phí thiết kế và phí giao hàng.</p>
+      <p class="note">Đã gồm VAT. Ưu đãi hạng thành viên chỉ tính trên tiền hàng, không áp vào phí thiết kế và phí giao hàng.</p>
       <ng-content></ng-content>
     </section>
   `,
@@ -40,6 +40,7 @@ export class OrderSummary {
   @Input({ required: true }) totals!: OrderTotals;
   @Input() itemCount = 0;
   @Input() title = 'Tóm tắt đơn hàng';
-  @Input() threshold = 5000000;
-  @Input() discountPercent = 5;
+  /** Ví dụ "Ưu đãi hạng Vàng (−5%)" – tính theo hạng thành viên C18 */
+  @Input() discountLabel = 'Ưu đãi thành viên';
+  @Input() discountHint = '';
 }

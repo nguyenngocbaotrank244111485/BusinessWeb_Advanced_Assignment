@@ -1,6 +1,6 @@
 :host { display: block; background: var(--pf-soft); min-height: 100vh; }
 .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-.account { display: grid; grid-template-columns: 260px 1fr; gap: 24px; padding-top: 28px; padding-bottom: 48px; align-items: start; }
+.account { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 24px; padding-top: 28px; padding-bottom: 48px; align-items: start; }
 
 .side { position: sticky; top: 92px; background: #fff; border: 1px solid var(--pf-line); border-radius: var(--pf-radius-lg); padding: 18px 12px; }
 .me { display: flex; align-items: center; gap: 12px; padding: 0 8px 16px; margin-bottom: 8px; border-bottom: 1px solid var(--pf-line); }
@@ -33,15 +33,14 @@
 .menu a:hover, .menu button:hover { background: var(--pf-soft); color: var(--pf-primary); }
 .menu a.active { background: var(--pf-pink-50); color: var(--pf-primary); }
 .ico { width: 22px; text-align: center; }
-.logout { margin-top: 8px; border-top: 1px solid var(--pf-line) !important; border-radius: 0 0 var(--pf-radius-sm) var(--pf-radius-sm) !important; padding-top: 14px !important; color: var(--pf-danger) !important; }
 
 .content { min-width: 0; }
 
 @media (max-width: 860px) {
-  .account { grid-template-columns: 1fr; padding-top: 16px; }
+  .account { grid-template-columns: minmax(0, 1fr); padding-top: 16px; }
+  .side { min-width: 0; }
   .side { position: static; padding: 12px; }
   .menu { flex-direction: row; overflow-x: auto; gap: 4px; }
   .menu a, .menu button { white-space: nowrap; flex-shrink: 0; }
-  .logout { margin-top: 0; border-top: none !important; padding-top: 10px !important; }
   .container { padding: 0 16px; }
 }

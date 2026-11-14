@@ -35,6 +35,7 @@ import { DesignService } from '../../services/design-service';
 import { CartService } from '../../services/cart-service';
 import { AuthService } from '../../services/auth-service';
 import { MarketService } from '../../services/market-service';
+import { ProfileService } from '../../services/profile-service';
 
 type Tab = 'design' | 'product' | 'layers' | 'templates';
 interface LayerItem {
@@ -109,6 +110,7 @@ export class EditorPage implements AfterViewInit, OnDestroy {
   private readonly auth = inject(AuthService);
   private readonly market = inject(MarketService);
   private readonly marketLoaded$ = toObservable(this.market.loaded);
+  private readonly profiles = inject(ProfileService);
 
   readonly fonts = FONTS;
   readonly shapes = SHAPES;
@@ -184,7 +186,9 @@ export class EditorPage implements AfterViewInit, OnDestroy {
     const item = this.orderItem();
     if (!item) return 0;
     const used = item.sampleReprintCount + this.designs.reprintsOf(this.orderId(), item.orderItemId).length;
-    return used >= 1 ? item.unitPrice : 0;
+    // lần 1 miễn phí; hạng Vàng miễn phí thêm lần 2 (C18)
+    const free = this.profiles.membership()?.tier.freeReprints ?? 1;
+    return used >= free ? item.unitPrice : 0;
   });
 
   /** Thuộc tính object đang chọn cho panel bên phải */
@@ -276,6 +280,7 @@ export class EditorPage implements AfterViewInit, OnDestroy {
         const opened = item.editRequest?.openedAt ? Date.parse(item.editRequest.openedAt) : Date.now();
         if (Date.now() - opened > SAMPLE_EDIT_WINDOW_MS)
           return this.fail('Cửa sổ chỉnh sửa mẫu 48 giờ đã hết hạn. Hãy mở lại yêu cầu ở trang chi tiết đơn.');
+        void this.profiles.load();
         this.orderId.set(order._id);
         this.orderItem.set(item);
         this.qty.set(item.qty);
@@ -1090,7 +1095,7 @@ export class EditorPage implements AfterViewInit, OnDestroy {
     if (!item) return;
     const fee = this.reprintFee();
     const msg = fee
-      ? `Đây là lần chỉnh sửa thứ 2 trở đi, phí in lại mẫu là ${this.ps.formatPrice(fee)} (thanh toán QR 10 phút tại trang đơn hàng). Tiếp tục?`
+      ? `Đã hết lượt in lại mẫu miễn phí, phí in lại mẫu là ${this.ps.formatPrice(fee)} (thanh toán QR 10 phút tại trang đơn hàng). Tiếp tục?`
       : 'Gửi thiết kế đã sửa để in lại mẫu (lần đầu miễn phí)?';
     if (!confirm(msg)) return;
     const doc = await this.save(true);

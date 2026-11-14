@@ -14,6 +14,17 @@ import { NotificationBell } from './notification-bell/notification-bell';
 @NgModule({
   declarations: [ProductCard, Pagination, EmptyState, VndPipe, StatusBadge, OrderSummary, NotificationBell],
   imports: [CommonModule, RouterModule, ImgFallbackDirective],
-  exports: [CommonModule, RouterModule, ImgFallbackDirective, ProductCard, Pagination, EmptyState, VndPipe, StatusBadge, OrderSummary, NotificationBell],
+  exports: [
+    CommonModule,
+    RouterModule,
+    ImgFallbackDirective,
+    ProductCard,
+    Pagination,
+    EmptyState,
+    VndPipe,
+    StatusBadge,
+    OrderSummary,
+    NotificationBell,
+  ],
 })
 export class SharedModule {}

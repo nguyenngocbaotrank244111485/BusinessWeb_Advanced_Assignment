@@ -10,6 +10,8 @@ import { CartService } from '../../services/cart-service';
 import { ConfigService } from '../../services/config-service';
 import { OrderService } from '../../services/order-service';
 import { ProductService } from '../../services/product-service';
+import { ProfileService } from '../../services/profile-service';
+import { tierDiscount } from '../../models/membership.model';
 
 /** SĐT Việt Nam (BR09): 0 hoặc +84, đầu số di động 3/5/7/8/9, tổng 10 số */
 export const PHONE_VN = /^(0|\+84)(3|5|7|8|9)\d{8}$/;
@@ -32,12 +34,25 @@ export class CheckoutPage {
   private readonly orders = inject(OrderService);
   private readonly router = inject(Router);
 
-  readonly provinces = ['TP. Hồ Chí Minh', 'Hà Nội', 'Đà Nẵng', 'Hải Phòng', 'Cần Thơ', 'Huế', 'Khánh Hòa', 'Lâm Đồng', 'Đồng Nai', 'Bình Dương', 'Bắc Ninh', 'Quảng Ninh', 'Nghệ An', 'Thanh Hóa', 'An Giang'];
+  private readonly profiles = inject(ProfileService);
+  /** 34 tỉnh/thành (dùng chung với sổ địa chỉ C18) */
+  private readonly provinceList = toSignal(this.profiles.provinces$, { initialValue: [] as string[] });
+  get provinces(): string[] {
+    return this.provinceList();
+  }
   private readonly products = toSignal(this.ps.getProducts(), { initialValue: undefined });
   /** Mỗi lần mở trang Checkout = 1 khóa; bấm Thanh toán nhiều lần cũng chỉ tạo 1 đơn */
   private readonly idempotencyKey = 'chk_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 
-  readonly addresses = computed<SavedAddress[]>(() => (this.auth.user() as { addresses?: SavedAddress[] } | null)?.addresses ?? []);
+  /** Sổ địa chỉ của tài khoản (C18), chưa tải xong thì dùng địa chỉ trong phiên đăng nhập */
+  readonly addresses = computed<SavedAddress[]>(
+    () =>
+      (this.profiles.profile()?.addresses as SavedAddress[] | undefined) ??
+      (this.auth.user() as { addresses?: SavedAddress[] } | null)?.addresses ??
+      [],
+  );
+  /** Giảm giá theo hạng thành viên (C18) */
+  readonly discount = computed(() => tierDiscount(this.profiles.membership()));
   readonly addressChoice = signal<string>(''); // _id địa chỉ đã lưu hoặc 'new'
   readonly submitting = signal(false);
   readonly error = signal('');
@@ -63,12 +78,17 @@ export class CheckoutPage {
     });
   });
   readonly totals = computed(() =>
-    calcTotals(this.lines().map((l) => ({ unitPrice: l.price, quantity: l.item.quantity, designFee: l.item.designFee ?? 0 })), this.cfg()),
+    calcTotals(
+      this.lines().map((l) => ({ unitPrice: l.price, quantity: l.item.quantity, designFee: l.item.designFee ?? 0 })),
+      { ...this.cfg(), discountRate: this.discount().rate, discountThresholdVnd: 0 },
+    ),
   );
   readonly qty = computed(() => this.lines().reduce((s, l) => s + l.item.quantity, 0));
 
   constructor() {
+    void this.profiles.load();
     effect(() => {
+      if (!this.profiles.profile()) return; // chờ tải sổ địa chỉ rồi mới chọn mặc định
       const list = this.addresses();
       untracked(() => {
         if (this.addressChoice()) return;

@@ -229,6 +229,10 @@ export class MarketService {
     this._designs.set(this.mergeById([...this._designs(), design]));
   }
 
+  removeDesign(id: string): void {
+    this._designs.set(this._designs().filter((d) => d._id !== id));
+  }
+
   // ---------- nội bộ ----------
 
   private load(): void {
@@ -259,7 +263,9 @@ export class MarketService {
           this.printAreas.set(areas);
           return {
             listings: this.mergeById([...listings, ...demoListings, ...this.readLocal<Listing>(LOCAL_LISTINGS_KEY)]),
-            designs: this.mergeById([...designs, ...demoDesigns, ...this.readLocal<Design>('printify_designs')]),
+            designs: this.mergeById([...designs, ...demoDesigns, ...this.readLocal<Design>('printify_designs')]).filter(
+              (d) => !this.readLocal<string>('printify_designs_deleted').includes(d._id),
+            ),
           };
         }),
       )

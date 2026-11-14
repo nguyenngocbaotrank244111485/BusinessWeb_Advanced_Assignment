@@ -31,7 +31,7 @@ export interface ShippingInfo {
 export interface OrderTotals {
   productSubtotal: number;
   designFees: number;
-  discount: number; // 5% trên productSubtotal khi >= ngưỡng (không áp vào phí thiết kế, ship)
+  discount: number; // giảm theo hạng thành viên trên productSubtotal (không áp vào phí thiết kế, ship)
   shipping: number;
   total: number;
 }

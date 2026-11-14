@@ -98,8 +98,8 @@
 
         <!-- ===== PHẢI: tóm tắt ===== -->
         <aside class="side">
-          <app-order-summary [totals]="totals()" [itemCount]="selectedQty()" [threshold]="cfg().discountThresholdVnd"
-            [discountPercent]="cfg().discountRate * 100">
+          <app-order-summary [totals]="totals()" [itemCount]="selectedQty()"
+            [discountLabel]="discount().label" [discountHint]="discount().hint">
             @if (blocking().length) {
               <p class="block-msg">{{ blocking().length }} dòng đã chọn cần xử lý trước khi đặt hàng.</p>
             }

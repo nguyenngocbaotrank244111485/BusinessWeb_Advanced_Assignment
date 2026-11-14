@@ -1,5 +1,4 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
 import { ProfileService } from '../../services/profile-service';
 import { NotificationService } from '../../services/notification-service';
@@ -22,7 +21,6 @@ interface MenuItem {
 export class AccountLayout implements OnInit {
   readonly auth = inject(AuthService);
   readonly profiles = inject(ProfileService);
-  private readonly router = inject(Router);
   readonly notifications = inject(NotificationService);
 
   tierOf(spent = 0) {
@@ -44,9 +42,5 @@ export class AccountLayout implements OnInit {
 
   initial(name: string | undefined): string {
     return (name || '?').trim().charAt(0).toUpperCase();
-  }
-
-  logout(): void {
-    this.auth.logout().subscribe({ next: () => this.router.navigateByUrl('/') });
   }
 }

@@ -107,7 +107,20 @@
         </article>
       }
     </div>
-    <p class="note">Đơn có tiền hàng từ {{ cfg().discountThresholdVnd | vnd }} được giảm {{ discountPercent() }}% trên tiền hàng.</p>
+    <div class="tiers" aria-label="Ưu đãi theo hạng thành viên">
+      <div class="tiers-head">
+        <b>Ưu đãi thành viên</b>
+        <span>Mua càng nhiều, hạng càng cao. Ưu đãi trừ thẳng vào tiền hàng ở giỏ và lúc thanh toán.</span>
+      </div>
+      @for (t of tiers; track t.key) {
+        <div class="tier" [class]="'tier ' + t.key.toLowerCase()">
+          <span class="t-icon" aria-hidden="true">{{ t.icon }}</span>
+          <b>Hạng {{ t.label }}</b>
+          <small>{{ t.minSpent ? 'Chi tiêu từ ' + (t.minSpent | vnd) : 'Khi tạo tài khoản' }}</small>
+          <em>{{ t.discountRate ? 'Giảm ' + (t.discountRate * 100 | number: '1.0-0') + '% tiền hàng' : 'Tích điểm, ưu đãi sinh nhật' }}</em>
+        </div>
+      }
+    </div>
   </section>
 
   <!-- ===== Câu hỏi thường gặp ===== -->
