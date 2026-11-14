@@ -55,6 +55,13 @@ const routes: Routes = [
     loadChildren: () => import('./cart/checkout-module').then((m) => m.CheckoutModule),
   },
 
+  // C04 Giới thiệu (lazy)
+  {
+    path: 'about',
+    component: ShopLayout,
+    loadChildren: () => import('./about/about-module').then((m) => m.AboutModule),
+  },
+
   // Tài khoản (C18 + sidebar cho C11, C14, C19): tải lazy
   { path: 'account', loadChildren: () => import('./account/account-module').then((m) => m.AccountModule) },
 
@@ -63,7 +70,6 @@ const routes: Routes = [
     path: '',
     component: ShopLayout,
     children: [
-      { path: 'about', component: NotFound, data: { title: 'Giới thiệu' } },
       // Đăng nhập demo bằng dữ liệu mock (khi chưa chạy server)
       { path: 'auth/demo-login', component: DemoLogin, title: 'Đăng nhập demo | PrintiFy' },
       { path: '**', component: NotFound, title: 'Không tìm thấy trang | PrintiFy' },
