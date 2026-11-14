@@ -30,9 +30,9 @@
               <div class="saved" role="radiogroup" aria-label="Địa chỉ đã lưu">
                 @for (a of addresses(); track a._id) {
                   <button type="button" role="radio" class="addr" [class.active]="addressChoice() === a._id" [attr.aria-checked]="addressChoice() === a._id" (click)="useAddress(a)">
+                    @if (a.isDefault) { <em>Mặc định</em> }
                     <b>{{ a.name }} · {{ a.phone }}</b>
                     <span>{{ a.detail }}, {{ a.ward }}, {{ a.province }}</span>
-                    @if (a.isDefault) { <em>Mặc định</em> }
                   </button>
                 }
                 <button type="button" role="radio" class="addr new" [class.active]="addressChoice() === 'new'" [attr.aria-checked]="addressChoice() === 'new'" (click)="newAddress()">
