@@ -55,13 +55,14 @@ const routes: Routes = [
     loadChildren: () => import('./cart/checkout-module').then((m) => m.CheckoutModule),
   },
 
+  // Tài khoản (C18 + sidebar cho C11, C14, C19): tải lazy
+  { path: 'account', loadChildren: () => import('./account/account-module').then((m) => m.AccountModule) },
+
   // Các màn hình chưa xây dựng: tạm hiện trang "đang xây dựng".
   {
     path: '',
     component: ShopLayout,
     children: [
-      { path: 'account/orders', component: NotFound, data: { title: 'Đơn hàng của tôi' } },
-      { path: 'account/orders/:orderId', component: NotFound, data: { title: 'Chi tiết đơn hàng' } },
       { path: 'about', component: NotFound, data: { title: 'Giới thiệu' } },
       // Đăng nhập demo bằng dữ liệu mock (khi chưa chạy server)
       { path: 'auth/demo-login', component: DemoLogin, title: 'Đăng nhập demo | PrintiFy' },

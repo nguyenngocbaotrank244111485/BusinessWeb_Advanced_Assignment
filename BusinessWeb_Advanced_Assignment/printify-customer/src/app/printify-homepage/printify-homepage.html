@@ -33,7 +33,10 @@
           <span aria-hidden="true">🛒</span><span class="cart-text">Giỏ hàng</span>
         </a>
         @if (auth.currentUser(); as user) {
-          <a routerLink="/account/profile" class="auth-login">Xin chào, {{ user.name }}</a>
+          <app-notification-bell></app-notification-bell>
+          <a routerLink="/account/profile" class="user-avatar-link" [title]="user.name + ' - Tài khoản của tôi'" [attr.aria-label]="'Tài khoản của ' + user.name">
+            @if (user.avatar) { <img [src]="user.avatar" alt="" /> } @else { <span aria-hidden="true">{{ user.name.charAt(0).toUpperCase() }}</span> }
+          </a>
           <button type="button" class="auth-register" (click)="logout()" [disabled]="loggingOut">
             {{ loggingOut ? 'Đang đăng xuất...' : 'Đăng xuất' }}
           </button>

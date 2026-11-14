@@ -257,3 +257,8 @@
  .hero-mini-steps { gap:7px; font-size:11px; }
  .hero-visual { transform:scale(.7); margin:-35px 0; }
 }
+
+/* Avatar tài khoản trên header: bấm vào mở /account/profile */
+.user-avatar-link { width: 42px; height: 42px; flex-shrink: 0; border-radius: 50%; display: grid; place-items: center; overflow: hidden; background: var(--pf-gradient, linear-gradient(120deg, #8b57c4, #b5528f)); color: #fff; font-weight: 800; font-size: 17px; text-decoration: none; box-shadow: 0 0 0 2px #fff, 0 0 0 4px #e9cced; transition: box-shadow 0.15s, transform 0.15s; }
+.user-avatar-link:hover { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #8b57c4; transform: translateY(-1px); }
+.user-avatar-link img { width: 100%; height: 100%; object-fit: cover; }

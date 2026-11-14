@@ -1,0 +1,50 @@
+:host { position: relative; display: inline-flex; }
+.bell {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--pf-line);
+  background: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: var(--pf-ink);
+  transition: background 0.15s, color 0.15s;
+}
+.bell:hover, .bell[aria-expanded='true'] { background: var(--pf-pink-50); color: var(--pf-primary); }
+.bell svg { width: 20px; height: 20px; fill: currentColor; }
+.dot { position: absolute; top: 8px; right: 9px; width: 9px; height: 9px; border-radius: 50%; background: #e5484d; box-shadow: 0 0 0 2px #fff; }
+
+.panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: -8px;
+  width: 360px;
+  max-width: calc(100vw - 24px);
+  background: #fff;
+  border: 1px solid var(--pf-line);
+  border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(46, 37, 56, 0.18);
+  z-index: 200;
+  overflow: hidden;
+  font-family: var(--pf-font);
+  text-align: left;
+}
+.panel-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 10px; border-bottom: 1px solid var(--pf-line); }
+.panel-head strong { font-size: 15px; color: var(--pf-ink); }
+.link { border: none; background: none; color: var(--pf-primary); font: 600 12.5px var(--pf-font); cursor: pointer; padding: 0; }
+ul { list-style: none; margin: 0; padding: 4px 0; max-height: 360px; overflow-y: auto; }
+.item { width: 100%; display: flex; gap: 10px; align-items: flex-start; padding: 10px 16px; border: none; background: none; cursor: pointer; text-align: left; font-family: var(--pf-font); }
+.item:hover { background: var(--pf-soft); }
+.item.unread { background: #fbf6ff; }
+.ico { width: 34px; height: 34px; flex-shrink: 0; border-radius: 50%; background: var(--pf-pink-50); display: grid; place-items: center; font-size: 16px; }
+.txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.txt b { font-size: 13.5px; color: var(--pf-ink); font-weight: 600; }
+.item.unread .txt b { font-weight: 800; }
+.txt span { font-size: 12.5px; color: var(--pf-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.txt small { font-size: 11px; color: var(--pf-muted); }
+.unread-dot { width: 8px; height: 8px; margin-top: 6px; border-radius: 50%; background: #e5484d; flex-shrink: 0; }
+.empty { margin: 0; padding: 28px 16px; text-align: center; color: var(--pf-muted); font-size: 13.5px; }
+.all { width: 100%; padding: 12px; border: none; border-top: 1px solid var(--pf-line); background: #fff; color: var(--pf-primary); font: 700 13px var(--pf-font); cursor: pointer; }
+.all:hover { background: var(--pf-soft); }

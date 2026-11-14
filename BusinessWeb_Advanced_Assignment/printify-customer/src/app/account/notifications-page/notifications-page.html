@@ -1,0 +1,44 @@
+<section class="card">
+  <header class="head">
+    <div>
+      <h1>Thông báo</h1>
+      <p>Cập nhật về đơn hàng, mẫu in, Marketplace và ưu đãi dành cho bạn.</p>
+    </div>
+    <button type="button" class="btn ghost" (click)="ns.markAllRead()" [disabled]="!ns.unread()">✓ Đánh dấu tất cả đã đọc</button>
+  </header>
+
+  <div class="filters" role="tablist">
+    <button type="button" role="tab" [class.active]="filter() === 'all'" [attr.aria-selected]="filter() === 'all'" (click)="filter.set('all')">
+      Tất cả <small>{{ ns.items().length }}</small>
+    </button>
+    <button type="button" role="tab" [class.active]="filter() === 'unread'" [attr.aria-selected]="filter() === 'unread'" (click)="filter.set('unread')">
+      Chưa đọc @if (ns.unread()) { <small class="red">{{ ns.unread() }}</small> }
+    </button>
+  </div>
+
+  @if (!ns.loaded()) {
+    <div class="skeleton"></div>
+  } @else if (list().length) {
+    <ul class="list">
+      @for (n of list(); track n._id) {
+        <li>
+          <button type="button" class="row" [class.unread]="!n.isRead" (click)="open(n)">
+            <span class="ico" aria-hidden="true">{{ ns.iconOf(n.type) }}</span>
+            <span class="txt">
+              <span class="title">{{ n.title }}</span>
+              <span class="body">{{ n.body }}</span>
+              <span class="time" [title]="n.createdAt | date: 'HH:mm dd/MM/yyyy'">{{ ago(n.createdAt) }}</span>
+            </span>
+            @if (!n.isRead) { <span class="badge">Mới</span> }
+            @if (ns.safeLink(n)) { <span class="go" aria-hidden="true">›</span> }
+          </button>
+        </li>
+      }
+    </ul>
+  } @else {
+    <div class="empty">
+      <div class="empty-icon" aria-hidden="true">🔔</div>
+      <p>{{ filter() === 'unread' ? 'Bạn đã đọc hết thông báo.' : 'Không có thông báo nào.' }}</p>
+    </div>
+  }
+</section>

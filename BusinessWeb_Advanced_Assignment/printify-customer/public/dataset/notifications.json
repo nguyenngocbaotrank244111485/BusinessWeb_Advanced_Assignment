@@ -34,5 +34,77 @@
     "deliveryStatus": "PENDING",
     "attemptCount": 0,
     "createdAt": "2026-11-07T07:34:47.624Z"
+  },
+  {
+    "_id": "ntf_4",
+    "userId": "usr_c1",
+    "type": "SAMPLE_READY",
+    "title": "Mẫu in đơn ord_1002 đã sẵn sàng",
+    "body": "Xem ảnh mẫu và duyệt trong 48 giờ để đơn được in chính thức.",
+    "link": "/account/orders/ord_1002",
+    "isRead": false,
+    "deliveryStatus": "SENT",
+    "attemptCount": 1,
+    "createdAt": "2026-11-14T02:10:00.000Z"
+  },
+  {
+    "_id": "ntf_5",
+    "userId": "usr_c1",
+    "type": "ORDER_SHIPPING",
+    "title": "Đơn ord_1003 đang được giao",
+    "body": "Đơn vị vận chuyển đã nhận hàng, dự kiến giao trong 2–3 ngày.",
+    "link": "/account/orders/ord_1003",
+    "isRead": false,
+    "deliveryStatus": "SENT",
+    "attemptCount": 1,
+    "createdAt": "2026-11-12T09:20:00.000Z"
+  },
+  {
+    "_id": "ntf_6",
+    "userId": "usr_c1",
+    "type": "ORDER_COMPLETED",
+    "title": "Đơn ord_1003 đã giao thành công",
+    "body": "Cảm ơn bạn đã mua sắm tại PrintiFy. Hãy đánh giá trải nghiệm nhé!",
+    "link": "/account/orders/ord_1003",
+    "isRead": true,
+    "deliveryStatus": "SENT",
+    "attemptCount": 1,
+    "createdAt": "2026-11-10T04:00:00.000Z"
+  },
+  {
+    "_id": "ntf_7",
+    "userId": "usr_c1",
+    "type": "LISTING_APPROVED",
+    "title": "Tin đăng thiết kế đã được duyệt",
+    "body": "Thiết kế của bạn đã hiển thị công khai trên Marketplace.",
+    "link": "/market/my-listings",
+    "isRead": false,
+    "deliveryStatus": "SENT",
+    "attemptCount": 1,
+    "createdAt": "2026-11-09T08:45:00.000Z"
+  },
+  {
+    "_id": "ntf_8",
+    "userId": "usr_c1",
+    "type": "MEMBERSHIP",
+    "title": "Chúc mừng bạn lên hạng Vàng",
+    "body": "Tổng chi tiêu đã đạt 5.000.000đ. Bạn được giảm 5% mọi đơn hàng.",
+    "link": "/account/profile",
+    "isRead": true,
+    "deliveryStatus": "SENT",
+    "attemptCount": 1,
+    "createdAt": "2026-11-05T03:00:00.000Z"
+  },
+  {
+    "_id": "ntf_9",
+    "userId": "usr_c1",
+    "type": "SURVEY",
+    "title": "Mời bạn tham gia khảo sát trải nghiệm",
+    "body": "Chỉ mất 3 phút, giúp PrintiFy cải thiện dịch vụ.",
+    "link": "/survey-question",
+    "isRead": true,
+    "deliveryStatus": "SENT",
+    "attemptCount": 1,
+    "createdAt": "2026-11-03T03:00:00.000Z"
   }
 ]
