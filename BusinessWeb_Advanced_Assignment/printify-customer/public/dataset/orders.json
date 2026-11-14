@@ -53,7 +53,7 @@
         "status": "PENDING_PAYMENT",
         "occurredAt": "2026-11-13T06:31:47.624Z",
         "actorId": "usr_c1",
-        "note": "Tạo đơn, trừ kho, mở QR 10 phút"
+        "note": "Tạo đơn, mở QR 10 phút (chưa trừ kho)"
       }
     ],
     "createdAt": "2026-11-13T06:31:47.624Z",
@@ -118,7 +118,7 @@
         "status": "PENDING_PAYMENT",
         "occurredAt": "2026-11-10T06:34:47.624Z",
         "actorId": "usr_c1",
-        "note": "Tạo đơn, trừ kho, mở QR 10 phút"
+        "note": "Tạo đơn, mở QR 10 phút (chưa trừ kho)"
       },
       {
         "status": "PENDING_STAFF_CONFIRMATION",
@@ -219,7 +219,7 @@
         "status": "PENDING_PAYMENT",
         "occurredAt": "2026-11-07T06:34:47.624Z",
         "actorId": "usr_c1",
-        "note": "Tạo đơn, trừ kho, mở QR 10 phút"
+        "note": "Tạo đơn, mở QR 10 phút (chưa trừ kho)"
       },
       {
         "status": "PENDING_STAFF_CONFIRMATION",
@@ -326,13 +326,13 @@
         "status": "PENDING_PAYMENT",
         "occurredAt": "2026-11-13T06:09:47.624Z",
         "actorId": "usr_c2",
-        "note": "Tạo đơn, trừ kho, mở QR 10 phút"
+        "note": "Tạo đơn, mở QR 10 phút (chưa trừ kho)"
       },
       {
         "status": "CANCELLED",
         "occurredAt": "2026-11-13T06:19:47.624Z",
         "actorId": "SYSTEM",
-        "note": "Hết 10 phút, hoàn kho một lần"
+        "note": "Hết 10 phút chưa thanh toán, hủy đơn (chưa trừ kho nên không hoàn)"
       }
     ],
     "createdAt": "2026-11-13T06:09:47.624Z",
