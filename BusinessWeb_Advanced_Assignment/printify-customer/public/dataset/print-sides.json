@@ -2,32 +2,358 @@
   "_note": "Vung in cho Design Editor (C10), ti le 0-1 tren anh san pham. \"auto\" = lay theo print-areas.json (vung ghep mockup Marketplace). San pham khong co \"back\" chi in 1 mat. Uu tien: byProduct > byCategory > auto.",
   "byCategory": {
     "ao-thun": {
-      "front": { "x": 0.3, "y": 0.2, "width": 0.4, "height": 0.58 },
-      "back": { "x": 0.3, "y": 0.18, "width": 0.4, "height": 0.62 }
+      "front": {
+        "x": 0.3,
+        "y": 0.2,
+        "width": 0.4,
+        "height": 0.58
+      },
+      "back": {
+        "x": 0.3,
+        "y": 0.18,
+        "width": 0.4,
+        "height": 0.62
+      }
     }
   },
   "byProduct": {
     "prd102": {
-      "front": { "x": 0.3, "y": 0.22, "width": 0.4, "height": 0.56 },
-      "back": { "x": 0.3, "y": 0.2, "width": 0.4, "height": 0.6 }
+      "front": {
+        "x": 0.3,
+        "y": 0.22,
+        "width": 0.4,
+        "height": 0.56
+      },
+      "back": {
+        "x": 0.3,
+        "y": 0.2,
+        "width": 0.4,
+        "height": 0.6
+      }
     },
     "prd103": {
-      "front": { "x": 0.3, "y": 0.38, "width": 0.4, "height": 0.42 },
-      "back": { "x": 0.3, "y": 0.22, "width": 0.4, "height": 0.56 }
+      "front": {
+        "x": 0.3,
+        "y": 0.38,
+        "width": 0.4,
+        "height": 0.42
+      },
+      "back": {
+        "x": 0.3,
+        "y": 0.22,
+        "width": 0.4,
+        "height": 0.56
+      }
     },
     "prd105": {
-      "front": { "x": 0.36, "y": 0.38, "width": 0.28, "height": 0.48 },
-      "back": { "x": 0.36, "y": 0.34, "width": 0.28, "height": 0.52 }
+      "front": {
+        "x": 0.36,
+        "y": 0.38,
+        "width": 0.28,
+        "height": 0.48
+      },
+      "back": {
+        "x": 0.36,
+        "y": 0.34,
+        "width": 0.28,
+        "height": 0.52
+      }
     },
     "prd107": {
-      "front": { "x": 0.33, "y": 0.32, "width": 0.34, "height": 0.26 },
-      "back": { "x": 0.3, "y": 0.26, "width": 0.4, "height": 0.48 }
+      "front": {
+        "x": 0.33,
+        "y": 0.32,
+        "width": 0.34,
+        "height": 0.26
+      },
+      "back": {
+        "x": 0.3,
+        "y": 0.26,
+        "width": 0.4,
+        "height": 0.48
+      }
     },
     "prd201": {
-      "front": { "x": 0.28, "y": 0.46, "width": 0.44, "height": 0.46 },
-      "back": { "x": 0.28, "y": 0.46, "width": 0.44, "height": 0.46 }
+      "front": {
+        "x": 0.28,
+        "y": 0.46,
+        "width": 0.44,
+        "height": 0.46
+      },
+      "back": {
+        "x": 0.28,
+        "y": 0.46,
+        "width": 0.44,
+        "height": 0.46
+      }
     },
-    "prd202": { "front": "auto", "back": "auto" },
-    "prd203": { "front": "auto", "back": "auto" }
+    "prd202": {
+      "front": {
+        "x": 0.29,
+        "y": 0.4,
+        "width": 0.42,
+        "height": 0.45
+      },
+      "back": {
+        "x": 0.29,
+        "y": 0.4,
+        "width": 0.42,
+        "height": 0.45
+      }
+    },
+    "prd203": {
+      "front": {
+        "x": 0.26,
+        "y": 0.44,
+        "width": 0.48,
+        "height": 0.42
+      },
+      "back": {
+        "x": 0.26,
+        "y": 0.44,
+        "width": 0.48,
+        "height": 0.42
+      }
+    },
+    "prd205": {
+      "front": {
+        "x": 0.2,
+        "y": 0.38,
+        "width": 0.5,
+        "height": 0.3
+      }
+    },
+    "prd206": {
+      "front": {
+        "x": 0.2,
+        "y": 0.48,
+        "width": 0.6,
+        "height": 0.38
+      }
+    },
+    "prd207": {
+      "front": {
+        "x": 0.39,
+        "y": 0.34,
+        "width": 0.29,
+        "height": 0.36
+      }
+    },
+    "prd301": {
+      "front": {
+        "x": 0.25,
+        "y": 0.33,
+        "width": 0.38,
+        "height": 0.38
+      }
+    },
+    "prd302": {
+      "front": {
+        "x": 0.29,
+        "y": 0.36,
+        "width": 0.34,
+        "height": 0.3
+      }
+    },
+    "prd303": {
+      "front": {
+        "x": 0.23,
+        "y": 0.32,
+        "width": 0.42,
+        "height": 0.38
+      }
+    },
+    "prd304": {
+      "front": {
+        "x": 0.26,
+        "y": 0.34,
+        "width": 0.4,
+        "height": 0.34
+      }
+    },
+    "prd305": {
+      "front": {
+        "x": 0.4,
+        "y": 0.38,
+        "width": 0.2,
+        "height": 0.38
+      }
+    },
+    "prd306": {
+      "front": {
+        "x": 0.4,
+        "y": 0.42,
+        "width": 0.2,
+        "height": 0.38
+      }
+    },
+    "prd307": {
+      "front": {
+        "x": 0.42,
+        "y": 0.38,
+        "width": 0.2,
+        "height": 0.38
+      }
+    },
+    "prd401": {
+      "front": {
+        "x": 0.3,
+        "y": 0.2,
+        "width": 0.42,
+        "height": 0.6
+      }
+    },
+    "prd402": {
+      "front": {
+        "x": 0.3,
+        "y": 0.2,
+        "width": 0.4,
+        "height": 0.6
+      }
+    },
+    "prd403": {
+      "front": {
+        "x": 0.3,
+        "y": 0.22,
+        "width": 0.42,
+        "height": 0.56
+      }
+    },
+    "prd404": {
+      "front": {
+        "x": 0.14,
+        "y": 0.28,
+        "width": 0.72,
+        "height": 0.44
+      }
+    },
+    "prd405": {
+      "front": {
+        "x": 0.31,
+        "y": 0.28,
+        "width": 0.38,
+        "height": 0.44
+      }
+    },
+    "prd406": {
+      "front": {
+        "x": 0.25,
+        "y": 0.15,
+        "width": 0.5,
+        "height": 0.7
+      }
+    },
+    "prd407": {
+      "front": {
+        "x": 0.2,
+        "y": 0.38,
+        "width": 0.6,
+        "height": 0.26
+      }
+    },
+    "prd501": {
+      "front": {
+        "x": 0.32,
+        "y": 0.16,
+        "width": 0.34,
+        "height": 0.7
+      }
+    },
+    "prd502": {
+      "front": {
+        "x": 0.24,
+        "y": 0.27,
+        "width": 0.52,
+        "height": 0.5
+      }
+    },
+    "prd503": {
+      "front": {
+        "x": 0.22,
+        "y": 0.32,
+        "width": 0.56,
+        "height": 0.36
+      }
+    },
+    "prd504": {
+      "front": {
+        "x": 0.3,
+        "y": 0.32,
+        "width": 0.4,
+        "height": 0.38
+      }
+    },
+    "prd505": {
+      "front": {
+        "x": 0.3,
+        "y": 0.32,
+        "width": 0.4,
+        "height": 0.36
+      }
+    },
+    "prd506": {
+      "front": {
+        "x": 0.24,
+        "y": 0.24,
+        "width": 0.54,
+        "height": 0.54
+      }
+    },
+    "prd507": {
+      "front": {
+        "x": 0.14,
+        "y": 0.22,
+        "width": 0.72,
+        "height": 0.55
+      }
+    },
+    "prd601": {
+      "front": {
+        "x": 0.34,
+        "y": 0.36,
+        "width": 0.32,
+        "height": 0.48
+      }
+    },
+    "prd602": {
+      "front": {
+        "x": 0.12,
+        "y": 0.2,
+        "width": 0.76,
+        "height": 0.6
+      }
+    },
+    "prd603": {
+      "front": {
+        "x": 0.23,
+        "y": 0.33,
+        "width": 0.54,
+        "height": 0.33
+      }
+    },
+    "prd604": {
+      "front": {
+        "x": 0.2,
+        "y": 0.32,
+        "width": 0.6,
+        "height": 0.4
+      }
+    },
+    "prd606": {
+      "front": {
+        "x": 0.36,
+        "y": 0.45,
+        "width": 0.28,
+        "height": 0.35
+      }
+    },
+    "prd607": {
+      "front": {
+        "x": 0.32,
+        "y": 0.32,
+        "width": 0.36,
+        "height": 0.36
+      }
+    }
   }
 }
