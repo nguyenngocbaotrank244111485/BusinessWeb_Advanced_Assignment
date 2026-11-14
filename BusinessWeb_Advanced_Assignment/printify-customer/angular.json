@@ -73,7 +73,10 @@
               "buildTarget": "printify-cutsomer:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "proxyConfig": "src/proxy.conf.json"
+          }
         },
         "test": {
           "builder": "@angular/build:unit-test"

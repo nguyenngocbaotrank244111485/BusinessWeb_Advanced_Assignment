@@ -1,0 +1,259 @@
+
+<section class="pf-auth-page">
+
+  <div class="pf-auth-shell">
+
+    <div class="pf-auth-visual">
+      <a routerLink="/" class="pf-auth-mark">
+        Printi<span>Fy</span>
+      </a>
+
+      <div class="pf-auth-illustration">
+        ✧
+        <span>CREATE<br>YOUR OWN</span>
+        ✧
+      </div>
+
+      <h2>Ý tưởng của bạn. Đậm chất riêng.</h2>
+
+      <p>
+        Tạo tài khoản PrintiFy để thiết kế,
+        lưu sản phẩm và quản lý đơn hàng.
+      </p>
+    </div>
+
+    <div class="pf-auth-card">
+
+      <nav class="pf-auth-breadcrumb">
+        <a routerLink="/">Trang chủ</a>
+        <span>›</span>
+        <span>Đăng ký</span>
+      </nav>
+
+      <p class="pf-auth-eyebrow">
+        THAM GIA CỘNG ĐỒNG PRINTIFY
+      </p>
+
+      <h1>Tạo tài khoản</h1>
+
+      <p class="pf-auth-subtitle">
+        Đăng ký miễn phí và xác minh email bằng mã OTP.
+      </p>
+
+      <form
+        [formGroup]="form"
+        (ngSubmit)="requestOtp()"
+        novalidate
+      >
+
+        <label for="register-name">Họ và tên</label>
+
+        <input
+          id="register-name"
+          type="text"
+          formControlName="name"
+          autocomplete="name"
+          placeholder="Nhập họ và tên của bạn"
+        />
+
+        @if (
+          (submitted || form.controls.name.touched) &&
+          form.controls.name.invalid
+        ) {
+          <small class="pf-auth-error">
+            Họ và tên phải có từ 2 đến 100 ký tự.
+          </small>
+        }
+
+        <label for="register-email">Email</label>
+
+        <input
+          id="register-email"
+          type="email"
+          formControlName="email"
+          autocomplete="email"
+          placeholder="Nhập địa chỉ email"
+        />
+
+        @if (
+          (submitted || form.controls.email.touched) &&
+          form.controls.email.invalid
+        ) {
+          <small class="pf-auth-error">
+            Vui lòng nhập email hợp lệ.
+          </small>
+        }
+
+        <label for="register-password">Mật khẩu</label>
+
+        <div class="pf-auth-password">
+          <input
+            id="register-password"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            autocomplete="new-password"
+            placeholder="Ít nhất 8 ký tự"
+          />
+
+          <button
+            type="button"
+            (click)="showPassword = !showPassword"
+          >
+            {{ showPassword ? 'Ẩn' : 'Hiện' }}
+          </button>
+        </div>
+
+        @if (
+          (submitted || form.controls.password.touched) &&
+          form.controls.password.invalid
+        ) {
+          <small class="pf-auth-error">
+            Mật khẩu phải có ít nhất 8 ký tự.
+          </small>
+        }
+
+        <label for="register-confirm">Xác nhận mật khẩu</label>
+
+        <input
+          id="register-confirm"
+          type="password"
+          formControlName="confirmPassword"
+          autocomplete="new-password"
+          placeholder="Nhập lại mật khẩu"
+        />
+
+        @if (
+          (submitted || form.controls.confirmPassword.touched) &&
+          form.controls.confirmPassword.invalid
+        ) {
+          <small class="pf-auth-error">
+            Vui lòng xác nhận mật khẩu.
+          </small>
+        }
+
+        @if (errorMessage) {
+          <p class="pf-auth-alert" role="alert">
+            {{ errorMessage }}
+          </p>
+        }
+
+        <button
+          type="submit"
+          class="pf-auth-primary"
+          [disabled]="busy"
+        >
+          {{ busy ? 'Đang xử lý...' : 'Đăng ký & nhận OTP' }}
+        </button>
+
+      </form>
+
+      <p class="pf-auth-switch">
+        Đã có tài khoản?
+        <a
+          routerLink="/auth/login"
+          [queryParams]="{ returnUrl: returnUrl }"
+        >
+          Đăng nhập
+        </a>
+      </p>
+
+      <p class="pf-auth-home">
+        <a routerLink="/">← Quay về Homepage PrintiFy</a>
+      </p>
+
+    </div>
+  </div>
+
+  <!-- POPUP XÁC MINH OTP -->
+
+  @if (otpSent) {
+
+    <div class="pf-auth-modal-backdrop">
+
+      <section
+        class="pf-auth-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="otp-title"
+      >
+
+        <button
+          type="button"
+          class="pf-auth-modal-close"
+          (click)="closeOtp()"
+          aria-label="Đóng popup"
+        >
+          ×
+        </button>
+
+        <div class="pf-auth-otp-icon">✉</div>
+
+        <h2 id="otp-title">Xác minh email</h2>
+
+        <p>
+          Nhập mã OTP gồm 6 chữ số được gửi đến
+          <strong>{{ form.controls.email.value }}</strong>.
+        </p>
+
+        @if (demoOtp) {
+          <p class="pf-auth-demo-otp">
+            OTP demo trên localhost:
+            <strong>{{ demoOtp }}</strong>
+          </p>
+        }
+
+        <form
+          [formGroup]="otpForm"
+          (ngSubmit)="verifyOtp()"
+        >
+
+          <label for="otp-input">Mã xác minh</label>
+
+          <input
+            id="otp-input"
+            class="pf-auth-otp-input"
+            formControlName="otpCode"
+            inputmode="numeric"
+            autocomplete="one-time-code"
+            maxlength="6"
+            placeholder="000000"
+          />
+
+          @if (
+            otpForm.controls.otpCode.touched &&
+            otpForm.controls.otpCode.invalid
+          ) {
+            <small class="pf-auth-error">
+              Mã OTP phải có đúng 6 chữ số.
+            </small>
+          }
+
+          @if (otpError) {
+            <p class="pf-auth-alert" role="alert">
+              {{ otpError }}
+            </p>
+          }
+
+          <button
+            type="submit"
+            class="pf-auth-primary"
+            [disabled]="busy"
+          >
+            {{ busy ? 'Đang xác minh...' : 'Xác nhận OTP' }}
+          </button>
+
+        </form>
+
+        <button
+          type="button"
+          class="pf-auth-text-button"
+          (click)="closeOtp()"
+        >
+          Quay lại đăng ký
+        </button>
+
+      </section>
+    </div>
+  }
+
+</section>

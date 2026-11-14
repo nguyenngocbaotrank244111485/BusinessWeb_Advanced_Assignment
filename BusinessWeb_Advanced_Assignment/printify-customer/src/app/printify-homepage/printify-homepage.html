@@ -32,8 +32,16 @@
         <a routerLink="/cart" class="cart-link" aria-label="Đi đến giỏ hàng">
           <span aria-hidden="true">🛒</span><span class="cart-text">Giỏ hàng</span>
         </a>
-        <a routerLink="/auth/login" class="auth-login">Đăng nhập</a>
-        <a routerLink="/auth/register" class="auth-register">Đăng ký</a>
+        @if (auth.currentUser(); as user) {
+          <a routerLink="/account/profile" class="auth-login">Xin chào, {{ user.name }}</a>
+          <button type="button" class="auth-register" (click)="logout()" [disabled]="loggingOut">
+            {{ loggingOut ? 'Đang đăng xuất...' : 'Đăng xuất' }}
+          </button>
+        } @else {
+          <a routerLink="/auth/login" class="auth-login">Đăng nhập</a>
+          <a routerLink="/auth/register" class="auth-register">Đăng ký</a>
+        }
+        @if (logoutError) { <span role="alert">{{ logoutError }}</span> }
       </div>
     </div>
   </header>

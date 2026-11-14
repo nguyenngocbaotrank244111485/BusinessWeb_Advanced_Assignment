@@ -1,6 +1,8 @@
 
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { Product, ProductService } from '../services/product-service';
+import { AuthService } from '../services/auth-service';
 
 @Component({
   selector: 'app-printify-homepage',
@@ -127,4 +129,31 @@ export class PrintifyHomepage implements OnInit {
   onProductImageError(id: Product['_id']): void {
     this.brokenImageIds.add(id);
   }
+
+readonly auth = inject(AuthService);
+private readonly router = inject(Router);
+
+loggingOut = false;
+logoutError = '';
+
+logout(): void {
+  if (this.loggingOut) return;
+
+  this.loggingOut = true;
+  this.logoutError = '';
+
+  this.auth.logout().subscribe({
+    next: () => {
+      this.loggingOut = false;
+
+      void this.router.navigateByUrl('/');
+    },
+
+    error: () => {
+      this.loggingOut = false;
+      this.logoutError =
+        'Không thể đăng xuất. Vui lòng thử lại.';
+    }
+  });
+}
 }

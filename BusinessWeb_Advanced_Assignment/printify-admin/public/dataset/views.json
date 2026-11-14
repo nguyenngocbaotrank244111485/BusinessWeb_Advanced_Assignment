@@ -2,19 +2,19 @@
   {
     "_id": "vw_1",
     "userId": "usr_c1",
-    "productId": "prd_tee",
+    "productId": "prd101",
     "viewedAt": "2026-11-11T06:34:47.624Z"
   },
   {
     "_id": "vw_2",
     "userId": "usr_c1",
-    "productId": "prd_mug",
+    "productId": "prd301",
     "viewedAt": "2026-11-12T06:34:47.624Z"
   },
   {
     "_id": "vw_3",
     "userId": "usr_c2",
-    "productId": "prd_tee",
+    "productId": "prd101",
     "viewedAt": "2026-11-13T03:34:47.624Z"
   }
 ]

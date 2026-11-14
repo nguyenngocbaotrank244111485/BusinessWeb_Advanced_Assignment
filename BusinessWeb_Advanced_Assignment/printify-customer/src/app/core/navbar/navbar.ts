@@ -32,8 +32,7 @@ export class Navbar {
   }
 
   logout(): void {
-    this.auth.logout();
-    this.router.navigateByUrl('/');
+    this.auth.logout().subscribe({ next: () => this.router.navigateByUrl('/') });
   }
 
   /** Đường dẫn hiện tại, để đăng nhập xong quay lại đúng trang */

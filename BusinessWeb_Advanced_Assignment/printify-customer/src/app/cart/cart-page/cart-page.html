@@ -41,7 +41,9 @@
               <div class="info">
                 <a class="name" [routerLink]="['/products', l.item.slug || l.item.productId]">{{ l.item.name }}</a>
                 @if (l.item.listingId) {
-                  <a class="design" [routerLink]="['/market', l.item.listingId]">🎨 Thiết kế: {{ l.item.listingTitle }} · +{{ l.item.designFee | vnd }}/dòng</a>
+                  <a class="design" [routerLink]="['/market', l.item.listingId]">🎨 Thiết kế: {{ l.item.listingTitle || 'Marketplace' }} · +{{ l.item.designFee | vnd }}/dòng</a>
+                } @else if (l.item.designId) {
+                  <a class="design" [routerLink]="['/editor/designs', l.item.designId]">✏️ Thiết kế của bạn · Sửa thiết kế</a>
                 } @else {
                   <span class="design plain">Sản phẩm thô (chưa in thiết kế)</span>
                 }

@@ -22,8 +22,8 @@
     "actorId": "usr_staff",
     "action": "STOCK_ADJUSTED",
     "targetType": "products",
-    "targetId": "prd_mug",
-    "detail": "ADMIN_ADJUST +10 prd_mug-350ml-white: Nhập thêm lô cốc sứ",
+    "targetId": "prd301",
+    "detail": "ADMIN_ADJUST +10 prd301-white: Nhập thêm lô cốc sứ",
     "at": "2026-11-12T06:34:47.624Z"
   }
 ]

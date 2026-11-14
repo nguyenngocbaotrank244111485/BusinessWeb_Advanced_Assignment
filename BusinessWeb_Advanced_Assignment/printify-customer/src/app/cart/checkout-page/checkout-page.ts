@@ -37,7 +37,7 @@ export class CheckoutPage {
   /** Mỗi lần mở trang Checkout = 1 khóa; bấm Thanh toán nhiều lần cũng chỉ tạo 1 đơn */
   private readonly idempotencyKey = 'chk_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 
-  readonly addresses = computed<SavedAddress[]>(() => this.auth.user()?.addresses ?? []);
+  readonly addresses = computed<SavedAddress[]>(() => (this.auth.user() as { addresses?: SavedAddress[] } | null)?.addresses ?? []);
   readonly addressChoice = signal<string>(''); // _id địa chỉ đã lưu hoặc 'new'
   readonly submitting = signal(false);
   readonly error = signal('');

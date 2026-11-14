@@ -41,12 +41,13 @@ export class CartService {
   readonly count = computed(() => this._items().reduce((n, i) => n + i.quantity, 0));
   readonly selectedItems = computed(() => this._items().filter((i) => i.selected));
 
-  static keyOf(productId: string, variantId: string, listingId?: string | null): string {
-    return [productId, variantId, listingId || ''].join('__');
+  /** 1 dòng = sản phẩm + biến thể + thiết kế (Editor) hoặc tin Marketplace */
+  static keyOf(productId: string, variantId: string, listingId?: string | null, designId?: string | null): string {
+    return [productId, variantId, designId || listingId || ''].join('__');
   }
 
-  quantityInCart(productId: string, variantId: string, listingId?: string | null): number {
-    return this._items().find((i) => i.key === CartService.keyOf(productId, variantId, listingId))?.quantity ?? 0;
+  quantityInCart(productId: string, variantId: string, listingId?: string | null, designId?: string | null): number {
+    return this._items().find((i) => i.key === CartService.keyOf(productId, variantId, listingId, designId))?.quantity ?? 0;
   }
 
   /** Thêm sản phẩm thô. Trả về false nếu vượt tồn kho. */
@@ -57,6 +58,42 @@ export class CartService {
   /** Thêm sản phẩm in thiết kế Marketplace (bản đặt mặc định, chỉnh trong Editor sau) */
   addWithListing(product: Product, variant: ProductVariant, listing: Listing, artUrl: string, quantity = 1): boolean {
     return this.addLine(product, variant, quantity, listing, artUrl);
+  }
+
+  /**
+   * Thêm sản phẩm đã thiết kế (C10). Mỗi thiết kế là 1 dòng riêng;
+   * thêm lại cùng thiết kế + biến thể thì cập nhật số lượng và ảnh xem trước.
+   */
+  addDesigned(
+    product: Product,
+    variant: ProductVariant,
+    quantity: number,
+    design: { designId: string; previewUrl: string; listingId?: string | null; listingTitle?: string; designFee?: number },
+  ): boolean {
+    if (quantity < 1 || quantity > variant.stock) return false;
+    const key = CartService.keyOf(product._id, variant._id, design.listingId, design.designId);
+    const item: CartItem = {
+      key,
+      productId: product._id,
+      variantId: variant._id,
+      name: product.name,
+      slug: product.slug,
+      category: product.category,
+      color: variant.color,
+      size: variant.size,
+      unitPrice: product.price,
+      quantity,
+      imageUrl: design.previewUrl || variant.imageUrl || product.img_display,
+      stock: variant.stock,
+      designId: design.designId,
+      listingId: design.listingId ?? null,
+      listingTitle: design.listingTitle,
+      designFee: design.designFee ?? 0,
+      selected: true,
+      addedAt: new Date().toISOString(),
+    };
+    this.save([item, ...this._items().filter((i) => i.key !== key)]);
+    return true;
   }
 
   updateQuantity(key: string, quantity: number): void {
@@ -73,7 +110,7 @@ export class CartService {
     const idx = list.findIndex((i) => i.key === key);
     if (idx < 0) return;
     const old = list[idx];
-    const newKey = CartService.keyOf(old.productId, variant._id, old.listingId);
+    const newKey = CartService.keyOf(old.productId, variant._id, old.listingId, old.designId);
     const updated: CartItem = {
       ...old,
       key: newKey,
@@ -128,7 +165,7 @@ export class CartService {
   // ---------- nội bộ ----------
 
   private addLine(product: Product, variant: ProductVariant, quantity: number, listing: Listing | null, artUrl?: string): boolean {
-    const key = CartService.keyOf(product._id, variant._id, listing?._id);
+    const key = CartService.keyOf(product._id, variant._id, listing?._id, listing?.designId);
     const list = [...this._items()];
     const existing = list.find((i) => i.key === key);
     const nextQty = (existing?.quantity ?? 0) + quantity;
@@ -178,7 +215,7 @@ export class CartService {
       const raw = localStorage.getItem(STORAGE_KEY);
       const list = raw ? (JSON.parse(raw) as CartItem[]) : [];
       // dữ liệu cũ (trước khi có listingId) -> chuẩn hóa key
-      return list.map((i) => ({ ...i, key: CartService.keyOf(i.productId, i.variantId, i.listingId) }));
+      return list.map((i) => ({ ...i, key: CartService.keyOf(i.productId, i.variantId, i.listingId, i.designId) }));
     } catch {
       return [];
     }

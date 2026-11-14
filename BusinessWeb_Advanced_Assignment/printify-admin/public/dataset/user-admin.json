@@ -1,0 +1,38 @@
+
+[
+  {
+    "_id": "usr_sa",
+    "name": "NGUYỄN NGỌC BẢO TRÂN",
+    "email": "trannnbk24411e@st.uel.edu.vn",
+    "admin_code": "K244111485",
+    "role": "SUPERADMIN"
+  },
+  {
+    "_id": "usr_staff",
+    "name": "NGUYỄN TRẦN PHƯƠNG AN",
+    "email": "anntpk24411e@st.uel.edu.vn",
+    "admin_code": "K244111450",
+    "role": "STAFF"
+  },
+  {
+    "_id": "usr_staff2",
+    "name": "PHẠM NGÔ BẢO TRÂN",
+    "email": "tranpnbk24411e@st.uel.edu.vn",
+    "admin_code": "K244111486",
+    "role": "STAFF"
+  },
+  {
+    "_id": "usr_staff2",
+    "name": "LÊ QUANG THÁI",
+    "email": "thailqk24411e@st.uel.edu.vn",
+    "admin_code": "K244111479",
+    "role": "STAFF"
+  },
+  {
+    "_id": "usr_staff2",
+    "name": "ĐOÀN HOÀNG LONG",
+    "email": "longdhlk24411e@st.uel.edu.vn",
+    "admin_code": "K244111467",
+    "role": "STAFF"
+  }
+]

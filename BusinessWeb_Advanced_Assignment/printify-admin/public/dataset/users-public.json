@@ -68,5 +68,114 @@
     "addresses": [],
     "avatar": null,
     "createdAt": "2026-11-13T06:34:47.624Z"
+  },
+  {
+    "_id": "usr_c4",
+    "name": "Phạm Thu Hà",
+    "email": "ha.pham@printify.demo",
+    "role": "CUSTOMER",
+    "status": "ACTIVE",
+    "addresses": [
+      {
+        "_id": "adr_c4_1",
+        "name": "Phạm Thu Hà",
+        "phone": "0935123456",
+        "province": "Hà Nội",
+        "ward": "Phường Hoàn Kiếm",
+        "detail": "88 Hàng Bài",
+        "isDefault": true
+      }
+    ],
+    "avatar": null,
+    "createdAt": "2026-10-28T09:00:47.624Z"
+  },
+  {
+    "_id": "usr_c5",
+    "name": "Vũ Đức Anh",
+    "email": "anh.vu@printify.demo",
+    "role": "CUSTOMER",
+    "status": "ACTIVE",
+    "addresses": [
+      {
+        "_id": "adr_c5_1",
+        "name": "Vũ Đức Anh",
+        "phone": "0965234890",
+        "province": "TP. Hồ Chí Minh",
+        "ward": "Phường Tân Sơn Nhì",
+        "detail": "24A Âu Cơ, nhà C2",
+        "isDefault": true
+      }
+    ],
+    "avatar": null,
+    "createdAt": "2026-10-30T14:20:47.624Z"
+  },
+  {
+    "_id": "usr_c6",
+    "name": "Đỗ Ngọc Linh",
+    "email": "linh.do@printify.demo",
+    "role": "CUSTOMER",
+    "status": "ACTIVE",
+    "addresses": [
+      {
+        "_id": "adr_c6_1",
+        "name": "Đỗ Ngọc Linh",
+        "phone": "0977888123",
+        "province": "Đà Nẵng",
+        "ward": "Phường Hải Châu",
+        "detail": "56 Bà Triệu",
+        "isDefault": true
+      },
+      {
+        "_id": "adr_c6_2",
+        "name": "Đỗ Ngọc Linh",
+        "phone": "0977888123",
+        "province": "TP. Hồ Chí Minh",
+        "ward": "Phường Võ Thị Sáu",
+        "detail": "301 Nguyễn Đình Chiểu",
+        "isDefault": false
+      }
+    ],
+    "avatar": null,
+    "createdAt": "2026-11-02T08:45:47.624Z"
+  },
+  {
+    "_id": "usr_c7",
+    "name": "Hoàng Quốc Bảo",
+    "email": "bao.hoang@printify.demo",
+    "role": "CUSTOMER",
+    "status": "ACTIVE",
+    "addresses": [
+      {
+        "_id": "adr_c7_1",
+        "name": "Hoàng Quốc Bảo",
+        "phone": "0908877665",
+        "province": "Cần Thơ",
+        "ward": "Phường Ninh Kiều",
+        "detail": "12 đường 3/2",
+        "isDefault": true
+      }
+    ],
+    "avatar": null,
+    "createdAt": "2026-11-05T10:10:47.624Z"
+  },
+  {
+    "_id": "usr_c8",
+    "name": "Ngô Thanh Trúc",
+    "email": "truc.ngo@printify.demo",
+    "role": "CUSTOMER",
+    "status": "ACTIVE",
+    "addresses": [
+      {
+        "_id": "adr_c8_1",
+        "name": "Ngô Thanh Trúc",
+        "phone": "0933888777",
+        "province": "Bình Dương",
+        "ward": "Phường Hiệp Thành",
+        "detail": "45 đường Đồng Khởi",
+        "isDefault": true
+      }
+    ],
+    "avatar": null,
+    "createdAt": "2026-11-08T16:30:47.624Z"
   }
 ]

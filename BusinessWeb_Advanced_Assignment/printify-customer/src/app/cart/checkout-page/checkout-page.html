@@ -89,7 +89,7 @@
                   <span class="txt">
                     <b>{{ l.item.name }}</b>
                     <small>{{ variantText(l.item.color, l.item.size) }}</small>
-                    @if (l.item.listingId) { <small class="design">🎨 {{ l.item.listingTitle }} (+{{ l.item.designFee | vnd }})</small> }
+                    @if (l.item.listingId) { <small class="design">🎨 {{ l.item.listingTitle || 'Thiết kế Marketplace' }} (+{{ l.item.designFee | vnd }})</small> } @else if (l.item.designId) { <small class="design">✏️ Thiết kế của bạn</small> }
                   </span>
                   <span class="amt">{{ l.price * l.item.quantity | vnd }}</span>
                 </li>
