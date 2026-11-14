@@ -1,0 +1,142 @@
+<section class="card">
+  <header class="head">
+    <div>
+      <h1>Đơn hàng của tôi</h1>
+      <p>Theo dõi trạng thái thanh toán, in ấn và giao hàng của từng đơn.</p>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Lọc theo trạng thái">
+    @for (t of tabs; track t.key) {
+      <button type="button" role="tab" [class.active]="tab() === t.key" [attr.aria-selected]="tab() === t.key" (click)="setTab(t.key)">
+        {{ t.label }}
+        @if (counts()[t.key]) { <small>{{ counts()[t.key] }}</small> }
+      </button>
+    }
+  </nav>
+
+  <div class="toolbar">
+    <label class="search">
+      <span aria-hidden="true">⌕</span>
+      <input type="search" placeholder="Tìm theo mã đơn hoặc tên sản phẩm…" [value]="query()" (input)="query.set($any($event.target).value)" aria-label="Tìm đơn hàng" />
+    </label>
+    <select [value]="order()" (change)="order.set($any($event.target).value)" aria-label="Sắp xếp theo ngày đặt">
+      <option value="newest">Mới nhất → cũ nhất</option>
+      <option value="oldest">Cũ nhất → mới nhất</option>
+    </select>
+  </div>
+
+  @if (list().length) {
+    <div class="orders">
+      @for (o of list(); track o._id) {
+        <article class="order">
+          <header class="o-head">
+            <div class="o-id">
+              <b>{{ o._id.toUpperCase() }}</b>
+              <span>Đặt lúc {{ o.createdAt | date: 'HH:mm dd/MM/yyyy' }} · {{ h.payment(o) }}</span>
+            </div>
+            <div class="o-status">
+              @if (o.cancelRequest?.status === 'PENDING') { <span class="chip wait">⏳ Đang chờ duyệt hủy</span> }
+              <span class="chip" [attr.data-tone]="label(o).tone">{{ label(o).text }}</span>
+            </div>
+          </header>
+
+          <button type="button" class="items" (click)="open(o)" [attr.aria-label]="'Xem chi tiết đơn ' + o._id">
+            @for (i of o.items.slice(0, 3); track i.orderItemId) {
+              <div class="item">
+                <img [src]="h.image(i)" [alt]="i.productName" loading="lazy" appImgFallback />
+                <div class="i-txt">
+                  <b>{{ i.productName }}</b>
+                  <span>{{ h.variantText(i) }}@if (i.designId) { · ✏️ có thiết kế }</span>
+                  <span>x{{ i.qty }}</span>
+                </div>
+                <span class="i-price">{{ i.unitPrice * i.qty | vnd }}</span>
+              </div>
+            }
+            @if (o.items.length > 3) { <p class="more">+ {{ o.items.length - 3 }} sản phẩm khác</p> }
+          </button>
+
+          @if (tabOf(o) === 'cancelled' && (o.cancelReason || o.cancelRequest)) {
+            <p class="reason">Lý do hủy: {{ o.cancelReason || o.cancelRequest?.reason }}</p>
+          }
+          @if (rejected(o)) {
+            <p class="reason">⚠️ PrintiFy đã kiểm tra mẫu in và cần bạn chỉnh sửa trước khi in. Mở chi tiết đơn để xem lý do.</p>
+          }
+          @if (o.orderStatus === 'SHIPPING' && o.trackingCode) {
+            <p class="track">🚚 Mã vận đơn <b>{{ o.trackingCode }}</b></p>
+          }
+
+          <footer class="o-foot">
+            <div class="total">
+              <span>Thành tiền ({{ itemCount(o) }} sản phẩm)</span>
+              <b>{{ o.totals.total | vnd }}</b>
+            </div>
+            <div class="actions">
+              <!-- Hủy: chỉ trước khi in; đang in thì hiện xám -->
+              @if (canCancel(o)) {
+                <button type="button" class="btn ghost danger" (click)="cancelFor.set(o)">Hủy đơn</button>
+              } @else if (cancelLocked(o)) {
+                <button type="button" class="btn ghost" disabled title="Đơn đã bắt đầu in nên không thể hủy">Hủy đơn</button>
+              }
+
+              @switch (tabOf(o)) {
+                @case ('confirm') {
+                  @if (o.orderStatus === 'PENDING_PAYMENT') {
+                    <button type="button" class="btn primary" (click)="pay(o)">Thanh toán ngay</button>
+                  } @else if (o.orderStatus === 'SAMPLE_REVIEW') {
+                    <button type="button" class="btn primary" (click)="open(o)">Duyệt mẫu in</button>
+                  } @else if (rejected(o)) {
+                    <button type="button" class="btn primary" (click)="open(o)">Xem lý do & sửa mẫu</button>
+                  }
+                }
+                @case ('shipping') {
+                  <button type="button" class="btn ghost" (click)="open(o)">Theo dõi đơn</button>
+                }
+                @case ('delivered') {
+                  @if (canReturn(o)) { <button type="button" class="btn ghost" (click)="returnOrder(o)">Trả hàng / Hoàn tiền</button> }
+                  <button type="button" class="btn primary" (click)="received(o)">Đã nhận được hàng</button>
+                }
+                @case ('done') {
+                  @if (canReturn(o)) {
+                    <button type="button" class="btn ghost" (click)="returnOrder(o)">Trả hàng / Hoàn tiền</button>
+                  } @else {
+                    <button type="button" class="btn ghost" disabled title="Đã quá 7 ngày kể từ khi nhận hàng">Hết hạn trả hàng</button>
+                  }
+                  <button type="button" class="btn ghost" (click)="rebuy(o)">Mua lại</button>
+                  @if (o.review) {
+                    <button type="button" class="btn ghost rated" (click)="open(o)">★ {{ o.review.rating }} · Đã đánh giá</button>
+                  } @else {
+                    <button type="button" class="btn primary" (click)="reviewFor.set(o)">Đánh giá</button>
+                  }
+                }
+                @case ('cancelled') {
+                  <button type="button" class="btn primary" (click)="rebuy(o)">Mua lại</button>
+                }
+              }
+              <button type="button" class="btn link" (click)="open(o)">Xem chi tiết ›</button>
+            </div>
+          </footer>
+        </article>
+      }
+    </div>
+  } @else {
+    <div class="empty">
+      <div class="empty-icon" aria-hidden="true">📦</div>
+      <p>{{ mine().length ? 'Không có đơn hàng nào ở mục này.' : 'Bạn chưa có đơn hàng nào.' }}</p>
+      <a routerLink="/products" class="btn primary">Mua sắm ngay</a>
+    </div>
+  }
+</section>
+
+@if (cancelFor(); as o) {
+  <app-cancel-dialog [order]="o" (done)="onCancelDone($event)" (closed)="cancelFor.set(null)"></app-cancel-dialog>
+}
+@if (reviewFor(); as o) {
+  <app-review-dialog [order]="o" (done)="onReviewed()" (closed)="reviewFor.set(null)"></app-review-dialog>
+}
+@if (qrFor(); as o) {
+  <app-qr-payment-dialog [order]="o" (claimed)="claim()" (closed)="qrFor.set(null)" (viewOrder)="qrFor.set(null); open(o)"></app-qr-payment-dialog>
+}
+@if (toast(); as t) {
+  <div class="toast" [class.error]="t.type === 'error'" role="status">{{ t.text }}</div>
+}

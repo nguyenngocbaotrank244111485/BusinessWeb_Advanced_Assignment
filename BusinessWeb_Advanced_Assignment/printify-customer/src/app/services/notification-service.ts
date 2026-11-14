@@ -22,6 +22,7 @@ export const NOTIFICATION_ICONS: Record<string, string> = {
   ORDER_SHIPPING: '🚚',
   ORDER_COMPLETED: '✅',
   SAMPLE_READY: '🖨️',
+  DESIGN_REJECTED: '⚠️',
   RETURN: '↩️',
   LISTING_APPROVED: '🏷️',
   LISTING_REJECTED: '⛔',

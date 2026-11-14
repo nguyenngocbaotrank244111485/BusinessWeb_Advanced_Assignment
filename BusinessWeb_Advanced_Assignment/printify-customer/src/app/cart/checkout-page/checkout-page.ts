@@ -2,7 +2,7 @@ import { Component, computed, effect, inject, signal, untracked } from '@angular
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Order, OrderItem, calcTotals } from '../../models/order.model';
+import { Order, OrderItem, PAYMENT_METHODS, PaymentMethod, calcTotals } from '../../models/order.model';
 import { Product } from '../../models/product.model';
 import { SavedAddress } from '../../models/user.model';
 import { AuthService } from '../../services/auth-service';
@@ -53,6 +53,9 @@ export class CheckoutPage {
   );
   /** Giảm giá theo hạng thành viên (C18) */
   readonly discount = computed(() => tierDiscount(this.profiles.membership()));
+  readonly paymentMethods = PAYMENT_METHODS;
+  readonly methodKeys: PaymentMethod[] = ['BANK', 'MOMO'];
+  readonly paymentMethod = signal<PaymentMethod>('BANK');
   readonly addressChoice = signal<string>(''); // _id địa chỉ đã lưu hoặc 'new'
   readonly submitting = signal(false);
   readonly error = signal('');
@@ -159,6 +162,7 @@ export class CheckoutPage {
       totals: this.totals(),
       idempotencyKey: this.idempotencyKey,
       paymentMinutes: this.cfg().orderPaymentMinutes,
+      paymentMethod: this.paymentMethod(),
     });
     this.order.set(order);
     this.cart.removeMany(this.lines().map((l) => l.item.key));

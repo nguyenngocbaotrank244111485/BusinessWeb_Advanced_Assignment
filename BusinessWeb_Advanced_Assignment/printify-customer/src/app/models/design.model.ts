@@ -82,6 +82,7 @@ export interface OrderItemRef {
   sampleStatus: string;
   sampleReprintCount: number;
   editRequest: { openedAt?: string; expiresAt?: string } | null;
+  designReview?: { status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'ACCEPTED_RISK'; reason?: string | null } | null;
 }
 
 export interface OrderRef {

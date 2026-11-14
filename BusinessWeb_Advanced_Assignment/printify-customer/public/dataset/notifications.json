@@ -106,5 +106,17 @@
     "deliveryStatus": "SENT",
     "attemptCount": 1,
     "createdAt": "2026-11-03T03:00:00.000Z"
+  },
+  {
+    "_id": "ntf_10",
+    "userId": "usr_c1",
+    "type": "DESIGN_REJECTED",
+    "title": "Mẫu in đơn ord_1013 cần chỉnh sửa",
+    "body": "PrintiFy phát hiện chữ ra ngoài vùng in và ảnh độ phân giải thấp. Xem chi tiết và sửa lại mẫu.",
+    "link": "/account/orders/ord_1013",
+    "isRead": false,
+    "deliveryStatus": "SENT",
+    "attemptCount": 1,
+    "createdAt": "2026-11-14T04:30:00.000Z"
   }
 ]

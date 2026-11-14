@@ -7,7 +7,7 @@
     @if (product(); as p) {
       <div class="tb-product">
         @switch (mode()) {
-          @case ('SAMPLE_EDIT') { <span class="mode-chip sample">Sửa mẫu · {{ orderId() }}</span> }
+          @case ('SAMPLE_EDIT') { <span class="mode-chip sample">{{ fixMode() ? 'Sửa mẫu bị trả về' : 'Sửa mẫu' }} · {{ orderId() }}</span> }
           @case ('EDIT') { <span class="mode-chip">Đang sửa thiết kế</span> }
           @default { <span class="mode-chip new">Thiết kế mới</span> }
         }
@@ -24,7 +24,7 @@
     <div class="tb-actions">
       <button type="button" class="tb-btn ghost" (click)="openPreview()" [disabled]="loading() || !!fatal()">👁 Xem trước</button>
       @if (mode() === 'SAMPLE_EDIT') {
-        <button type="button" class="tb-btn primary" (click)="requestReprint()" [disabled]="loading() || !!fatal()">↻ Gửi yêu cầu in lại</button>
+        <button type="button" class="tb-btn primary" (click)="requestReprint()" [disabled]="loading() || !!fatal()">{{ fixMode() ? '↻ Gửi lại mẫu để kiểm tra' : '↻ Gửi yêu cầu in lại' }}</button>
       } @else {
         <button type="button" class="tb-btn ghost" (click)="save()" [disabled]="loading() || !!fatal()" title="Ctrl+S">
           💾 Lưu@if (dirty()) {<span class="dot" aria-label="chưa lưu"></span>}
@@ -86,6 +86,9 @@
           <button type="button" class="link-btn" (click)="restoreDraft()">Khôi phục</button>
           <button type="button" class="link-btn muted" (click)="discardDraft()">Bỏ qua</button>
         </div>
+      }
+      @if (fixReason()) {
+        <div class="banner warn">📝 Góp ý của PrintiFy: {{ fixReason() }}</div>
       }
       @if (listing(); as l) {
         <div class="banner info">✨ Đang dùng thiết kế Marketplace “{{ l.title }}” · phí thiết kế {{ l.buyerDesignFee | vnd }}</div>
@@ -260,8 +263,8 @@
                 <div class="sum-row total"><span>Tạm tính</span><b>{{ total() | vnd }}</b></div>
               </section>
               @if (mode() === 'SAMPLE_EDIT') {
-                <button type="button" class="cta" (click)="requestReprint()">↻ Gửi yêu cầu in lại mẫu</button>
-                <p class="hint center">{{ reprintFee() ? 'Phí in lại: ' + ps.formatPrice(reprintFee()) : 'Lần in lại đầu tiên miễn phí' }}</p>
+                <button type="button" class="cta" (click)="requestReprint()">{{ fixMode() ? '↻ Gửi lại mẫu để kiểm tra' : '↻ Gửi yêu cầu in lại mẫu' }}</button>
+                <p class="hint center">{{ fixMode() ? 'Sửa theo góp ý của PrintiFy, gửi lại miễn phí' : reprintFee() ? 'Phí in lại: ' + ps.formatPrice(reprintFee()) : 'Lần in lại đầu tiên miễn phí' }}</p>
               } @else {
                 <button type="button" class="cta" (click)="askAddToCart()">🛒 Xác nhận & thêm vào giỏ</button>
                 @if (canPublish() && p.allowMarketplace) {

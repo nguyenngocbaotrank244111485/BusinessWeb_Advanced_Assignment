@@ -1,0 +1,262 @@
+@if (order(); as o) {
+  <a routerLink="/account/orders" class="back">← Đơn hàng của tôi</a>
+
+  <section class="card head">
+    <div>
+      <h1>Đơn {{ o._id.toUpperCase() }}</h1>
+      <p>Đặt lúc {{ o.createdAt | date: 'HH:mm dd/MM/yyyy' }} · {{ h.payment(o) }}</p>
+    </div>
+    <div class="chips">
+      @if (o.cancelRequest?.status === 'PENDING') { <span class="chip wait">⏳ Đang chờ duyệt hủy</span> }
+      @if (label(); as l) { <span class="chip" [attr.data-tone]="l.tone">{{ l.text }}</span> }
+    </div>
+  </section>
+
+  <!-- ===== Tiến độ ===== -->
+  @if (!cancelled()) {
+    <section class="card">
+      <ol class="stepper">
+        @for (s of steps; track s.key; let i = $index) {
+          <li [class.done]="i < stepIndex()" [class.current]="i === stepIndex()">
+            <span class="dot" aria-hidden="true">{{ i < stepIndex() ? '✓' : s.icon }}</span>
+            <span class="s-label">{{ s.label }}</span>
+          </li>
+        }
+      </ol>
+    </section>
+  }
+
+  <!-- ===== Thông báo theo tình huống ===== -->
+  @if (cancelled()) {
+    <div class="banner bad">
+      <b>{{ expired() ? 'Đơn đã hủy do quá hạn thanh toán 10 phút.' : 'Đơn hàng đã bị hủy.' }}</b>
+      @if (o.cancelReason || o.cancelRequest?.reason) { <span>Lý do: {{ o.cancelReason || o.cancelRequest?.reason }}</span> }
+      @if (o.cancelRequest?.resolveNote) { <span>{{ o.cancelRequest?.resolveNote }}</span> }
+    </div>
+  } @else if (o.cancelRequest?.status === 'PENDING') {
+    <div class="banner wait">
+      <b>Yêu cầu hủy đang chờ PrintiFy duyệt.</b>
+      <span>Lý do: {{ o.cancelRequest?.reason }}@if (o.cancelRequest?.note) { – {{ o.cancelRequest?.note }} } · gửi lúc {{ o.cancelRequest?.requestedAt | date: 'HH:mm dd/MM' }}</span>
+    </div>
+  } @else {
+    @switch (o.orderStatus) {
+      @case ('PENDING_PAYMENT') {
+        <div class="banner action">
+          <div><b>Đơn đang chờ thanh toán</b><span>Mã QR còn hiệu lực <b class="timer">{{ paymentLeft() }}</b>. Quá hạn đơn sẽ tự hủy.</span></div>
+          <button type="button" class="btn primary" (click)="showQr.set(true)">Thanh toán ngay</button>
+        </div>
+      }
+      @case ('PENDING_STAFF_CONFIRMATION') {
+        <div class="banner wait"><b>PrintiFy đang kiểm tra thanh toán của bạn.</b><span>Thường mất vài giờ trong giờ hành chính. Bạn sẽ nhận thông báo khi đơn được xác nhận.</span></div>
+      }
+      @case ('DESIGN_REVIEW') {
+        @if (rejected()) {
+          <div class="banner bad-action">
+            <div><b>Mẫu in chưa đạt yêu cầu – cần bạn chỉnh sửa.</b><span>PrintiFy đã ghi lý do ở sản phẩm bên dưới. Sửa xong gửi lại để được kiểm tra (miễn phí).</span></div>
+            <button type="button" class="btn primary" (click)="scrollToItems()">Xem lý do ↓</button>
+          </div>
+        } @else {
+          <div class="banner wait"><b>PrintiFy đang kiểm tra mẫu in của bạn.</b><span>Kiểm tra vùng in, độ phân giải và nội dung trước khi in mẫu thử. Nếu cần sửa, bạn sẽ nhận được thông báo.</span></div>
+        }
+      }
+      @case ('SAMPLE_PRINTING') {
+        <div class="banner info"><b>Đang in mẫu thử cho sản phẩm có thiết kế.</b><span>Khi mẫu xong, bạn sẽ xem ảnh mẫu và duyệt trước khi in hàng loạt.</span></div>
+      }
+      @case ('SAMPLE_REVIEW') {
+        <div class="banner action"><b>Mẫu in đã sẵn sàng – mời bạn duyệt.</b><span>Duyệt từng sản phẩm bên dưới, hoặc yêu cầu chỉnh sửa thiết kế (lần đầu miễn phí, mở trong 48 giờ).</span></div>
+      }
+      @case ('PRINT_CONFIRMED') {
+        <div class="banner info"><b>Đơn đang được in ấn.</b><span>Đơn đã bắt đầu in nên không thể hủy.</span></div>
+      }
+      @case ('PRINT_COMPLETED') {
+        <div class="banner info"><b>Đã in xong, đang đóng gói chờ giao cho đơn vị vận chuyển.</b></div>
+      }
+      @case ('SHIPPING') {
+        <div class="banner info"><b>Đơn đang trên đường giao đến bạn.</b>@if (o.trackingCode) { <span>Mã vận đơn: <b>{{ o.trackingCode }}</b></span> }</div>
+      }
+      @case ('COMPLETED') {
+        @if (tab() === 'delivered') {
+          <div class="banner ok"><div><b>Đơn đã được giao{{ o.deliveredAt ? ' lúc ' + (o.deliveredAt | date: 'HH:mm dd/MM') : '' }}.</b><span>Bạn đã nhận được hàng chưa?</span></div>
+            <button type="button" class="btn primary" (click)="received()">Đã nhận được hàng</button></div>
+        } @else {
+          <div class="banner ok"><b>Đơn hàng đã hoàn thành. Cảm ơn bạn đã mua sắm tại PrintiFy!</b></div>
+        }
+      }
+    }
+  }
+
+  <div class="grid">
+    <!-- ===== Sản phẩm ===== -->
+    <section class="card items" id="order-items">
+      <h2>Sản phẩm ({{ o.items.length }})</h2>
+      @for (i of o.items; track i.orderItemId) {
+        <article class="item">
+          <img [src]="h.image(i)" [alt]="i.productName" appImgFallback />
+          <div class="i-main">
+            <b>{{ i.productName }}</b>
+            <span class="muted">{{ h.variantText(i) }} · x{{ i.qty }}</span>
+            @if (i.listingSnapshot) { <span class="tag">🎨 Thiết kế Marketplace</span> }
+            @else if (i.designId) {
+              <span class="tag">✏️ Thiết kế của bạn
+                @if (ownDesign(i)) { · <a [routerLink]="['/editor/designs', i.designId]">mở thiết kế</a> }
+              </span>
+            }
+            @if (i.designReview && o.orderStatus === 'DESIGN_REVIEW') {
+              @switch (i.designReview.status) {
+                @case ('REJECTED') {
+                  <div class="review bad">
+                    <b>❌ Mẫu chưa đạt{{ i.designReview.reviewedAt ? ' · ' + (i.designReview.reviewedAt | date: 'HH:mm dd/MM') : '' }}</b>
+                    <p>{{ i.designReview.reason }}</p>
+                    <div class="review-actions">
+                      <button type="button" class="btn primary" (click)="fixDesign(i)">✏️ Sửa lại mẫu in</button>
+                      <button type="button" class="btn ghost risk" (click)="askAcceptRisk(i)">Vẫn in như hiện tại</button>
+                    </div>
+                    <small class="risk-hint">Chọn "Vẫn in như hiện tại" nếu bạn muốn giữ nguyên thiết kế và chấp nhận các lỗi đã nêu.</small>
+                  </div>
+                }
+                @case ('PENDING') {
+                  <div class="review wait">⏳ {{ i.designReview.resubmittedAt ? 'Đã gửi lại mẫu đã sửa, đang chờ PrintiFy kiểm tra' : 'Đang chờ PrintiFy kiểm tra mẫu' }}</div>
+                }
+              }
+            } @else if (i.designReview?.status === 'APPROVED') {
+              <div class="review ok">✓ Mẫu in đã được PrintiFy kiểm tra đạt</div>
+            }
+            @if (i.designReview?.status === 'ACCEPTED_RISK') {
+              <div class="review risk-ok">
+                <b>⚠️ Bạn đã chọn in mẫu hiện tại{{ i.designReview.riskAcceptedAt ? ' · ' + (i.designReview.riskAcceptedAt | date: 'HH:mm dd/MM') : '' }}</b>
+                <span>Lỗi đã được cảnh báo: {{ i.designReview.reason }}</span>
+              </div>
+            }
+            @if (i.requiresSample && sampleText(i) && o.orderStatus !== 'DESIGN_REVIEW') {
+              <div class="sample" [attr.data-s]="i.sampleStatus">
+                <span>🖨️ {{ sampleText(i) }}</span>
+                @if (i.samplePhotoUrl) {
+                  <button type="button" class="thumb" (click)="photo.set(i.samplePhotoUrl!)" aria-label="Xem ảnh mẫu in">
+                    <img [src]="i.samplePhotoUrl" alt="Ảnh mẫu in" />
+                    <small>Xem ảnh mẫu</small>
+                  </button>
+                }
+              </div>
+              @if (canReviewSample(i)) {
+                <div class="sample-actions">
+                  <button type="button" class="btn ghost" (click)="requestEdit(i)">✏️ Yêu cầu chỉnh sửa</button>
+                  <button type="button" class="btn primary" (click)="approve(i)">✓ Duyệt mẫu</button>
+                </div>
+              }
+            }
+          </div>
+          <span class="i-price">{{ i.unitPrice * i.qty | vnd }}</span>
+        </article>
+      }
+    </section>
+
+    <aside class="side">
+      <section class="card">
+        <h2>Thông tin nhận hàng</h2>
+        <p class="ship"><b>{{ o.shippingInfo.name }}</b> · {{ o.shippingInfo.phone }}<br />{{ o.shippingInfo.detail }}, {{ o.shippingInfo.ward }}, {{ o.shippingInfo.province }}</p>
+        @if (o.shippingInfo.note) { <p class="muted small">Ghi chú: {{ o.shippingInfo.note }}</p> }
+        @if (o.trackingCode) { <p class="small">🚚 Mã vận đơn: <b>{{ o.trackingCode }}</b></p> }
+      </section>
+
+      <section class="card">
+        <h2>Thanh toán</h2>
+        <dl class="sum">
+          <div><dt>Tiền hàng</dt><dd>{{ o.totals.productSubtotal | vnd }}</dd></div>
+          @if (o.totals.designFees) { <div><dt>Phí thiết kế</dt><dd>{{ o.totals.designFees | vnd }}</dd></div> }
+          @if (o.totals.discount) { <div class="good"><dt>Ưu đãi thành viên</dt><dd>−{{ o.totals.discount | vnd }}</dd></div> }
+          <div><dt>Phí giao hàng</dt><dd>{{ o.totals.shipping | vnd }}</dd></div>
+          <div class="total"><dt>Tổng cộng</dt><dd>{{ o.totals.total | vnd }}</dd></div>
+        </dl>
+        <p class="small muted">{{ h.payment(o) }} · {{ o.paymentStatus === 'PAID' ? 'Đã thanh toán' : o.paymentStatus === 'PENDING' ? 'Chưa thanh toán' : 'Chờ xác nhận' }}</p>
+      </section>
+
+      @if (o.review) {
+        <section class="card">
+          <h2>Đánh giá của bạn</h2>
+          <p class="stars">{{ stars(o.review.rating) }}</p>
+          @if (o.review.comment) { <p class="small">{{ o.review.comment }}</p> }
+        </section>
+      }
+
+      <div class="actions">
+        @if (canCancel()) {
+          <button type="button" class="btn ghost danger" (click)="showCancel.set(true)">Hủy đơn / đổi địa chỉ</button>
+        } @else if (cancelLocked()) {
+          <button type="button" class="btn ghost" disabled title="Đơn đã bắt đầu in nên không thể hủy">Hủy đơn</button>
+        }
+        @if (tab() === 'delivered' || tab() === 'done') {
+          @if (canReturn()) { <button type="button" class="btn ghost" (click)="returnOrder()">Trả hàng / Hoàn tiền</button> }
+          @else { <button type="button" class="btn ghost" disabled title="Đã quá 7 ngày kể từ khi giao">Hết hạn trả hàng</button> }
+        }
+        @if (tab() === 'done' || tab() === 'cancelled') { <button type="button" class="btn ghost" (click)="rebuy()">Mua lại</button> }
+        @if (tab() === 'done' && !o.review) { <button type="button" class="btn primary" (click)="showReview.set(true)">Đánh giá</button> }
+      </div>
+    </aside>
+  </div>
+
+  <!-- ===== Lịch sử ===== -->
+  @if (timeline().length) {
+    <section class="card">
+      <h2>Lịch sử đơn hàng</h2>
+      <ul class="timeline">
+        @for (e of timeline(); track $index) {
+          <li [class.first]="$first">
+            <span class="t-time">{{ e.occurredAt | date: 'HH:mm dd/MM/yyyy' }}</span>
+            <span class="t-body"><b>{{ timelineLabel(e) }}</b><span>{{ e.note }}</span></span>
+          </li>
+        }
+      </ul>
+    </section>
+  }
+
+  @if (showQr()) {
+    <app-qr-payment-dialog [order]="o" (claimed)="claim()" (closed)="showQr.set(false)" (viewOrder)="showQr.set(false)"></app-qr-payment-dialog>
+  }
+  @if (showCancel()) {
+    <app-cancel-dialog [order]="o" (done)="onCancelDone($event)" (closed)="showCancel.set(false)"></app-cancel-dialog>
+  }
+  @if (riskFor(); as ri) {
+    <div class="risk-backdrop" (click)="riskFor.set(null)">
+      <div class="risk-modal" role="alertdialog" aria-modal="true" aria-labelledby="risk-title" (click)="$event.stopPropagation()">
+        <div class="risk-icon" aria-hidden="true">⚠️</div>
+        <h2 id="risk-title">In mẫu hiện tại, không chỉnh sửa?</h2>
+        <p>PrintiFy đã cảnh báo mẫu <b>{{ ri.productName }}</b> có thể in không như mong đợi:</p>
+        <blockquote>{{ ri.designReview?.reason }}</blockquote>
+        <ul>
+          <li>PrintiFy sẽ in đúng thiết kế bạn đã gửi, không tự chỉnh sửa.</li>
+          <li>Các lỗi đã nêu ở trên (bị cắt ngoài vùng in, vỡ hạt…) <b>không được áp dụng trả hàng / hoàn tiền</b>.</li>
+          <li>Bạn vẫn được xem ảnh mẫu thử và duyệt trước khi in chính thức.</li>
+        </ul>
+        <label class="agree">
+          <input type="checkbox" [checked]="riskAgree()" (change)="riskAgree.set(!riskAgree())" />
+          Tôi đã đọc cảnh báo và đồng ý tự chịu rủi ro về các lỗi trên.
+        </label>
+        <div class="risk-actions">
+          <button type="button" class="btn ghost" (click)="riskFor.set(null)">Quay lại sửa mẫu</button>
+          <button type="button" class="btn warn" [disabled]="!riskAgree()" (click)="acceptRisk()">Xác nhận vẫn in</button>
+        </div>
+      </div>
+    </div>
+  }
+  @if (showReview()) {
+    <app-review-dialog [order]="o" (done)="onReviewed()" (closed)="showReview.set(false)"></app-review-dialog>
+  }
+} @else if (notFound()) {
+  <section class="card empty">
+    <div class="empty-icon" aria-hidden="true">🔍</div>
+    <p>Không tìm thấy đơn hàng này trong tài khoản của bạn.</p>
+    <a routerLink="/account/orders" class="btn primary">Về danh sách đơn</a>
+  </section>
+} @else {
+  <section class="card"><div class="skeleton"></div></section>
+}
+
+@if (photo(); as src) {
+  <div class="photo-view" (click)="photo.set(null)" role="dialog" aria-label="Ảnh mẫu in">
+    <img [src]="src" alt="Ảnh mẫu in" />
+    <button type="button" aria-label="Đóng">✕</button>
+  </div>
+}
+@if (toast(); as t) {
+  <div class="toast" [class.error]="t.type === 'error'" role="status">{{ t.text }}</div>
+}

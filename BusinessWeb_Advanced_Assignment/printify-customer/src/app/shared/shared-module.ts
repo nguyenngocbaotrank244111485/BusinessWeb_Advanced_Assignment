@@ -9,10 +9,11 @@ import { StatusBadge } from './status-badge/status-badge';
 import { OrderSummary } from './order-summary/order-summary';
 import { ImgFallbackDirective } from './img-fallback.directive';
 import { NotificationBell } from './notification-bell/notification-bell';
+import { QrPaymentDialog } from '../cart/qr-payment-dialog/qr-payment-dialog';
 
 /** Component/pipe dùng lại ở nhiều module (Ch.II 2.3: @Input/@Output) */
 @NgModule({
-  declarations: [ProductCard, Pagination, EmptyState, VndPipe, StatusBadge, OrderSummary, NotificationBell],
+  declarations: [ProductCard, Pagination, EmptyState, VndPipe, StatusBadge, OrderSummary, NotificationBell, QrPaymentDialog],
   imports: [CommonModule, RouterModule, ImgFallbackDirective],
   exports: [
     CommonModule,
@@ -25,6 +26,7 @@ import { NotificationBell } from './notification-bell/notification-bell';
     StatusBadge,
     OrderSummary,
     NotificationBell,
+    QrPaymentDialog,
   ],
 })
 export class SharedModule {}

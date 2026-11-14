@@ -1,5 +1,5 @@
 import { Component, DestroyRef, EventEmitter, Input, OnInit, Output, computed, inject, signal } from '@angular/core';
-import { Order } from '../../models/order.model';
+import { Order, PAYMENT_METHODS } from '../../models/order.model';
 
 /**
  * Popup thanh toán QR tĩnh, đếm ngược theo paymentExpiresAt (10 phút từ lúc tạo đơn).
@@ -36,6 +36,10 @@ export class QrPaymentDialog implements OnInit {
   ngOnInit(): void {
     const t = setInterval(() => this.now.set(Date.now()), 1000);
     this.destroyRef.onDestroy(() => clearInterval(t));
+  }
+
+  get method() {
+    return PAYMENT_METHODS[this.order.paymentMethod ?? 'BANK'];
   }
 
   get transferNote(): string {

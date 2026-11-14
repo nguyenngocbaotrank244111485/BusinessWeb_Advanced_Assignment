@@ -1,0 +1,76 @@
+<div class="backdrop" (click)="closed.emit()">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="cancel-title" (click)="$event.stopPropagation()">
+    <div class="head">
+      <h2 id="cancel-title">{{ step() === 'confirm' ? 'Xác nhận gửi yêu cầu hủy' : 'Hủy đơn ' + order._id.toUpperCase() }}</h2>
+      <button type="button" class="x" (click)="closed.emit()" aria-label="Đóng">✕</button>
+    </div>
+
+    @if (step() === 'form') {
+      <p class="sub">Vui lòng cho PrintiFy biết lý do bạn muốn hủy đơn:</p>
+      <div class="reasons" role="radiogroup" aria-label="Lý do hủy">
+        @for (r of reasons; track r) {
+          <label class="reason" [class.on]="reason() === r">
+            <input type="radio" name="reason" [value]="r" [checked]="reason() === r" (change)="reason.set(r)" />
+            <span>{{ r }}</span>
+          </label>
+        }
+      </div>
+
+      @if (isAddress()) {
+        <div class="addr-box">
+          <p class="tip">💡 Không cần hủy! Chọn địa chỉ đúng bên dưới, PrintiFy sẽ giao đến địa chỉ mới.</p>
+          @if (addresses().length) {
+            <div class="addr-list">
+              @for (a of addresses(); track a._id) {
+                <label class="addr" [class.on]="pickedAddress() === a._id">
+                  <input type="radio" name="addr" [value]="a._id" [checked]="pickedAddress() === a._id" (change)="pickedAddress.set(a._id)" />
+                  <span>
+                    <b>{{ a.name }} · {{ a.phone }}</b>
+                    @if (a.isDefault) { <em class="tag">Mặc định</em> }
+                    @if (isCurrent(a)) { <em class="tag cur">Đang dùng cho đơn</em> }
+                    <small>{{ a.detail }}, {{ a.ward }}, {{ a.province }}</small>
+                  </span>
+                </label>
+              }
+            </div>
+          } @else {
+            <p class="muted">Sổ địa chỉ đang trống.</p>
+          }
+          <a routerLink="/account/profile" [queryParams]="{ tab: 'addresses' }" class="link" (click)="closed.emit()">＋ Thêm / sửa địa chỉ trong sổ địa chỉ</a>
+          <div class="actions">
+            <button type="button" class="btn primary" [disabled]="!pickedAddress() || pickedIsCurrent()" (click)="useAddress()">
+              Đổi sang địa chỉ này
+            </button>
+          </div>
+          <p class="or"><span>hoặc vẫn muốn hủy đơn</span></p>
+        </div>
+      }
+
+      <label class="field">
+        <span>Ghi chú thêm {{ needNote() ? '(bắt buộc)' : '(không bắt buộc)' }}</span>
+        <textarea rows="3" maxlength="300" [value]="note()" (input)="note.set($any($event.target).value)" placeholder="Mô tả thêm để PrintiFy xử lý nhanh hơn…"></textarea>
+        @if (needNote() && note().trim().length < 5) { <em>Vui lòng nhập lý do (ít nhất 5 ký tự).</em> }
+      </label>
+
+      <div class="actions">
+        <button type="button" class="btn ghost" (click)="closed.emit()">Không hủy nữa</button>
+        <button type="button" class="btn danger" [disabled]="!canSubmit()" (click)="next()">Tiếp tục hủy đơn</button>
+      </div>
+    } @else {
+      <div class="confirm">
+        <div class="warn-icon" aria-hidden="true">⚠️</div>
+        <p>Bạn có chắc chắn muốn gửi yêu cầu hủy đơn <b>{{ order._id.toUpperCase() }}</b>?</p>
+        <dl>
+          <div><dt>Lý do</dt><dd>{{ reason() }}</dd></div>
+          @if (note().trim()) { <div><dt>Ghi chú</dt><dd>{{ note() }}</dd></div> }
+          <div><dt>Tổng tiền</dt><dd>{{ order.totals.total | vnd }}</dd></div>
+        </dl>
+        <p class="note">Yêu cầu sẽ được PrintiFy xem xét. Đơn chỉ bị hủy khi được duyệt; nếu đã thanh toán, tiền được hoàn theo chính sách.</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn ghost" (click)="step.set('form')">← Quay lại</button>
+        <button type="button" class="btn danger" (click)="submit()">Gửi yêu cầu hủy</button>
+      </div>
+    }
+  </div>
+</div>

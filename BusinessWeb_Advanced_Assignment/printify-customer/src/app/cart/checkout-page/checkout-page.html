@@ -71,10 +71,17 @@
 
           <section class="card">
             <h2>2. Phương thức thanh toán</h2>
-            <div class="method" role="radio" aria-checked="true">
-              <span class="dot" aria-hidden="true"></span>
-              <span><b>Chuyển khoản qua mã QR</b><small>Sau khi đặt hàng, mã QR hiện ra và có hiệu lực {{ cfg().orderPaymentMinutes }} phút. PrintiFy xác nhận thanh toán rồi mới bắt đầu in.</small></span>
+            <div class="methods" role="radiogroup" aria-label="Phương thức thanh toán">
+              @for (m of methodKeys; track m) {
+                <button type="button" class="method" role="radio" [class.active]="paymentMethod() === m" [attr.aria-checked]="paymentMethod() === m"
+                  (click)="paymentMethod.set(m)">
+                  <span class="dot" aria-hidden="true"></span>
+                  <span class="logo" [attr.data-m]="m" aria-hidden="true">{{ m === 'MOMO' ? 'MoMo' : '🏦' }}</span>
+                  <span><b>{{ paymentMethods[m].label }}</b><small>Quét mã QR bằng {{ paymentMethods[m].app }}</small></span>
+                </button>
+              }
             </div>
+            <p class="pay-note">Sau khi đặt hàng, mã QR hiện ra và có hiệu lực {{ cfg().orderPaymentMinutes }} phút. PrintiFy xác nhận thanh toán rồi mới bắt đầu in.</p>
           </section>
         </div>
 

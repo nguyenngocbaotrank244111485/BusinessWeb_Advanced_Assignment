@@ -25,3 +25,6 @@ h2 { margin: 0; font-size: 21px; color: var(--pf-ink); }
 .done p { margin: 0; font-size: 14px; color: var(--pf-muted); line-height: 1.6; }
 .done .primary { width: 100%; }
 .big { font-size: 44px; }
+
+.method-chip { margin: 6px auto 0; width: fit-content; padding: 4px 12px; border-radius: 999px; background: #e9f1ff; color: #1d4ed8; font-size: 12.5px; font-weight: 700; }
+.method-chip[data-m='MOMO'] { background: #fde7f3; color: #a50064; }

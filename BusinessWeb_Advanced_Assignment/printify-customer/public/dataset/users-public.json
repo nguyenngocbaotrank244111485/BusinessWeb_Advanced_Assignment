@@ -14,6 +14,24 @@
         "ward": "Phường Bến Nghé",
         "detail": "12 Nguyễn Huệ",
         "isDefault": true
+      },
+      {
+        "_id": "adr_c1_2",
+        "name": "Nguyễn Minh An",
+        "phone": "0901234567",
+        "province": "TP. Hồ Chí Minh",
+        "ward": "Phường Linh Xuân",
+        "detail": "KTX Khu B ĐHQG, Tòa B3, phòng 512",
+        "isDefault": false
+      },
+      {
+        "_id": "adr_c1_3",
+        "name": "Trần Thị Mai (mẹ)",
+        "phone": "0912345678",
+        "province": "TP. Đà Nẵng",
+        "ward": "Phường Hải Châu",
+        "detail": "45 Lê Duẩn",
+        "isDefault": false
       }
     ],
     "avatar": null,

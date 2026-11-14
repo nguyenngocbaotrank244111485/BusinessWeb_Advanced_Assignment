@@ -25,6 +25,7 @@ import {
   DesignTemplate,
   EditorMode,
   OrderItemRef,
+  OrderRef,
   SAMPLE_EDIT_WINDOW_MS,
   SideDef,
   SideKey,
@@ -36,6 +37,7 @@ import { CartService } from '../../services/cart-service';
 import { AuthService } from '../../services/auth-service';
 import { MarketService } from '../../services/market-service';
 import { ProfileService } from '../../services/profile-service';
+import { OrderService } from '../../services/order-service';
 
 type Tab = 'design' | 'product' | 'layers' | 'templates';
 interface LayerItem {
@@ -111,6 +113,11 @@ export class EditorPage implements AfterViewInit, OnDestroy {
   private readonly market = inject(MarketService);
   private readonly marketLoaded$ = toObservable(this.market.loaded);
   private readonly profiles = inject(ProfileService);
+  private readonly orderSvc = inject(OrderService);
+  /** Sửa mẫu bị PrintiFy trả về (DESIGN_REVIEW) thay vì sửa sau khi xem mẫu thử */
+  readonly fixMode = signal(false);
+  /** Lý do PrintiFy trả mẫu về (hiện trên khung để khách sửa đúng chỗ) */
+  readonly fixReason = signal('');
 
   readonly fonts = FONTS;
   readonly shapes = SHAPES;
@@ -184,7 +191,7 @@ export class EditorPage implements AfterViewInit, OnDestroy {
   );
   readonly reprintFee = computed(() => {
     const item = this.orderItem();
-    if (!item) return 0;
+    if (!item || this.fixMode()) return 0;
     const used = item.sampleReprintCount + this.designs.reprintsOf(this.orderId(), item.orderItemId).length;
     // lần 1 miễn phí; hạng Vàng miễn phí thêm lần 2 (C18)
     const free = this.profiles.membership()?.tier.freeReprints ?? 1;
@@ -271,14 +278,19 @@ export class EditorPage implements AfterViewInit, OnDestroy {
       if (pm.get('orderId')) {
         // ----- SAMPLE_EDIT -----
         this.mode.set('SAMPLE_EDIT');
-        const order = await firstValueFrom(this.designs.findOrder(pm.get('orderId')!));
+        // ưu tiên trạng thái mới nhất (đã đổi trên trình duyệt), chưa có thì đọc orders.json
+        const order = (this.orderSvc.getById(pm.get('orderId')!) as unknown as OrderRef | undefined) ??
+          (await firstValueFrom(this.designs.findOrder(pm.get('orderId')!)));
         const item = order?.items.find((i) => i.orderItemId === pm.get('itemId'));
         if (!order || !item || !item.designId) return this.fail('Không tìm thấy dòng đơn hàng cần sửa mẫu.');
         if (order.userId !== me) return this.fail('Bạn không có quyền sửa mẫu của đơn hàng này.');
-        if (order.orderStatus !== 'SAMPLE_REVIEW' || !item.requiresSample || item.sampleStatus === 'APPROVED')
-          return this.fail('Đơn hàng không ở bước duyệt mẫu nên chưa thể chỉnh sửa thiết kế.');
+        const rejected = order.orderStatus === 'DESIGN_REVIEW' && item.designReview?.status === 'REJECTED';
+        this.fixMode.set(rejected);
+        this.fixReason.set(rejected ? item.designReview?.reason ?? '' : '');
+        if (!rejected && (order.orderStatus !== 'SAMPLE_REVIEW' || !item.requiresSample || item.sampleStatus === 'APPROVED'))
+          return this.fail('Đơn hàng không ở bước sửa mẫu nên chưa thể chỉnh sửa thiết kế.');
         const opened = item.editRequest?.openedAt ? Date.parse(item.editRequest.openedAt) : Date.now();
-        if (Date.now() - opened > SAMPLE_EDIT_WINDOW_MS)
+        if (!rejected && Date.now() - opened > SAMPLE_EDIT_WINDOW_MS)
           return this.fail('Cửa sổ chỉnh sửa mẫu 48 giờ đã hết hạn. Hãy mở lại yêu cầu ở trang chi tiết đơn.');
         void this.profiles.load();
         this.orderId.set(order._id);
@@ -319,6 +331,8 @@ export class EditorPage implements AfterViewInit, OnDestroy {
         this.designId.set(doc._id);
         if (doc.listingId) this.listing.set((await this.findListing(doc.listingId)) ?? null);
         if (doc.canvasJSON?.objects?.length) await this.loadObjects(doc.canvasJSON.objects);
+        // thiết kế mẫu trong dữ liệu chỉ có ảnh (chưa có canvasJSON) -> dựng lại từ ảnh
+        else if (doc.previewUrl) await this.addImageFromUrl(doc.previewUrl, false);
       } else if (qm.get('listingId')) {
         await this.startFromListing(qm.get('listingId')!);
       } else if (qm.get('templateId')) {
@@ -1093,6 +1107,7 @@ export class EditorPage implements AfterViewInit, OnDestroy {
   async requestReprint(): Promise<void> {
     const item = this.orderItem();
     if (!item) return;
+    if (this.fixMode()) return this.resubmitDesign(item);
     const fee = this.reprintFee();
     const msg = fee
       ? `Đã hết lượt in lại mẫu miễn phí, phí in lại mẫu là ${this.ps.formatPrice(fee)} (thanh toán QR 10 phút tại trang đơn hàng). Tiếp tục?`
@@ -1112,6 +1127,15 @@ export class EditorPage implements AfterViewInit, OnDestroy {
     });
     if (!ok) return this.showToast('error', 'Không gửi được yêu cầu, bộ nhớ trình duyệt đã đầy.');
     void this.router.navigate(['/account/orders', this.orderId()], { queryParams: { reprint: 'sent' } });
+  }
+
+  /** Gửi lại mẫu đã sửa cho PrintiFy kiểm tra (miễn phí) */
+  private async resubmitDesign(item: OrderItemRef): Promise<void> {
+    if (!confirm('Gửi mẫu đã sửa để PrintiFy kiểm tra lại?')) return;
+    const doc = await this.save(true);
+    if (!doc) return;
+    this.orderSvc.resubmitDesign(this.orderId(), item.orderItemId, doc._id);
+    void this.router.navigate(['/account/orders', this.orderId()], { queryParams: { resubmit: 'sent' } });
   }
 
   async publish(): Promise<void> {

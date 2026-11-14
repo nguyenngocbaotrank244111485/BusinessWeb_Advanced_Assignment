@@ -19,6 +19,7 @@
   } @else {
     <h2 id="qr-title">Quét mã để thanh toán</h2>
     <p class="sub">Đơn <b>{{ transferNote }}</b> đang chờ thanh toán</p>
+    <p class="method-chip" [attr.data-m]="order.paymentMethod ?? 'BANK'">{{ method.icon }} {{ method.label }} · mở {{ method.app }} để quét</p>
 
     <div class="timer" [class.low]="remainingMs() < 120000" aria-live="polite">
       <span>Mã hết hạn sau</span><b>{{ mmss() }}</b>
@@ -29,6 +30,7 @@
 
     <dl class="info">
       <div><dt>Số tiền</dt><dd><b>{{ order.totals.total | vnd }}</b> <button type="button" (click)="copy(order.totals.total + '', 'amount')">{{ copied() === 'amount' ? 'Đã chép' : 'Chép' }}</button></dd></div>
+      <div><dt>Phương thức</dt><dd>{{ method.label }}</dd></div>
       <div><dt>Nội dung chuyển khoản</dt><dd><b>{{ transferNote }}</b> <button type="button" (click)="copy(transferNote, 'note')">{{ copied() === 'note' ? 'Đã chép' : 'Chép' }}</button></dd></div>
       <div><dt>Người nhận</dt><dd>CONG TY PRINTIFY (tài khoản demo)</dd></div>
     </dl>

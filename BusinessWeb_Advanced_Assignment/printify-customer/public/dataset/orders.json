@@ -79,7 +79,12 @@
         "sampleReprints": [],
         "editRequest": null,
         "listingSnapshot": null,
-        "printFileUrl": "/uploads/print/ord_1002_oi_1002_1.png"
+        "printFileUrl": "/uploads/print/ord_1002_oi_1002_1.png",
+        "designReview": {
+          "status": "APPROVED",
+          "reason": null,
+          "reviewedAt": "2026-11-10T07:04:47.624Z"
+        }
       }
     ],
     "shippingInfo": {
@@ -120,6 +125,12 @@
         "occurredAt": "2026-11-10T06:38:47.624Z",
         "actorId": "usr_c1",
         "note": "Khách báo đã thanh toán"
+      },
+      {
+        "status": "DESIGN_REVIEW",
+        "occurredAt": "2026-11-10T07:04:47.624Z",
+        "actorId": "usr_staff",
+        "note": "PrintiFy kiểm tra file thiết kế: đạt yêu cầu in"
       },
       {
         "status": "SAMPLE_PRINTING",
@@ -169,7 +180,12 @@
           "platformFee": 5000,
           "buyerDesignFee": 55000
         },
-        "printFileUrl": "/uploads/print/ord_1003_oi_1003_1.png"
+        "printFileUrl": "/uploads/print/ord_1003_oi_1003_1.png",
+        "designReview": {
+          "status": "APPROVED",
+          "reason": null,
+          "reviewedAt": "2026-11-07T07:34:47.624Z"
+        }
       }
     ],
     "shippingInfo": {
@@ -210,6 +226,12 @@
         "occurredAt": "2026-11-07T06:39:47.624Z",
         "actorId": "usr_c1",
         "note": "Khách báo đã thanh toán"
+      },
+      {
+        "status": "DESIGN_REVIEW",
+        "occurredAt": "2026-11-07T07:34:47.624Z",
+        "actorId": "usr_staff",
+        "note": "PrintiFy kiểm tra file thiết kế: đạt yêu cầu in"
       },
       {
         "status": "SAMPLE_PRINTING",
@@ -315,5 +337,865 @@
     ],
     "createdAt": "2026-11-13T06:09:47.624Z",
     "updatedAt": "2026-11-13T06:19:47.624Z"
+  },
+  {
+    "_id": "ord_1005",
+    "userId": "usr_c1",
+    "orderStatus": "PENDING_STAFF_CONFIRMATION",
+    "paymentStatus": "WAITING_STAFF",
+    "paymentMethod": "MOMO",
+    "items": [
+      {
+        "orderItemId": "oi_1005_1",
+        "productId": "prd202",
+        "productName": "Túi Tote Mini",
+        "variantId": "prd202-beige",
+        "color": "beige",
+        "size": null,
+        "qty": 2,
+        "unitPrice": 75000,
+        "designId": "dsg_demo_c1_city",
+        "requiresSample": true,
+        "sampleStatus": "WAITING_SAMPLE",
+        "samplePhotoUrl": null,
+        "sampleReprintCount": 0,
+        "sampleReprints": [],
+        "editRequest": null,
+        "listingSnapshot": null,
+        "printFileUrl": null,
+        "designReview": {
+          "status": "PENDING",
+          "reason": null,
+          "reviewedAt": null
+        }
+      }
+    ],
+    "shippingInfo": {
+      "name": "Nguyễn Minh An",
+      "phone": "0901234567",
+      "province": "TP. Hồ Chí Minh",
+      "ward": "Phường Bến Nghé",
+      "detail": "12 Nguyễn Huệ",
+      "note": ""
+    },
+    "totals": {
+      "productSubtotal": 150000,
+      "designFees": 0,
+      "discount": 7500,
+      "shipping": 20000,
+      "total": 162500
+    },
+    "idempotencyKey": "seed_ord_1005",
+    "paymentOpenedAt": "2026-11-14T02:00:00.000Z",
+    "paymentExpiresAt": "2026-11-14T02:10:00.000Z",
+    "paymentClaimedAt": "2026-11-14T02:00:00.000Z",
+    "firstSampleStartedAt": null,
+    "trackingCode": null,
+    "shippedAt": null,
+    "deliveredAt": null,
+    "receivedAt": null,
+    "cancelRequest": null,
+    "cancelledAt": null,
+    "cancelReason": null,
+    "review": null,
+    "timeline": [
+      {
+        "status": "PENDING_PAYMENT",
+        "occurredAt": "2026-11-14T02:00:00.000Z",
+        "actorId": "usr_c1",
+        "note": "Tạo đơn, mở QR 10 phút"
+      },
+      {
+        "status": "PENDING_STAFF_CONFIRMATION",
+        "occurredAt": "2026-11-14T02:00:00.000Z",
+        "actorId": "usr_c1",
+        "note": "Khách báo đã thanh toán"
+      }
+    ],
+    "createdAt": "2026-11-14T02:00:00.000Z",
+    "updatedAt": "2026-11-14T02:00:00.000Z"
+  },
+  {
+    "_id": "ord_1012",
+    "userId": "usr_c1",
+    "orderStatus": "PENDING_STAFF_CONFIRMATION",
+    "paymentStatus": "WAITING_STAFF",
+    "paymentMethod": "BANK",
+    "items": [
+      {
+        "orderItemId": "oi_1012_1",
+        "productId": "prd302",
+        "productName": "Cốc sứ Mini 250ml",
+        "variantId": "prd302-white",
+        "color": "white",
+        "size": null,
+        "qty": 1,
+        "unitPrice": 95000,
+        "designId": null,
+        "requiresSample": false,
+        "sampleStatus": "NOT_REQUIRED",
+        "samplePhotoUrl": null,
+        "sampleReprintCount": 0,
+        "sampleReprints": [],
+        "editRequest": null,
+        "listingSnapshot": null,
+        "printFileUrl": null
+      }
+    ],
+    "shippingInfo": {
+      "name": "Nguyễn Minh An",
+      "phone": "0901234567",
+      "province": "TP. Hồ Chí Minh",
+      "ward": "Phường Bến Nghé",
+      "detail": "12 Nguyễn Huệ",
+      "note": ""
+    },
+    "totals": {
+      "productSubtotal": 95000,
+      "designFees": 0,
+      "discount": 4750,
+      "shipping": 20000,
+      "total": 110250
+    },
+    "idempotencyKey": "seed_ord_1012",
+    "paymentOpenedAt": "2026-11-13T09:00:00.000Z",
+    "paymentExpiresAt": "2026-11-13T09:10:00.000Z",
+    "paymentClaimedAt": "2026-11-13T09:00:00.000Z",
+    "firstSampleStartedAt": null,
+    "trackingCode": null,
+    "shippedAt": null,
+    "deliveredAt": null,
+    "receivedAt": null,
+    "cancelRequest": {
+      "reason": "Đặt sai số lượng",
+      "note": "Muốn đặt 3 cái nhưng bấm nhầm 1",
+      "status": "PENDING",
+      "requestedAt": "2026-11-13T10:00:00.000Z",
+      "resolvedAt": null,
+      "resolveNote": null
+    },
+    "cancelledAt": null,
+    "cancelReason": null,
+    "review": null,
+    "timeline": [
+      {
+        "status": "PENDING_PAYMENT",
+        "occurredAt": "2026-11-13T09:00:00.000Z",
+        "actorId": "usr_c1",
+        "note": "Tạo đơn, mở QR 10 phút"
+      },
+      {
+        "status": "PENDING_STAFF_CONFIRMATION",
+        "occurredAt": "2026-11-13T09:00:00.000Z",
+        "actorId": "usr_c1",
+        "note": "Khách báo đã thanh toán"
+      }
+    ],
+    "createdAt": "2026-11-13T09:00:00.000Z",
+    "updatedAt": "2026-11-13T09:00:00.000Z"
+  },
+  {
+    "_id": "ord_1006",
+    "userId": "usr_c1",
+    "orderStatus": "SAMPLE_REVIEW",
+    "paymentStatus": "PAID",
+    "paymentMethod": "BANK",
+    "items": [
+      {
+        "orderItemId": "oi_1006_1",
+        "productId": "prd101",
+        "productName": "Áo thun Cotton Basic",
+        "variantId": "prd101-white-m",
+        "color": "white",
+        "size": "M",
+        "qty": 3,
+        "unitPrice": 180000,
+        "designId": "dsg_c1_tee",
+        "requiresSample": true,
+        "sampleStatus": "SAMPLE_READY",
+        "samplePhotoUrl": "/uploads/designs/dsg_c1_tee.png",
+        "sampleReprintCount": 0,
+        "sampleReprints": [],
+        "editRequest": null,
+        "listingSnapshot": null,
+        "printFileUrl": null,
+        "designReview": {
+          "status": "APPROVED",
+          "reason": null,
+          "reviewedAt": "2026-11-12T06:00:00.000Z"
+        }
+      }
+    ],
+    "shippingInfo": {
+      "name": "Nguyễn Minh An",
+      "phone": "0901234567",
+      "province": "TP. Hồ Chí Minh",
+      "ward": "Phường Bến Nghé",
+      "detail": "12 Nguyễn Huệ",
+      "note": ""
+    },
+    "totals": {
+      "productSubtotal": 540000,
+      "designFees": 0,
+      "discount": 27000,
+      "shipping": 20000,
+      "total": 533000
+    },
+    "idempotencyKey": "seed_ord_1006",
+    "paymentOpenedAt": "2026-11-12T03:00:00.000Z",
+    "paymentExpiresAt": "2026-11-12T03:10:00.000Z",
+    "paymentClaimedAt": "2026-11-12T03:00:00.000Z",
+    "firstSampleStartedAt": "2026-11-12T07:00:00.000Z",
+    "trackingCode": null,
+    "shippedAt": null,
+    "deliveredAt": null,
+    "receivedAt": null,
+    "cancelRequest": null,
+    "cancelledAt": null,
+    "cancelReason": null,
+    "review": null,
+    "timeline": [
+      {
+        "status": "PENDING_PAYMENT",
+        "occurredAt": "2026-11-12T03:00:00.000Z",
+        "actorId": "usr_c1",
+        "note": "Tạo đơn, mở QR 10 phút"
+      },
+      {
+        "status": "PENDING_STAFF_CONFIRMATION",
+        "occurredAt": "2026-11-12T03:00:00.000Z",
+        "actorId": "usr_c1",
+        "note": "Khách báo đã thanh toán"
+      },
+      {
+        "status": "DESIGN_REVIEW",
+        "occurredAt": "2026-11-12T06:00:00.000Z",
+        "actorId": "usr_staff",
+        "note": "PrintiFy kiểm tra file thiết kế: đạt yêu cầu in"
+      },
+      {
+        "status": "SAMPLE_PRINTING",
+        "occurredAt": "2026-11-12T06:00:00.000Z",
+        "actorId": "usr_staff",
+        "note": "Staff xác nhận thanh toán, bắt đầu in mẫu"
+      },
+      {
+        "status": "SAMPLE_REVIEW",
+        "occurredAt": "2026-11-13T08:00:00.000Z",
+        "actorId": "usr_staff",
+        "note": "Mẫu hoàn tất, chờ khách duyệt"
+      }
+    ],
+    "createdAt": "2026-11-12T03:00:00.000Z",
+    "updatedAt": "2026-11-13T08:00:00.000Z"
+  },
+  {
+    "_id": "ord_1008",
+    "userId": "usr_c1",
+    "orderStatus": "PRINT_COMPLETED",
+    "paymentStatus": "PAID",
+    "paymentMethod": "BANK",
+    "items": [
+      {
+        "orderItemId": "oi_1008_1",
+        "productId": "prd401",
+        "productName": "Sổ tay lò xo A5",
+        "variantId": "prd401-white",
+        "color": "white",
+        "size": null,
+        "qty": 2,
+        "unitPrice": 65000,
+        "designId": "dsg_demo_110",
+        "requiresSample": true,
+        "sampleStatus": "APPROVED",
+        "samplePhotoUrl": null,
+        "sampleReprintCount": 0,
+        "sampleReprints": [],
+        "editRequest": null,
+        "listingSnapshot": null,
+        "printFileUrl": null,
+        "designReview": {
+          "status": "APPROVED",
+          "reason": null,
+          "reviewedAt": "2026-11-08T05:00:00.000Z"
+        }
+      }
+    ],
+    "shippingInfo": {
+      "name": "Nguyễn Minh An",
+      "phone": "0901234567",
+      "province": "TP. Hồ Chí Minh",
+      "ward": "Phường Bến Nghé",
+      "detail": "12 Nguyễn Huệ",
+      "note": ""
+    },
+    "totals": {
+      "productSubtotal": 130000,
+      "designFees": 0,
+      "discount": 6500,
+      "shipping": 20000,
+      "total": 143500
+    },
+    "idempotencyKey": "seed_ord_1008",
+    "paymentOpenedAt": "2026-11-08T02:00:00.000Z",
+    "paymentExpiresAt": "2026-11-08T02:10:00.000Z",
+    "paymentClaimedAt": "2026-11-08T02:00:00.000Z",
+    "firstSampleStartedAt": "2026-11-08T06:00:00.000Z",
+    "trackingCode": null,
+    "shippedAt": null,
+    "deliveredAt": null,
+    "receivedAt": null,
+    "cancelRequest": null,
+    "cancelledAt": null,
+    "cancelReason": null,
+    "review": null,
+    "timeline": [
+      {
+        "status": "PENDING_PAYMENT",
+        "occurredAt": "2026-11-08T02:00:00.000Z",
+        "actorId": "usr_c1",
+        "note": "Tạo đơn, mở QR 10 phút"
+      },
+      {
+        "status": "PENDING_STAFF_CONFIRMATION",
+        "occurredAt": "2026-11-08T02:00:00.000Z",
+        "actorId": "usr_c1",
+        "note": "Khách báo đã thanh toán"
+      },
+      {
+        "status": "DESIGN_REVIEW",
+        "occurredAt": "2026-11-08T05:00:00.000Z",
+        "actorId": "usr_staff",
+        "note": "PrintiFy kiểm tra file thiết kế: đạt yêu cầu in"
+      },
+      {
+        "status": "SAMPLE_PRINTING",
+        "occurredAt": "2026-11-08T05:00:00.000Z",
+        "actorId": "usr_staff",
+        "note": "Staff xác nhận thanh toán, bắt đầu in mẫu"
+      },
+      {
+        "status": "SAMPLE_REVIEW",
+        "occurredAt": "2026-11-09T05:00:00.000Z",
+        "actorId": "usr_staff",
+        "note": "Mẫu hoàn tất, chờ khách duyệt"
+      },
+      {
+        "status": "PRINT_CONFIRMED",
+        "occurredAt": "2026-11-10T02:00:00.000Z",
+        "actorId": "usr_c1",
+        "note": "Khách duyệt mẫu, bắt đầu in chính thức"
+      },
+      {
+        "status": "PRINT_COMPLETED",
+        "occurredAt": "2026-11-13T04:00:00.000Z",
+        "actorId": "usr_staff",
+        "note": "In xong, đóng gói chờ giao"
+      }
+    ],
+    "createdAt": "2026-11-08T02:00:00.000Z",
+    "updatedAt": "2026-11-13T04:00:00.000Z"
+  },
+  {
+    "_id": "ord_1009",
+    "userId": "usr_c1",
+    "orderStatus": "SHIPPING",
+    "paymentStatus": "PAID",
+    "paymentMethod": "BANK",
+    "items": [
+      {
+        "orderItemId": "oi_1009_1",
+        "productId": "prd501",
+        "productName": "Tranh Canvas 20 × 30cm",
+        "variantId": "prd501-white",
+        "color": "white",
+        "size": null,
+        "qty": 1,
+        "unitPrice": 190000,
+        "designId": "dsg_demo_112",
+        "requiresSample": true,
+        "sampleStatus": "APPROVED",
+        "samplePhotoUrl": null,
+        "sampleReprintCount": 0,
+        "sampleReprints": [],
+        "editRequest": null,
+        "listingSnapshot": null,
+        "printFileUrl": null,
+        "designReview": {
+          "status": "APPROVED",
+          "reason": null,
+          "reviewedAt": "2026-11-06T05:00:00.000Z"
+        }
+      },
+      {
+        "orderItemId": "oi_1009_2",
+        "productId": "prd604",
+        "productName": "Móc khóa Mica chữ nhật",
+        "variantId": "prd604-clear",
+        "color": "clear",
+        "size": null,
+        "qty": 4,
+        "unitPrice": 45000,
+        "designId": null,
+        "requiresSample": false,
+        "sampleStatus": "NOT_REQUIRED",
+        "samplePhotoUrl": null,
+        "sampleReprintCount": 0,
+        "sampleReprints": [],
+        "editRequest": null,
+        "listingSnapshot": null,
+        "printFileUrl": null
+      }
+    ],
+    "shippingInfo": {
+      "name": "Nguyễn Minh An",
+      "phone": "0901234567",
+      "province": "TP. Hồ Chí Minh",
+      "ward": "Phường Bến Nghé",
+      "detail": "12 Nguyễn Huệ",
+      "note": ""
+    },
+    "totals": {
+      "productSubtotal": 370000,
+      "designFees": 0,
+      "discount": 18500,
+      "shipping": 20000,
+      "total": 371500
+    },
+    "idempotencyKey": "seed_ord_1009",
+    "paymentOpenedAt": "2026-11-06T02:00:00.000Z",
+    "paymentExpiresAt": "2026-11-06T02:10:00.000Z",
+    "paymentClaimedAt": "2026-11-06T02:00:00.000Z",
+    "firstSampleStartedAt": "2026-11-06T06:00:00.000Z",
+    "trackingCode": "GHN8812345VN",
+    "shippedAt": "2026-11-12T03:00:00.000Z",
+    "deliveredAt": null,
+    "receivedAt": null,
+    "cancelRequest": null,
+    "cancelledAt": null,
+    "cancelReason": null,
+    "review": null,
+    "timeline": [
+      {
+        "status": "PENDING_PAYMENT",
+        "occurredAt": "2026-11-06T02:00:00.000Z",
+        "actorId": "usr_c1",
+        "note": "Tạo đơn, mở QR 10 phút"
+      },
+      {
+        "status": "PENDING_STAFF_CONFIRMATION",
+        "occurredAt": "2026-11-06T02:00:00.000Z",
+        "actorId": "usr_c1",
+        "note": "Khách báo đã thanh toán"
+      },
+      {
+        "status": "DESIGN_REVIEW",
+        "occurredAt": "2026-11-06T05:00:00.000Z",
+        "actorId": "usr_staff",
+        "note": "PrintiFy kiểm tra file thiết kế: đạt yêu cầu in"
+      },
+      {
+        "status": "SAMPLE_PRINTING",
+        "occurredAt": "2026-11-06T05:00:00.000Z",
+        "actorId": "usr_staff",
+        "note": "Staff xác nhận thanh toán, bắt đầu in mẫu"
+      },
+      {
+        "status": "SAMPLE_REVIEW",
+        "occurredAt": "2026-11-07T05:00:00.000Z",
+        "actorId": "usr_staff",
+        "note": "Mẫu hoàn tất, chờ khách duyệt"
+      },
+      {
+        "status": "PRINT_CONFIRMED",
+        "occurredAt": "2026-11-08T02:00:00.000Z",
+        "actorId": "usr_c1",
+        "note": "Khách duyệt mẫu, bắt đầu in chính thức"
+      },
+      {
+        "status": "PRINT_COMPLETED",
+        "occurredAt": "2026-11-10T04:00:00.000Z",
+        "actorId": "usr_staff",
+        "note": "In xong, đóng gói chờ giao"
+      },
+      {
+        "status": "SHIPPING",
+        "occurredAt": "2026-11-12T03:00:00.000Z",
+        "actorId": "usr_staff",
+        "note": "Bàn giao đơn vị vận chuyển"
+      }
+    ],
+    "createdAt": "2026-11-06T02:00:00.000Z",
+    "updatedAt": "2026-11-12T03:00:00.000Z"
+  },
+  {
+    "_id": "ord_1010",
+    "userId": "usr_c1",
+    "orderStatus": "COMPLETED",
+    "paymentStatus": "PAID",
+    "paymentMethod": "BANK",
+    "items": [
+      {
+        "orderItemId": "oi_1010_1",
+        "productId": "prd302",
+        "productName": "Cốc sứ Mini 250ml",
+        "variantId": "prd302-white",
+        "color": "white",
+        "size": null,
+        "qty": 2,
+        "unitPrice": 95000,
+        "designId": "dsg_demo_c1_sunflower",
+        "requiresSample": true,
+        "sampleStatus": "APPROVED",
+        "samplePhotoUrl": null,
+        "sampleReprintCount": 0,
+        "sampleReprints": [],
+        "editRequest": null,
+        "listingSnapshot": null,
+        "printFileUrl": null,
+        "designReview": {
+          "status": "APPROVED",
+          "reason": null,
+          "reviewedAt": "2026-11-05T05:00:00.000Z"
+        }
+      }
+    ],
+    "shippingInfo": {
+      "name": "Nguyễn Minh An",
+      "phone": "0901234567",
+      "province": "TP. Hồ Chí Minh",
+      "ward": "Phường Bến Nghé",
+      "detail": "12 Nguyễn Huệ",
+      "note": ""
+    },
+    "totals": {
+      "productSubtotal": 190000,
+      "designFees": 0,
+      "discount": 9500,
+      "shipping": 20000,
+      "total": 200500
+    },
+    "idempotencyKey": "seed_ord_1010",
+    "paymentOpenedAt": "2026-11-05T02:00:00.000Z",
+    "paymentExpiresAt": "2026-11-05T02:10:00.000Z",
+    "paymentClaimedAt": "2026-11-05T02:00:00.000Z",
+    "firstSampleStartedAt": "2026-11-05T06:00:00.000Z",
+    "trackingCode": "GHN8800001VN",
+    "shippedAt": "2026-11-11T03:00:00.000Z",
+    "deliveredAt": "2026-11-13T09:00:00.000Z",
+    "receivedAt": null,
+    "cancelRequest": null,
+    "cancelledAt": null,
+    "cancelReason": null,
+    "review": null,
+    "timeline": [
+      {
+        "status": "PENDING_PAYMENT",
+        "occurredAt": "2026-11-05T02:00:00.000Z",
+        "actorId": "usr_c1",
+        "note": "Tạo đơn, mở QR 10 phút"
+      },
+      {
+        "status": "PENDING_STAFF_CONFIRMATION",
+        "occurredAt": "2026-11-05T02:00:00.000Z",
+        "actorId": "usr_c1",
+        "note": "Khách báo đã thanh toán"
+      },
+      {
+        "status": "DESIGN_REVIEW",
+        "occurredAt": "2026-11-05T05:00:00.000Z",
+        "actorId": "usr_staff",
+        "note": "PrintiFy kiểm tra file thiết kế: đạt yêu cầu in"
+      },
+      {
+        "status": "SAMPLE_PRINTING",
+        "occurredAt": "2026-11-05T05:00:00.000Z",
+        "actorId": "usr_staff",
+        "note": "Staff xác nhận thanh toán, bắt đầu in mẫu"
+      },
+      {
+        "status": "SAMPLE_REVIEW",
+        "occurredAt": "2026-11-06T05:00:00.000Z",
+        "actorId": "usr_staff",
+        "note": "Mẫu hoàn tất, chờ khách duyệt"
+      },
+      {
+        "status": "PRINT_CONFIRMED",
+        "occurredAt": "2026-11-07T02:00:00.000Z",
+        "actorId": "usr_c1",
+        "note": "Khách duyệt mẫu, bắt đầu in chính thức"
+      },
+      {
+        "status": "PRINT_COMPLETED",
+        "occurredAt": "2026-11-09T04:00:00.000Z",
+        "actorId": "usr_staff",
+        "note": "In xong, đóng gói chờ giao"
+      },
+      {
+        "status": "SHIPPING",
+        "occurredAt": "2026-11-11T03:00:00.000Z",
+        "actorId": "usr_staff",
+        "note": "Bàn giao đơn vị vận chuyển"
+      },
+      {
+        "status": "COMPLETED",
+        "occurredAt": "2026-11-13T09:00:00.000Z",
+        "actorId": "usr_staff",
+        "note": "Giao hàng thành công"
+      }
+    ],
+    "createdAt": "2026-11-05T02:00:00.000Z",
+    "updatedAt": "2026-11-13T09:00:00.000Z"
+  },
+  {
+    "_id": "ord_1011",
+    "userId": "usr_c1",
+    "orderStatus": "CANCELLED",
+    "paymentStatus": "WAITING_STAFF",
+    "paymentMethod": "BANK",
+    "items": [
+      {
+        "orderItemId": "oi_1011_1",
+        "productId": "prd106",
+        "productName": "Áo Sweater cổ tròn",
+        "variantId": "prd106-gray-l",
+        "color": "gray",
+        "size": "L",
+        "qty": 1,
+        "unitPrice": 280000,
+        "designId": null,
+        "requiresSample": false,
+        "sampleStatus": "NOT_REQUIRED",
+        "samplePhotoUrl": null,
+        "sampleReprintCount": 0,
+        "sampleReprints": [],
+        "editRequest": null,
+        "listingSnapshot": null,
+        "printFileUrl": null
+      }
+    ],
+    "shippingInfo": {
+      "name": "Nguyễn Minh An",
+      "phone": "0901234567",
+      "province": "TP. Hồ Chí Minh",
+      "ward": "Phường Bến Nghé",
+      "detail": "12 Nguyễn Huệ",
+      "note": ""
+    },
+    "totals": {
+      "productSubtotal": 280000,
+      "designFees": 0,
+      "discount": 14000,
+      "shipping": 20000,
+      "total": 286000
+    },
+    "idempotencyKey": "seed_ord_1011",
+    "paymentOpenedAt": "2026-11-04T02:00:00.000Z",
+    "paymentExpiresAt": "2026-11-04T02:10:00.000Z",
+    "paymentClaimedAt": "2026-11-04T02:00:00.000Z",
+    "firstSampleStartedAt": null,
+    "trackingCode": null,
+    "shippedAt": null,
+    "deliveredAt": null,
+    "receivedAt": null,
+    "cancelRequest": {
+      "reason": "Đổi ý, không muốn mua nữa",
+      "note": "",
+      "status": "APPROVED",
+      "requestedAt": "2026-11-04T03:00:00.000Z",
+      "resolvedAt": "2026-11-04T08:00:00.000Z",
+      "resolveNote": "Đã hoàn tiền về tài khoản"
+    },
+    "cancelledAt": "2026-11-04T08:00:00.000Z",
+    "cancelReason": "Khách yêu cầu hủy: Đổi ý, không muốn mua nữa",
+    "review": null,
+    "timeline": [
+      {
+        "status": "PENDING_PAYMENT",
+        "occurredAt": "2026-11-04T02:00:00.000Z",
+        "actorId": "usr_c1",
+        "note": "Tạo đơn, mở QR 10 phút"
+      },
+      {
+        "status": "PENDING_STAFF_CONFIRMATION",
+        "occurredAt": "2026-11-04T02:00:00.000Z",
+        "actorId": "usr_c1",
+        "note": "Khách báo đã thanh toán"
+      }
+    ],
+    "createdAt": "2026-11-04T02:00:00.000Z",
+    "updatedAt": "2026-11-04T02:00:00.000Z"
+  },
+  {
+    "_id": "ord_1013",
+    "userId": "usr_c1",
+    "orderStatus": "DESIGN_REVIEW",
+    "paymentStatus": "PAID",
+    "paymentMethod": "BANK",
+    "items": [
+      {
+        "orderItemId": "oi_1013_1",
+        "productId": "prd202",
+        "productName": "Túi Tote Mini",
+        "variantId": "prd202-beige",
+        "color": "beige",
+        "size": null,
+        "qty": 1,
+        "unitPrice": 75000,
+        "designId": "dsg_demo_c1_city",
+        "requiresSample": true,
+        "sampleStatus": "WAITING_SAMPLE",
+        "samplePhotoUrl": null,
+        "sampleReprintCount": 0,
+        "sampleReprints": [],
+        "editRequest": null,
+        "listingSnapshot": null,
+        "printFileUrl": null,
+        "designReview": {
+          "status": "REJECTED",
+          "reason": "Chữ “SÀI GÒN” nằm sát mép dưới, một phần đã ra ngoài vùng in nên sẽ bị cắt. Ngoài ra ảnh nền có độ phân giải thấp, in trên túi khổ lớn sẽ bị vỡ hạt. Bạn vui lòng kéo chữ vào trong khung và dùng ảnh rõ nét hơn.",
+          "reviewedAt": "2026-11-14T04:30:00.000Z"
+        }
+      }
+    ],
+    "shippingInfo": {
+      "name": "Nguyễn Minh An",
+      "phone": "0901234567",
+      "province": "TP. Hồ Chí Minh",
+      "ward": "Phường Bến Nghé",
+      "detail": "12 Nguyễn Huệ",
+      "note": ""
+    },
+    "totals": {
+      "productSubtotal": 75000,
+      "designFees": 0,
+      "discount": 3750,
+      "shipping": 20000,
+      "total": 91250
+    },
+    "idempotencyKey": "seed_ord_1013",
+    "paymentOpenedAt": "2026-11-13T14:00:00.000Z",
+    "paymentExpiresAt": "2026-11-13T14:10:00.000Z",
+    "paymentClaimedAt": "2026-11-13T14:00:00.000Z",
+    "firstSampleStartedAt": null,
+    "trackingCode": null,
+    "shippedAt": null,
+    "deliveredAt": null,
+    "receivedAt": null,
+    "cancelRequest": null,
+    "cancelledAt": null,
+    "cancelReason": null,
+    "review": null,
+    "timeline": [
+      {
+        "status": "PENDING_PAYMENT",
+        "occurredAt": "2026-11-13T14:00:00.000Z",
+        "actorId": "usr_c1",
+        "note": "Tạo đơn, mở QR 10 phút"
+      },
+      {
+        "status": "PENDING_STAFF_CONFIRMATION",
+        "occurredAt": "2026-11-13T14:00:00.000Z",
+        "actorId": "usr_c1",
+        "note": "Khách báo đã thanh toán"
+      },
+      {
+        "status": "DESIGN_REVIEW",
+        "occurredAt": "2026-11-14T02:00:00.000Z",
+        "actorId": "usr_staff",
+        "note": "Staff xác nhận thanh toán, chuyển kiểm tra file thiết kế"
+      },
+      {
+        "status": "DESIGN_REJECTED",
+        "occurredAt": "2026-11-14T04:30:00.000Z",
+        "actorId": "usr_staff",
+        "note": "Mẫu in chưa đạt, cần khách chỉnh sửa"
+      }
+    ],
+    "createdAt": "2026-11-13T14:00:00.000Z",
+    "updatedAt": "2026-11-14T04:30:00.000Z"
+  },
+  {
+    "_id": "ord_1014",
+    "userId": "usr_c1",
+    "orderStatus": "DESIGN_REVIEW",
+    "paymentStatus": "PAID",
+    "paymentMethod": "BANK",
+    "items": [
+      {
+        "orderItemId": "oi_1014_1",
+        "productId": "prd302",
+        "productName": "Cốc sứ Mini 250ml",
+        "variantId": "prd302-white",
+        "color": "white",
+        "size": null,
+        "qty": 2,
+        "unitPrice": 95000,
+        "designId": "dsg_demo_c1_sunflower",
+        "requiresSample": true,
+        "sampleStatus": "WAITING_SAMPLE",
+        "samplePhotoUrl": null,
+        "sampleReprintCount": 0,
+        "sampleReprints": [],
+        "editRequest": null,
+        "listingSnapshot": null,
+        "printFileUrl": null,
+        "designReview": {
+          "status": "PENDING",
+          "reason": null,
+          "reviewedAt": null
+        }
+      }
+    ],
+    "shippingInfo": {
+      "name": "Nguyễn Minh An",
+      "phone": "0901234567",
+      "province": "TP. Hồ Chí Minh",
+      "ward": "Phường Bến Nghé",
+      "detail": "12 Nguyễn Huệ",
+      "note": ""
+    },
+    "totals": {
+      "productSubtotal": 190000,
+      "designFees": 0,
+      "discount": 9500,
+      "shipping": 20000,
+      "total": 200500
+    },
+    "idempotencyKey": "seed_ord_1014",
+    "paymentOpenedAt": "2026-11-14T05:00:00.000Z",
+    "paymentExpiresAt": "2026-11-14T05:10:00.000Z",
+    "paymentClaimedAt": "2026-11-14T05:00:00.000Z",
+    "firstSampleStartedAt": null,
+    "trackingCode": null,
+    "shippedAt": null,
+    "deliveredAt": null,
+    "receivedAt": null,
+    "cancelRequest": null,
+    "cancelledAt": null,
+    "cancelReason": null,
+    "review": null,
+    "timeline": [
+      {
+        "status": "PENDING_PAYMENT",
+        "occurredAt": "2026-11-14T05:00:00.000Z",
+        "actorId": "usr_c1",
+        "note": "Tạo đơn, mở QR 10 phút"
+      },
+      {
+        "status": "PENDING_STAFF_CONFIRMATION",
+        "occurredAt": "2026-11-14T05:00:00.000Z",
+        "actorId": "usr_c1",
+        "note": "Khách báo đã thanh toán"
+      },
+      {
+        "status": "DESIGN_REVIEW",
+        "occurredAt": "2026-11-14T06:00:00.000Z",
+        "actorId": "usr_staff",
+        "note": "Staff xác nhận thanh toán, chuyển kiểm tra file thiết kế"
+      }
+    ],
+    "createdAt": "2026-11-14T05:00:00.000Z",
+    "updatedAt": "2026-11-14T06:00:00.000Z"
   }
 ]
