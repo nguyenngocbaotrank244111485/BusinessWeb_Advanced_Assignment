@@ -1,0 +1,22 @@
+<article class="card" [class.compact]="compact">
+  <a class="card-img" [routerLink]="['/products', product.slug]" [attr.aria-label]="'Xem ' + product.name">
+    @if (!compact && product.allowCustomization) { <span class="tag">Tùy chỉnh được</span> }
+    @if (soldOut) { <span class="tag tag-out">Hết hàng</span> }
+    <img [src]="product.img_display" [alt]="product.name" loading="lazy" appImgFallback />
+  </a>
+  <div class="card-body">
+    @if (!compact) { <span class="card-cat">{{ ps.categoryLabel(product.category) }}</span> }
+    <h3><a [routerLink]="['/products', product.slug]">{{ product.name }}</a></h3>
+    @if (!compact) {
+      <div class="swatches" aria-label="Màu có sẵn">
+        @for (c of ps.getColors(product); track c) {
+          <span class="swatch" [style.background]="c" [title]="ps.colorLabel(c)"></span>
+        }
+      </div>
+    }
+    <div class="card-foot">
+      <strong>{{ product.price | vnd }}</strong>
+      @if (!compact) { <a class="card-btn" [routerLink]="['/products', product.slug]">Xem chi tiết →</a> }
+    </div>
+  </div>
+</article>

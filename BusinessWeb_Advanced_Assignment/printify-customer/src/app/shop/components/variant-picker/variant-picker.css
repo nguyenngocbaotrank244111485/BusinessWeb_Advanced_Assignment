@@ -1,0 +1,14 @@
+:host { display: block; }
+button { font: inherit; cursor: pointer; }
+.option { margin-top: 20px; }
+.option-label { margin-bottom: 10px; font-size: 13px; color: var(--pf-muted); }
+.option-label b { color: var(--pf-ink); }
+.colors { display: flex; flex-wrap: wrap; gap: 12px; }
+.color-dot { width: 36px; height: 36px; border-radius: 50%; border: 1px solid #d9d3e3; box-shadow: 0 0 0 3px #fff; }
+.color-dot.active { box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--pf-primary); }
+.color-dot.sold-out { opacity: .4; }
+.sizes { display: flex; flex-wrap: wrap; gap: 8px; }
+.size-btn { min-width: 52px; height: 42px; padding: 0 14px; border: 1px solid var(--pf-line); border-radius: var(--pf-radius-sm); background: #fff; font-weight: 700; color: var(--pf-ink); }
+.size-btn:hover:not(:disabled) { border-color: var(--pf-lavender); }
+.size-btn.active { border-color: var(--pf-primary); background: var(--pf-pink-50); color: var(--pf-primary); }
+.size-btn:disabled { opacity: .35; text-decoration: line-through; cursor: not-allowed; }

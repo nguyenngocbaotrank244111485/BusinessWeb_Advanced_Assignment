@@ -1,0 +1,27 @@
+<aside class="filters" aria-label="Bộ lọc sản phẩm">
+  <div class="filter-block">
+    <h2>Danh mục</h2>
+    <button type="button" class="cat-item" [class.active]="!category" (click)="categoryChange.emit('')">
+      <span>Tất cả</span><small>{{ total }}</small>
+    </button>
+    @for (c of categories; track c.slug) {
+      <button type="button" class="cat-item" [class.active]="category === c.slug" (click)="categoryChange.emit(c.slug)">
+        <span>{{ c.label }}</span><small>{{ c.count }}</small>
+      </button>
+    }
+  </div>
+
+  <form class="filter-block" (submit)="$event.preventDefault(); applyPrice(minBox.value, maxBox.value)">
+    <h2>Khoảng giá (đ)</h2>
+    <div class="price-row">
+      <input #minBox type="number" min="0" step="10000" placeholder="Từ" [value]="minPrice ?? ''" aria-label="Giá từ" />
+      <span>–</span>
+      <input #maxBox type="number" min="0" step="10000" placeholder="Đến" [value]="maxPrice ?? ''" aria-label="Giá đến" />
+    </div>
+    <button type="submit" class="btn-apply">Áp dụng</button>
+  </form>
+
+  @if (hasFilter) {
+    <button type="button" class="btn-clear" (click)="clear.emit()">✕ Xóa bộ lọc</button>
+  }
+</aside>

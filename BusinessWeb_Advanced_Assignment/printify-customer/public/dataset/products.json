@@ -1,6 +1,7 @@
 [
   {
   "_id": "prd101",
+  "slug": "ao-thun-cotton-basic",
   "name": "Áo thun Cotton Basic",
   "category": "ao-thun",
   "price": 180000,
@@ -42,6 +43,7 @@
 },
 {
   "_id": "prd201",
+  "slug": "coc-su-in-hinh",
   "name": "Cốc sứ In Hình",
   "category": "coc-su",
   "price": 120000,

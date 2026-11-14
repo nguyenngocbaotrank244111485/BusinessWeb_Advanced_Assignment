@@ -46,6 +46,20 @@ export class ProductService {
     return this.products$.pipe(map((list) => list.find((p) => p._id === id)));
   }
 
+  /** Tìm theo slug (vẫn nhận _id cũ để link cũ không bị hỏng) */
+  getProductBySlug(slug: string): Observable<Product | undefined> {
+    return this.getActiveProducts().pipe(
+      map((list) => list.find((p) => p.slug === slug) ?? list.find((p) => p._id === slug)),
+    );
+  }
+
+  /** Tạo slug từ tên: "Áo thun Cotton Basic" -> "ao-thun-cotton-basic" */
+  toSlug(text: string): string {
+    return this.stripAccents(text)
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
   /** Danh mục lấy theo dữ liệu thật trong JSON, giữ thứ tự xuất hiện */
   getCategories(): Observable<Category[]> {
     return this.getActiveProducts().pipe(
@@ -143,6 +157,8 @@ export class ProductService {
     const display = raw.img_display || variants.find((v) => v.imageUrl)?.imageUrl;
     return {
       _id: raw._id ?? '',
+      // JSON chưa có slug thì tự tạo từ tên để vẫn chạy được
+      slug: raw.slug || this.toSlug(raw.name ?? raw._id ?? ''),
       name: raw.name ?? '',
       category: raw.category ?? 'khac',
       price: raw.price ?? 0,

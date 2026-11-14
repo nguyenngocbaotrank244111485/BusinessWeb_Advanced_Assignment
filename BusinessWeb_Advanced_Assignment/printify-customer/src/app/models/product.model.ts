@@ -18,6 +18,8 @@ export interface PrintArea {
 
 export interface Product {
   _id: string;
+  /** Đường dẫn thân thiện: /products/ao-thun-cotton-basic (duy nhất) */
+  slug: string;
   name: string;
   category: string;
   price: number;

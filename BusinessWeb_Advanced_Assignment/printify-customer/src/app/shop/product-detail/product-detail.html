@@ -1,0 +1,84 @@
+<main class="page">
+  @if (loading()) {
+    <div class="container detail"><div class="skeleton gallery-sk"></div><div class="skeleton info-sk"></div></div>
+  } @else if (product(); as p) {
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a routerLink="/">Trang chủ</a><span>/</span>
+        <a routerLink="/products">Sản phẩm</a><span>/</span>
+        <a routerLink="/products" [queryParams]="{ category: p.category }">{{ ps.categoryLabel(p.category) }}</a><span>/</span>
+        <b>{{ p.name }}</b>
+      </nav>
+    </div>
+
+    <div class="container detail">
+      <section class="gallery" aria-label="Ảnh sản phẩm">
+        <div class="main-img"><img [src]="activeImage()" [alt]="p.name" appImgFallback /></div>
+        @if (gallery().length > 1) {
+          <div class="thumbs">
+            @for (img of gallery(); track img) {
+              <button type="button" class="thumb" [class.active]="img === activeImage()" (click)="activeImage.set(img)" [attr.aria-label]="'Xem ảnh ' + ($index + 1)">
+                <img [src]="img" alt="" appImgFallback />
+              </button>
+            }
+          </div>
+        }
+      </section>
+
+      <section class="info">
+        <span class="cat">{{ ps.categoryLabel(p.category) }}</span>
+        <h1>{{ p.name }}</h1>
+        <div class="price">{{ p.price | vnd }} <small>đã gồm VAT</small></div>
+        <p class="desc">{{ p.description }}</p>
+
+        <app-variant-picker [product]="p" [color]="color()" [size]="size()"
+          (colorChange)="onColor($event)" (sizeChange)="onSize($event)"></app-variant-picker>
+
+        <div class="option">
+          <div class="option-label">Số lượng</div>
+          <div class="qty-row">
+            <div class="qty">
+              <button type="button" (click)="changeQty(-1)" [disabled]="quantity() <= 1" aria-label="Giảm">−</button>
+              <span>{{ quantity() }}</span>
+              <button type="button" (click)="changeQty(1)" [disabled]="quantity() >= stock()" aria-label="Tăng">+</button>
+            </div>
+            <span class="stock" [class.out]="stock() === 0 && !needSize()">
+              @if (needSize()) { Chọn size để xem tồn kho }
+              @else if (stock() === 0) { Hết hàng }
+              @else if (stock() <= (p.lowStockThreshold ?? 5)) { Chỉ còn {{ stock() }} sản phẩm }
+              @else { Còn {{ stock() }} sản phẩm }
+            </span>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="btn btn-cart" [disabled]="!needSize() && !canAdd()" (click)="addToCart()">🛒 Thêm vào giỏ hàng</button>
+          @if (p.allowCustomization) {
+            <button type="button" class="btn btn-design" (click)="startDesign()">✏️ Bắt đầu thiết kế</button>
+          }
+          @if (p.allowMarketplace) {
+            <button type="button" class="btn btn-market" (click)="exploreDesigns()">✨ Khám phá thiết kế có sẵn</button>
+          }
+        </div>
+        @if (stock() === 0 && !needSize() && p.allowCustomization) {
+          <p class="hint">Màu/size này tạm hết hàng, nhưng bạn vẫn có thể thiết kế trước.</p>
+        }
+
+        <ul class="perks">
+          <li>🚚 Phí giao hàng đồng giá 20.000đ</li>
+          <li>🎁 Giảm 5% cho đơn từ 5.000.000đ</li>
+          <li>🖨️ Duyệt mẫu in trước khi in chính thức</li>
+        </ul>
+      </section>
+    </div>
+
+    <app-similar-products class="container similar" [products]="similar()"></app-similar-products>
+  }
+
+  @if (toast(); as t) {
+    <div class="toast" [class.error]="t.type === 'error'" role="status">
+      <span>{{ t.type === 'ok' ? '✅' : '⚠️' }} {{ t.text }}</span>
+      @if (t.type === 'ok') { <a routerLink="/cart">Xem giỏ hàng →</a> }
+    </div>
+  }
+</main>

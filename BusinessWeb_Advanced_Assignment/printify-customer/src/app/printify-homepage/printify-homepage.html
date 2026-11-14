@@ -125,16 +125,16 @@
 
         <div class="product-grid" *ngIf="!isLoading && !errorMessage && visibleProducts.length">
           <article class="product-card" *ngFor="let product of visibleProducts">
-            <a [routerLink]="['/products', product._id]" class="product-image-wrap" [attr.aria-label]="'Xem chi tiết ' + product.name">
+            <a [routerLink]="['/products', product.slug]" class="product-image-wrap" [attr.aria-label]="'Xem chi tiết ' + product.name">
               <span class="product-tag" *ngIf="product.allowCustomization">Tùy chỉnh được</span>
               <img *ngIf="!brokenImageIds.has(product._id)" [src]="product.img_display" [alt]="product.name" loading="lazy" (error)="onProductImageError(product._id)" />
               <span *ngIf="brokenImageIds.has(product._id) || !product.img_display" class="product-placeholder" aria-hidden="true">{{ productIcon(product.category) }}</span>
             </a>
             <div class="product-info">
               <span class="product-category">{{ categoryLabel(product.category) }}</span>
-              <h3><a [routerLink]="['/products', product._id]">{{ product.name }}</a></h3>
+              <h3><a [routerLink]="['/products', product.slug]">{{ product.name }}</a></h3>
               <div class="price-row"><strong>{{ formatPrice(product.price) }}</strong><span>Giá sản phẩm</span></div>
-              <a [routerLink]="['/products', product._id]" class="product-button">{{ product.allowCustomization ? 'Xem & thiết kế' : 'Xem chi tiết' }} <span aria-hidden="true">→</span></a>
+              <a [routerLink]="['/products', product.slug]" class="product-button">{{ product.allowCustomization ? 'Xem & thiết kế' : 'Xem chi tiết' }} <span aria-hidden="true">→</span></a>
             </div>
           </article>
         </div>
