@@ -1,28 +1,31 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { catchError, forkJoin, of } from 'rxjs';
+import { Injectable, computed, effect, inject, signal, untracked } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { ToastService } from '../shared/toast.service';
 import {
   AuditLog, CopyrightReport, Design, DesignSale, InventoryMovement, Listing, Order, OrderStatus, PrintArea, Product,
   ProductVariant, PublicUser, SurveyQuestion, SurveyResponse,
 } from '../models/admin.models';
 import { AdminAuthService } from './admin-auth.service';
 
-const STATE_KEY = 'pf_admin_state_v1';
-/** Các collection Admin được sửa -> lưu lại (giai đoạn chưa có API) */
-type Saved = Partial<Record<'products' | 'orders' | 'listings' | 'reports' | 'movements' | 'auditLogs' | 'surveyQuestions', unknown[]>>;
+/** GET /api/admin/data */
+interface AdminData {
+  products: Product[]; orders: Order[]; listings: Listing[]; designs: Design[]; designSales: DesignSale[]; users: PublicUser[];
+  reports: CopyrightReport[]; movements: InventoryMovement[]; surveyQuestions: SurveyQuestion[]; surveyResponses: SurveyResponse[]; auditLogs: AuditLog[];
+}
 
 export type ActionResult = { ok: true; message: string } | { ok: false; message: string };
 
 /**
  * Nguồn dữ liệu của Admin.
- * - Đọc dataset trong public/dataset (cùng dữ liệu với app Customer).
  * - Mọi thao tác đi qua các hàm bên dưới: kiểm tra trạng thái hiện tại, áp đúng luật nghiệp vụ, ghi auditLogs.
- * - Chưa có API nên thay đổi lưu localStorage; khi có backend chỉ cần đổi phần đọc/ghi sang HTTP (/api/admin/...).
+ * - Đọc GET /api/admin/data; mỗi thao tác gửi /api/admin/... (server là nơi quyết định cuối cùng).
  */
 @Injectable({ providedIn: 'root' })
 export class AdminDataService {
   private readonly http = inject(HttpClient);
   private readonly auth = inject(AdminAuthService);
+  private readonly toast = inject(ToastService);
+  private pendingUrl: ['POST' | 'PUT' | 'PATCH', string, unknown] | null = null;
 
   readonly products = signal<Product[]>([]);
   readonly orders = signal<Order[]>([]);
@@ -44,7 +47,10 @@ export class AdminDataService {
   private readonly designMap = computed(() => new Map(this.designs().map((d) => [d._id, d])));
 
   constructor() {
-    this.load();
+    // tải khi đã đăng nhập (đổi tài khoản -> tải lại)
+    effect(() => {
+      if (this.auth.user()?._id) untracked(() => this.load());
+    });
   }
 
   // ======================================================== đọc
@@ -143,6 +149,7 @@ export class AdminDataService {
         { status: next, occurredAt: now, actorId: 'SYSTEM', note: hasDesign ? 'Chờ PrintiFy kiểm tra mẫu in' : 'Đơn không có thiết kế riêng, chuyển in' }],
     }));
     this.audit('PAYMENT_APPROVE', 'order', o._id, 'Xác nhận thanh toán, trừ kho');
+    this.send('POST', `/api/admin/orders/${orderId}/payment-review`, { decision: 'APPROVE' });
     return this.done('Đã xác nhận thanh toán và trừ kho.');
   }
 
@@ -158,6 +165,7 @@ export class AdminDataService {
       timeline: [...x.timeline, { status: 'CANCELLED', occurredAt: now, actorId: this.actor(), note: 'Từ chối thanh toán: ' + reason.trim() }],
     }));
     this.audit('PAYMENT_REJECT', 'order', o._id, reason.trim());
+    this.send('POST', `/api/admin/orders/${orderId}/payment-review`, { decision: 'REJECT', reason: reason.trim() });
     return this.done('Đã từ chối thanh toán, đơn chuyển sang Đã hủy.');
   }
 
@@ -183,6 +191,7 @@ export class AdminDataService {
     }
     this.patchOrder(o._id, (x) => ({ ...x, items, orderStatus: status, timeline }));
     this.audit(decision === 'APPROVE' ? 'DESIGN_APPROVE' : 'DESIGN_REJECT', 'orderItem', itemId, reason.trim() || 'Đạt');
+    this.send('POST', `/api/admin/orders/${orderId}/items/${itemId}/design-review`, { decision, reason: reason.trim() });
     return this.done(allOk ? 'Tất cả mẫu đã đạt, đơn chuyển sang In mẫu thử.' : decision === 'APPROVE' ? 'Đã duyệt dòng này.' : 'Đã gửi yêu cầu sửa cho khách.');
   }
 
@@ -194,6 +203,7 @@ export class AdminDataService {
     const now = this.now();
     this.patchOrder(o._id, (x) => ({ ...x, firstSampleStartedAt: now, timeline: [...x.timeline, { status: 'SAMPLE_PRINTING', occurredAt: now, actorId: this.actor(), note: 'Bắt đầu in mẫu – khóa hủy đơn' }] }));
     this.audit('SAMPLE_START', 'order', o._id, 'Bắt đầu in mẫu');
+    this.send('POST', `/api/admin/orders/${orderId}/sample-start`, {});
     return this.done('Đã bắt đầu in mẫu. Khách không thể hủy đơn từ bây giờ.');
   }
 
@@ -210,19 +220,23 @@ export class AdminDataService {
       timeline: [...x.timeline, { status: 'SAMPLE_REVIEW', occurredAt: now, actorId: this.actor(), note: 'In mẫu xong, gửi ảnh cho khách duyệt' }],
     }));
     this.audit('SAMPLE_COMPLETE', 'order', o._id, photoUrl.trim());
+    this.send('POST', `/api/admin/orders/${orderId}/sample-complete`, { photoUrl: photoUrl.trim() });
     return this.done('Đã gửi ảnh mẫu, chờ khách duyệt.');
   }
 
   completePrint(orderId: string): ActionResult {
+    this.pendingUrl = ['POST', `/api/admin/orders/${orderId}/print-complete`, {}];
     return this.step(orderId, 'PRINT_CONFIRMED', 'PRINT_COMPLETED', { printCompletedAt: this.now() }, 'In xong, đóng gói', 'PRINT_COMPLETE');
   }
 
   ship(orderId: string, trackingCode: string): ActionResult {
     if (!trackingCode.trim()) return this.fail('Nhập mã vận đơn.');
+    this.pendingUrl = ['POST', `/api/admin/orders/${orderId}/ship`, { trackingCode: trackingCode.trim() }];
     return this.step(orderId, 'PRINT_COMPLETED', 'SHIPPING', { shippedAt: this.now(), trackingCode: trackingCode.trim() }, 'Bàn giao vận chuyển, mã ' + trackingCode.trim(), 'SHIP');
   }
 
   deliver(orderId: string): ActionResult {
+    this.pendingUrl = ['POST', `/api/admin/orders/${orderId}/deliver`, {}];
     return this.step(orderId, 'SHIPPING', 'COMPLETED', { deliveredAt: this.now() }, 'Đã giao hàng thành công', 'DELIVER');
   }
 
@@ -237,7 +251,8 @@ export class AdminDataService {
       this.patchOrder(o._id, (x) => ({ ...x, cancelRequest: { ...x.cancelRequest!, status: 'REJECTED', resolvedAt: now, resolveNote: note.trim() },
         timeline: [...x.timeline, { status: x.orderStatus, occurredAt: now, actorId: this.actor(), note: 'Từ chối yêu cầu hủy: ' + note.trim() }] }));
       this.audit('CANCEL_REJECT', 'order', o._id, note.trim());
-      return this.done('Đã từ chối yêu cầu hủy, đơn tiếp tục xử lý.');
+      this.send('POST', `/api/admin/orders/${orderId}/cancel-request`, { decision, note: note.trim() });
+    return this.done('Đã từ chối yêu cầu hủy, đơn tiếp tục xử lý.');
     }
     const restore = !!o.stockDeductedAt && !o.stockRestoredAt;
     if (restore) for (const it of o.items) this.moveStock(it.productId, it.variantId, it.qty, 'ORDER_RELEASE', `release:${o._id}:${it.orderItemId}`, o._id);
@@ -247,6 +262,7 @@ export class AdminDataService {
       timeline: [...x.timeline, { status: 'CANCELLED', occurredAt: now, actorId: this.actor(), note: 'Đồng ý hủy đơn' + (restore ? ', hoàn kho' : '') + (x.paymentStatus === 'PAID' ? '. PrintiFy liên hệ khách để hoàn tiền' : '') }],
     }));
     this.audit('CANCEL_APPROVE', 'order', o._id, restore ? 'Hủy + hoàn kho' : 'Hủy (chưa trừ kho)');
+    this.send('POST', `/api/admin/orders/${orderId}/cancel-request`, { decision, note: note.trim() });
     return this.done(restore ? 'Đã hủy đơn và hoàn kho.' : 'Đã hủy đơn.');
   }
 
@@ -258,6 +274,7 @@ export class AdminDataService {
     this.products.update((list) => list.map((p) => (p._id === id ? { ...p, ...patch, updatedAt: this.now() } : p)));
     this.save('products', this.products());
     this.audit('PRODUCT_UPDATE', 'product', id, Object.keys(patch).join(', '));
+    this.send('PUT', `/api/admin/products/${id}`, patch);
     return this.done('Đã lưu sản phẩm.');
   }
 
@@ -270,6 +287,7 @@ export class AdminDataService {
     for (const v of initial) if (v.stock > 0) this.moveStock(p._id, v._id, v.stock, 'INITIAL_STOCK', `init:${p._id}:${v._id}`, null);
     this.save('products', this.products());
     this.audit('PRODUCT_CREATE', 'product', p._id, p.name);
+    this.send('POST', '/api/admin/products', p);
     return this.done('Đã thêm sản phẩm ' + p.name + '.');
   }
 
@@ -282,6 +300,7 @@ export class AdminDataService {
     if (v.stock + delta < 0) return this.fail(`Tồn kho không được âm (hiện còn ${v.stock}).`);
     this.moveStock(productId, variantId, delta, 'ADMIN_ADJUST', `adjust:${variantId}:${Date.now()}`, null, reason.trim());
     this.audit('STOCK_ADJUST', 'variant', variantId, `${delta > 0 ? '+' : ''}${delta}: ${reason.trim()}`);
+    this.send('PATCH', `/api/admin/products/${productId}/stock`, { variantId, delta, reason: reason.trim() });
     return this.done('Đã cập nhật tồn kho.');
   }
 
@@ -299,6 +318,7 @@ export class AdminDataService {
     this.listings.update((list) => list.map((x) => (x._id === id ? { ...x, status, reviewedBy: this.actor(), reviewedAt: now, reviewNote: note.trim() || null, updatedAt: now } : x)));
     this.save('listings', this.listings());
     this.audit('LISTING_' + decision, 'listing', id, note.trim() || 'Duyệt');
+    this.send('POST', `/api/admin/market/listings/${id}/review`, { decision, reviewNote: note.trim() });
     return this.done(decision === 'APPROVE' ? 'Đã duyệt, tin hiện công khai trên Marketplace.' : decision === 'REJECT' ? 'Đã từ chối, người bán sẽ thấy lý do.' : 'Đã gỡ tin khỏi Marketplace.');
   }
 
@@ -321,6 +341,7 @@ export class AdminDataService {
     }
     this.save('reports', this.reports());
     this.audit('REPORT_' + decision, 'copyrightReport', reportId, note.trim());
+    this.send('POST', `/api/admin/market/reports/${reportId}`, { decision, note: note.trim() });
     return this.done(decision === 'TAKEDOWN' ? 'Đã gỡ tin và đóng các báo cáo của tin này.' : 'Đã bỏ qua báo cáo.');
   }
 
@@ -331,12 +352,12 @@ export class AdminDataService {
     this.surveyQuestions.update((list) => list.map((q) => (q._id === id ? { ...q, isActive: active } : q)));
     this.save('surveyQuestions', this.surveyQuestions());
     this.audit(active ? 'SURVEY_ENABLE' : 'SURVEY_DISABLE', 'surveyQuestion', id, '');
+    this.send('PATCH', `/api/admin/survey/questions/${id}`, { isActive: active });
     return this.done(active ? 'Đã bật câu hỏi.' : 'Đã tắt câu hỏi.');
   }
 
-  /** Xóa mọi thay đổi đã lưu, quay về dữ liệu mẫu */
-  resetDemo(): void {
-    try { localStorage.removeItem(STATE_KEY); } catch { /* bỏ qua */ }
+  /** Tải lại toàn bộ dữ liệu từ MongoDB */
+  reload(): void {
     this.load();
   }
 
@@ -344,10 +365,12 @@ export class AdminDataService {
 
   private step(orderId: string, from: OrderStatus, to: OrderStatus, patch: Partial<Order>, note: string, action: string): ActionResult {
     const o = this.order(orderId);
-    if (!o || o.orderStatus !== from) return this.fail('Trạng thái đơn đã thay đổi, tải lại để xem.');
+    if (!o || o.orderStatus !== from) { this.pendingUrl = null; return this.fail('Trạng thái đơn đã thay đổi, tải lại để xem.'); }
     const now = this.now();
     this.patchOrder(o._id, (x) => ({ ...x, ...patch, orderStatus: to, timeline: [...x.timeline, { status: to, occurredAt: now, actorId: this.actor(), note }] }));
     this.audit(action, 'order', o._id, note);
+    if (this.pendingUrl) this.send(...this.pendingUrl);
+    this.pendingUrl = null;
     return this.done('Đã cập nhật: ' + note + '.');
   }
 
@@ -391,58 +414,45 @@ export class AdminDataService {
     return { ok: false, message };
   }
 
-  private readSaved(): Saved {
-    try {
-      return JSON.parse(localStorage.getItem(STATE_KEY) || '{}') as Saved;
-    } catch {
-      return {};
-    }
+  /**
+   * Gửi thao tác lên server. Màn hình đã cập nhật ngay (kiểm tra luật ở trên), server kiểm tra lại
+   * và ghi MongoDB (trừ / hoàn kho, audit log, thông báo khách). Xong -> tải lại dữ liệu thật;
+   * server từ chối -> báo lỗi và tải lại để bỏ thay đổi tạm.
+   */
+  private send(method: 'POST' | 'PUT' | 'PATCH', url: string, body: unknown): void {
+    this.http.request<{ message?: string }>(method, url, { body, withCredentials: true }).subscribe({
+      next: () => this.load(),
+      error: (e: HttpErrorResponse) => {
+        this.toast.show(e.status === 0 || e.status >= 500 ? 'Mất kết nối server, thao tác chưa được lưu.' : e.error?.message ?? 'Server từ chối thao tác.', false);
+        if (e.status === 401) this.auth.user.set(null);
+        this.load();
+      },
+    });
   }
 
-  private save(key: keyof Saved, value: unknown[]): void {
-    try {
-      const s = this.readSaved();
-      s[key] = value;
-      localStorage.setItem(STATE_KEY, JSON.stringify(s));
-    } catch { /* trình duyệt chặn: thay đổi chỉ còn trong phiên */ }
-  }
+  /** Thay đổi đã đi qua send(), không lưu gì trên trình duyệt */
+  private save(_key: string, _value: unknown[]): void {}
 
   private load(): void {
-    const get = <T>(f: string) => this.http.get<T>('/dataset/' + f).pipe(catchError(() => of([] as unknown as T)));
-    forkJoin({
-      products: get<Product[]>('products.json'),
-      orders: get<Order[]>('orders.json'),
-      listings: get<Listing[]>('listings.json'),
-      designs: get<Design[]>('designs.json'),
-      sales: get<DesignSale[]>('designSales.json'),
-      users: get<PublicUser[]>('users-public.json'),
-      reports: get<CopyrightReport[]>('copyrightReports.json'),
-      movements: get<InventoryMovement[]>('inventoryMovements.json'),
-      questions: get<SurveyQuestion[]>('surveyQuestions.json'),
-      responses: get<SurveyResponse[]>('surveyResponses.json'),
-      demoResponses: get<SurveyResponse[]>('surveyResponses-demo.json'),
-      logs: get<AuditLog[]>('auditLogs.json'),
-      areas: this.http.get<Record<string, PrintArea>>('/dataset/print-areas.json').pipe(catchError(() => of({} as Record<string, PrintArea>))),
-    }).subscribe({
+    this.http.get<AdminData>('/api/admin/data', { withCredentials: true }).subscribe({
       next: (d) => {
-        const s = this.readSaved();
-        this.products.set(((s.products as Product[]) ?? d.products).map((p) => Object.assign({ lowStockThreshold: 5, isActive: true, allowCustomization: true, allowMarketplace: true, img_detail: [] }, p)));
-        this.orders.set(((s.orders as Order[]) ?? d.orders).map((o) => Object.assign({ timeline: [] }, o)));
-        this.listings.set((s.listings as Listing[]) ?? d.listings);
-        this.reports.set((s.reports as CopyrightReport[]) ?? d.reports);
-        this.movements.set((s.movements as InventoryMovement[]) ?? d.movements.map((m) => ({ reason: null, ...m })));
-        this.surveyQuestions.set(((s.surveyQuestions as SurveyQuestion[]) ?? d.questions).slice().sort((a, b) => a.orderIndex - b.orderIndex));
-        this.auditLogs.set((s.auditLogs as AuditLog[]) ?? d.logs);
+        this.products.set(d.products.map((p) => Object.assign({ lowStockThreshold: 5, isActive: true, allowCustomization: true, allowMarketplace: true, img_detail: [] }, p)));
+        this.orders.set(d.orders.map((o) => Object.assign({ timeline: [] }, o)));
+        this.listings.set(d.listings);
+        this.reports.set(d.reports);
+        this.movements.set(d.movements.map((m) => ({ reason: null, ...m })));
+        this.surveyQuestions.set(d.surveyQuestions.slice().sort((a, b) => a.orderIndex - b.orderIndex));
+        this.auditLogs.set(d.auditLogs);
         this.designs.set(d.designs);
-        this.designSales.set(d.sales);
+        this.designSales.set(d.designSales);
         this.users.set(d.users);
-        this.surveyResponses.set([...d.responses, ...d.demoResponses]);
-        this.printAreas.set(d.areas);
+        this.surveyResponses.set(d.surveyResponses);
+        this.printAreas.set({});
         this.error.set('');
         this.loaded.set(true);
       },
-      error: () => {
-        this.error.set('Không tải được dữ liệu. Thử tải lại trang.');
+      error: (e: HttpErrorResponse) => {
+        this.error.set(e.status === 401 ? 'Phiên đăng nhập đã hết, hãy đăng nhập lại.' : 'Không tải được dữ liệu từ server. Kiểm tra printify-server đang chạy (npm run dev).');
         this.loaded.set(true);
       },
     });

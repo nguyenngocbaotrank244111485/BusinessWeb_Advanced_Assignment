@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map, shareReplay } from 'rxjs';
+import { Observable, catchError, defer, map, of, shareReplay } from 'rxjs';
 import {
   CATEGORY_LABELS,
   COLOR_LABELS,
@@ -21,16 +21,30 @@ export const PLACEHOLDER_IMAGE = `${DATASET_BASE}images/products/placeholder.svg
   providedIn: 'root',
 })
 export class ProductService {
-  private readonly apiUrl = `${DATASET_BASE}products.json`;
+  private cache?: { at: number; data$: Observable<Product[]> };
 
-  /** Tải 1 lần, các trang dùng chung kết quả */
-  private readonly products$: Observable<Product[]>;
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) {
-    this.products$ = this.http.get<Partial<Product>[]>(this.apiUrl).pipe(
-      map((list) => list.map((raw) => this.normalize(raw))),
-      shareReplay(1),
-    );
+  /**
+   * Danh sách sản phẩm từ MongoDB (GET /api/products). Giữ trong 60 giây rồi tải lại,
+   * để Admin đổi giá / tồn kho thì phía khách thấy ngay. Server chưa chạy thì đọc tạm products.json.
+   */
+  private get products$(): Observable<Product[]> {
+    if (!this.cache || Date.now() - this.cache.at > 60_000) {
+      const data$ = this.http.get<{ items: Partial<Product>[] }>('/api/products', { params: { limit: 100 } }).pipe(
+        map((r) => r.items),
+        catchError(() => this.http.get<Partial<Product>[]>(`${DATASET_BASE}products.json`)),
+        map((list) => list.map((raw) => this.normalize(raw))),
+        shareReplay(1),
+      );
+      this.cache = { at: Date.now(), data$ };
+    }
+    return this.cache.data$;
+  }
+
+  /** Bỏ cache (sau khi đặt hàng / sửa giỏ cần tồn kho mới nhất) */
+  refresh(): void {
+    this.cache = undefined;
   }
 
   /** Tất cả sản phẩm (đã chuẩn hoá đường dẫn ảnh và giá trị mặc định) */
@@ -47,10 +61,15 @@ export class ProductService {
     return this.products$.pipe(map((list) => list.find((p) => p._id === id)));
   }
 
-  /** Tìm theo slug (vẫn nhận _id cũ để link cũ không bị hỏng) */
+  /** C03: GET /api/products/:slug (nhận cả _id cũ). Không có / ngừng bán -> undefined */
   getProductBySlug(slug: string): Observable<Product | undefined> {
-    return this.getActiveProducts().pipe(
-      map((list) => list.find((p) => p.slug === slug) ?? list.find((p) => p._id === slug)),
+    return defer(() => this.http.get<{ product: Partial<Product> }>(`/api/products/${encodeURIComponent(slug)}`)).pipe(
+      map((r) => this.normalize(r.product)),
+      catchError((e) =>
+        e?.status === 404
+          ? of(undefined)
+          : this.getActiveProducts().pipe(map((list) => list.find((p) => p.slug === slug) ?? list.find((p) => p._id === slug))),
+      ),
     );
   }
 

@@ -34,6 +34,9 @@ export interface Listing {
   reviewNote: string | null;
   createdAt: string;
   updatedAt?: string;
+  /** Server gắn thêm khi trả danh sách / chi tiết */
+  sellerName?: string;
+  soldCount?: number;
 }
 
 /** Thiết kế đã lưu từ Editor */

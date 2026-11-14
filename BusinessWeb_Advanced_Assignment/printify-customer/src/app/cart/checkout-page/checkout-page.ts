@@ -1,3 +1,4 @@
+import { ApiStatusService } from '../../services/api-status-service';
 import { Component, computed, effect, inject, signal, untracked } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -33,6 +34,7 @@ export class CheckoutPage {
   readonly cfg = inject(ConfigService).config;
   private readonly orders = inject(OrderService);
   private readonly router = inject(Router);
+  private readonly api = inject(ApiStatusService);
 
   private readonly profiles = inject(ProfileService);
   /** 34 tỉnh/thành (dùng chung với sổ địa chỉ C18) */
@@ -121,7 +123,7 @@ export class CheckoutPage {
     return this.ps.colorLabel(color) + (size ? ' / ' + size : '');
   }
 
-  pay(): void {
+  async pay(): Promise<void> {
     if (this.submitting() || this.order()) return;
     this.error.set('');
     if (this.form.invalid) {
@@ -139,35 +141,24 @@ export class CheckoutPage {
     }
     this.submitting.set(true);
     const v = this.form.getRawValue();
-    const items: OrderItem[] = this.lines().map((l, i) => ({
-      orderItemId: `oi_${Date.now().toString(36)}_${i + 1}`,
-      productId: l.item.productId,
-      productName: l.item.name,
-      variantId: l.item.variantId,
-      color: l.item.color,
-      size: l.item.size,
-      qty: l.item.quantity,
-      unitPrice: l.price,
-      imageUrl: l.item.imageUrl,
-      designId: l.item.designId,
-      listingSnapshot: l.item.listingId
-        ? { listingId: l.item.listingId, title: l.item.listingTitle ?? '', buyerDesignFee: l.item.designFee ?? 0 }
-        : null,
-      requiresSample: !!l.item.designId,
-    }));
-    const order = this.orders.create({
-      userId: this.auth.user()!._id,
-      items,
-      shippingInfo: { name: v.name.trim(), phone: v.phone.trim(), province: v.province.trim(), ward: v.ward.trim(), detail: v.detail.trim(), note: v.note.trim() },
-      totals: this.totals(),
-      idempotencyKey: this.idempotencyKey,
-      paymentMinutes: this.cfg().orderPaymentMinutes,
-      paymentMethod: this.paymentMethod(),
+    const shippingInfo = { name: v.name.trim(), phone: v.phone.trim(), province: v.province.trim(), ward: v.ward.trim(), detail: v.detail.trim(), note: v.note.trim() };
+    // Đẩy giỏ lên server trước, server tự lấy giá / tồn kho / giảm giá hạng thành viên để tạo đơn
+    await this.cart.flush();
+    this.orders.create({ shippingInfo, idempotencyKey: this.idempotencyKey, paymentMethod: this.paymentMethod() }).subscribe({
+      next: (order) => {
+        this.order.set(order);
+        this.cart.removeMany(this.lines().map((l) => l.item.key));
+        this.submitting.set(false);
+        this.showQr.set(true);
+      },
+      error: (e) => {
+        this.submitting.set(false);
+        if (e?.status === 409) {
+          this.cart.reload();
+          this.router.navigate(['/cart'], { queryParams: { issue: 1 } });
+        } else this.api.report(e, 'Không tạo được đơn hàng, thử lại sau.');
+      },
     });
-    this.order.set(order);
-    this.cart.removeMany(this.lines().map((l) => l.item.key));
-    this.submitting.set(false);
-    this.showQr.set(true);
   }
 
   claim(): void {
@@ -175,6 +166,8 @@ export class CheckoutPage {
     if (!o) return;
     const updated = this.orders.claimPayment(o._id);
     if (updated) this.order.set(updated);
+    // đơn chuẩn từ server sẽ cập nhật qua orders.get
+
   }
 
   viewOrder(): void {

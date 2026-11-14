@@ -4,10 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-  "start": "node index.js",
-  "dev": "nodemon index.js",
-  "seed:survey": "node scripts/seed-survey.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "seed": "node scripts/seed.js",
+    "seed:reset": "node scripts/seed.js --reset",
+    "seed:survey": "node scripts/seed-survey.js",
+    "test": "node --test \"tests/*.test.js\"",
+    "test:survey": "node --test \"tests/survey-*.test.js\""
   },
   "keywords": [],
   "author": "",

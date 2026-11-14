@@ -80,6 +80,8 @@ export class MarketList {
   }
 
   sellerName(id: string): string {
+    const fromServer = this.market.listings().find((l) => l.sellerId === id && l.sellerName)?.sellerName;
+    if (fromServer) return fromServer;
     return this.userMap().get(id) ?? '';
   }
 

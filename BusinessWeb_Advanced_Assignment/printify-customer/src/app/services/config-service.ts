@@ -27,9 +27,14 @@ export class ConfigService {
   readonly config = this._config.asReadonly();
 
   constructor() {
-    inject(HttpClient)
-      .get<Partial<PublicConfig>>('/dataset/appConfig.json')
-      .pipe(catchError(() => of({} as Partial<PublicConfig>)))
+    const http = inject(HttpClient);
+    // GET /api/config/public; server chưa chạy thì đọc tạm appConfig.json
+    http
+      .get<Partial<PublicConfig>>('/api/config/public')
+      .pipe(
+        catchError(() => http.get<Partial<PublicConfig>>('/dataset/appConfig.json')),
+        catchError(() => of({} as Partial<PublicConfig>)),
+      )
       .subscribe((c) => this._config.set({ ...DEFAULTS, ...c }));
   }
 }

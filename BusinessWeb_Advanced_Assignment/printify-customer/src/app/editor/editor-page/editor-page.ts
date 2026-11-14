@@ -1053,8 +1053,8 @@ export class EditorPage implements AfterViewInit, OnDestroy {
         createdAt: existing?.createdAt ?? now,
         updatedAt: now,
       };
-      if (!this.designs.save(doc)) {
-        this.showToast('error', 'Bộ nhớ trình duyệt đã đầy, không lưu được. Hãy dùng ảnh nhỏ hơn.');
+      if (!(await this.designs.save(doc))) {
+        this.showToast('error', 'Không lưu được thiết kế lên server. Hãy thử lại (ảnh quá lớn?).');
         return null;
       }
       if (!this.designId()) {
@@ -1115,7 +1115,7 @@ export class EditorPage implements AfterViewInit, OnDestroy {
     if (!confirm(msg)) return;
     const doc = await this.save(true);
     if (!doc) return;
-    const ok = this.designs.requestReprint({
+    const ok = await this.designs.requestReprint({
       _id: 'rpt_' + Date.now().toString(36),
       orderId: this.orderId(),
       orderItemId: item.orderItemId,
@@ -1125,7 +1125,7 @@ export class EditorPage implements AfterViewInit, OnDestroy {
       status: fee ? 'PENDING_PAYMENT' : 'REQUESTED',
       createdAt: new Date().toISOString(),
     });
-    if (!ok) return this.showToast('error', 'Không gửi được yêu cầu, bộ nhớ trình duyệt đã đầy.');
+    if (!ok) return this.showToast('error', 'Không gửi được yêu cầu in lại mẫu.');
     void this.router.navigate(['/account/orders', this.orderId()], { queryParams: { reprint: 'sent' } });
   }
 

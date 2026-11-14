@@ -86,9 +86,12 @@ export class MyListings {
 
   unlist(i: MyMarketItem): void {
     if (!i.listing) return;
-    this.market.unlist(i.listing._id, this.auth.user()!._id);
+    const title = i.listing.title;
     this.confirmUnlist.set(null);
-    this.showToast(`Đã gỡ “${i.listing.title}” khỏi Marketplace.`);
+    this.market.unlist(i.listing._id, this.auth.user()!._id).subscribe({
+      next: () => this.showToast(`Đã gỡ “${title}” khỏi Marketplace.`),
+      error: (e) => this.showToast(e?.error?.message || 'Không gỡ được tin này.'),
+    });
   }
 
   private match(i: MyMarketItem, f: Filter): boolean {

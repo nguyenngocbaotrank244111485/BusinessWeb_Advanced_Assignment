@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs';
@@ -16,7 +16,8 @@ import { AuthService } from '../../services/auth-service';
     <main class="wrap">
       <span class="badge">Bản demo</span>
       <h1>Đăng nhập</h1>
-      <p class="lead">Chọn một tài khoản mẫu để tiếp tục. Trang đăng nhập bằng email và mật khẩu đang được nhóm hoàn thiện.</p>
+      <p class="lead">Chọn một tài khoản mẫu để đăng nhập nhanh (mật khẩu chung Printify@123 nếu dùng trang đăng nhập).</p>
+      @if (error()) { <p class="lead" role="alert" style="color: var(--pf-danger)">{{ error() }}</p> }
       <div class="users">
         @for (u of users(); track u._id) {
           <button type="button" class="user" (click)="choose(u)">
@@ -56,10 +57,17 @@ export class DemoLogin {
     initialValue: [] as PublicUser[],
   });
 
+  readonly error = signal('');
+
   choose(user: PublicUser): void {
-    this.auth.loginLocal(user);
-    const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-    // chỉ chấp nhận đường dẫn nội bộ
-    this.router.navigateByUrl(returnUrl && returnUrl.startsWith('/') ? returnUrl : '/');
+    this.error.set('');
+    this.auth.loginDemo(user._id).subscribe({
+      next: () => {
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+        // chỉ chấp nhận đường dẫn nội bộ
+        this.router.navigateByUrl(returnUrl && returnUrl.startsWith('/') && !returnUrl.startsWith('//') ? returnUrl : '/');
+      },
+      error: (e) => this.error.set(e?.status === 0 || e?.status >= 500 ? 'Không kết nối được máy chủ. Chạy server (npm run dev) rồi thử lại.' : e?.error?.message || 'Không đăng nhập được tài khoản này.'),
+    });
   }
 }

@@ -113,9 +113,9 @@ export class DesignsPage {
   }
 
   /** Tạo bản sao: designId mới, cùng sản phẩm, rồi mở editor */
-  duplicate(c: DesignCard): void {
-    const copy = this.designs.copy(c.doc._id, this.auth.user()?._id ?? '');
-    if (!copy) return this.showToast('error', 'Không tạo được bản sao (bộ nhớ trình duyệt đầy?).');
+  async duplicate(c: DesignCard): Promise<void> {
+    const copy = await this.designs.copy(c.doc._id, this.auth.user()?._id ?? '');
+    if (!copy) return this.showToast('error', 'Không tạo được bản sao.');
     void this.router.navigate(['/editor/designs', copy._id]);
   }
 
@@ -132,11 +132,11 @@ export class DesignsPage {
     this.confirmDelete.set(c);
   }
 
-  doDelete(): void {
+  async doDelete(): Promise<void> {
     const c = this.confirmDelete();
     this.confirmDelete.set(null);
     if (!c || this.blocksDelete(c)) return;
-    if (!this.designs.remove(c.doc._id, this.auth.user()?._id ?? '')) {
+    if (!(await this.designs.remove(c.doc._id, this.auth.user()?._id ?? ''))) {
       return this.showToast('error', 'Không xóa được thiết kế. Vui lòng thử lại.');
     }
     const removed = this.cart.removeByDesign(c.doc._id);

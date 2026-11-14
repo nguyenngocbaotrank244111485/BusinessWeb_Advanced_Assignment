@@ -1,312 +1,221 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
+import { Injectable, computed, effect, inject, signal, untracked } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, forkJoin, map, of } from 'rxjs';
+import { Observable, catchError, forkJoin, map, of, tap } from 'rxjs';
 import { CopyrightReport, Design, DesignSale, Listing, ListingInput, MyMarketItem } from '../models/market.model';
 import { PrintArea, Product } from '../models/product.model';
+import { AuthService } from './auth-service';
+import { ConfigService } from './config-service';
 
-const LOCAL_LISTINGS_KEY = 'printify_market_listings';
-const LOCAL_REPORTS_KEY = 'printify_market_reports';
-const DEFAULT_FEE_RATE = 0.1; // appConfig.platformFeeRate
+const API = '/api/market';
+
+/** Lượt bán server trả về trong /api/market/mine */
+type MineSale = { _id: string; productId: string | null; sellerPrice: number; recordedAt: string };
+type MineRow = { key: string; status: MyMarketItem['status']; design: Design | null; listing?: Listing; soldCount: number; earned: number; sales: MineSale[]; updatedAt: string };
 
 /**
- * Marketplace (NV05) – giai đoạn mock:
- * - Đọc listings.json + designs.json (dữ liệu nhóm) và *-demo.json (dữ liệu trình bày).
- * - Tin đăng / sửa / gỡ của người dùng lưu localStorage, gộp đè theo _id.
- * Khi có API chỉ cần thay phần load() và các hàm ghi bằng HTTP (GET/POST/PUT /api/market).
+ * Marketplace (C05, C06, C20) – dữ liệu từ MongoDB qua /api/market.
+ * Giữ dạng "kho" bằng signal (tên hàm như cũ) để Editor, Thiết kế của tôi, Giới thiệu dùng tiếp không phải sửa:
+ *  - approved / listings: tin đã duyệt (GET /api/market) + mọi tin của tôi (GET /api/market/mine)
+ *  - myMarket(): My marketplace (nháp + tin + lượt bán) do server tính
+ * Ghi (đăng / sửa / gỡ / báo cáo) trả Observable – server kiểm tra quyền, giá, trạng thái.
  */
 @Injectable({ providedIn: 'root' })
 export class MarketService {
   private readonly http = inject(HttpClient);
+  private readonly auth = inject(AuthService);
+  private readonly config = inject(ConfigService);
 
-  private readonly _listings = signal<Listing[]>([]);
-  private readonly _designs = signal<Design[]>([]);
-  private readonly _sales = signal<DesignSale[]>([]);
-  readonly feeRate = signal(DEFAULT_FEE_RATE);
-  /** Vùng in (tỉ lệ 0–1 trên ảnh sản phẩm) để ghép mockup: print-areas.json, ưu tiên product.printArea nếu có */
+  private readonly _public = signal<Listing[]>([]);
+  private readonly _mine = signal<MineRow[]>([]);
+  private readonly reported = signal<Set<string>>(new Set());
   private readonly printAreas = signal<Record<string, PrintArea>>({});
   readonly loaded = signal(false);
   readonly error = signal('');
+  readonly feeRate = computed(() => this.config.config().platformFeeRate ?? 0.1);
 
-  /** Tất cả tin (mọi trạng thái) */
-  readonly listings = this._listings.asReadonly();
+  /** Mọi tin biết được: tin đang bán + tin của tôi (mọi trạng thái) */
+  readonly listings = computed(() => this.mergeById([...this._public(), ...this._mine().flatMap((r) => (r.listing ? [r.listing] : []))]));
   /** Chỉ tin đã được duyệt mới hiện công khai */
   readonly approved = computed(() =>
-    this._listings()
+    this.listings()
       .filter((l) => l.status === 'APPROVED')
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
   );
+  private readonly designs = computed(() => this._mine().flatMap((r) => (r.design ? [r.design] : [])));
 
   constructor() {
-    this.load();
+    this.http
+      .get<Record<string, PrintArea>>(`${API}/print-areas`)
+      .pipe(
+        catchError(() => this.http.get<Record<string, PrintArea>>('/dataset/print-areas.json')),
+        catchError(() => of({} as Record<string, PrintArea>)),
+      )
+      .subscribe((a) => this.printAreas.set(a));
+    // tải lại khi đăng nhập / đăng xuất / đổi tài khoản
+    effect(() => {
+      this.auth.user()?._id;
+      untracked(() => this.reload());
+    });
   }
 
   // ---------- đọc ----------
 
   getListing(id: string): Listing | undefined {
-    return this._listings().find((l) => l._id === id);
+    return this.listings().find((l) => l._id === id);
   }
 
   getDesign(id: string): Design | undefined {
-    return this._designs().find((d) => d._id === id);
+    return this.designs().find((d) => d._id === id);
   }
 
-  /** Lượt bán còn hiệu lực của 1 tin (bỏ lượt đã đảo do hoàn tiền) */
+  /** Lượt bán của tin của tôi (người bán xem danh sách người mua) */
   salesOf(listingId: string): DesignSale[] {
-    return this._sales()
-      .filter((s) => s.listingId === listingId && s.status !== 'REVERSED')
-      .sort((a, b) => b.recordedAt.localeCompare(a.recordedAt));
+    const row = this._mine().find((r) => r.listing?._id === listingId);
+    return (row?.sales ?? []).map((s) => ({
+      _id: s._id, orderId: '', orderItemId: '', listingId, sellerId: row?.listing?.sellerId ?? '', buyerId: '', productId: s.productId ?? undefined,
+      sellerPrice: s.sellerPrice, platformFee: 0, buyerDesignFee: 0, status: 'RECORDED', reversedAmount: 0, reversedAt: null, recordedAt: s.recordedAt,
+    }));
   }
 
-  /**
-   * C20 – My marketplace: thiết kế nháp (chưa đăng) + tất cả tin đã đăng của user.
-   * "Đã bán" không phải trạng thái riêng mà là số lượt bán của tin.
-   */
-  myMarket(userId: string): MyMarketItem[] {
-    const listings = this.myListings(userId);
-    const listed = new Set(listings.filter((l) => l.status !== 'UNLISTED').map((l) => l.designId));
-    const drafts: MyMarketItem[] = this._designs()
-      .filter((d) => d.userId === userId && !d.listingId && !listed.has(d._id))
-      .map((d) => ({
-        key: 'd_' + d._id,
-        status: 'EDITING',
-        design: d,
-        title: 'Thiết kế chưa đăng bán',
-        imageUrl: this.imageUrl(d.previewUrl),
-        soldCount: 0,
-        earned: 0,
-        updatedAt: d.updatedAt ?? d.createdAt,
-      }));
-    const items: MyMarketItem[] = listings.map((l) => {
-      const sales = this.salesOf(l._id);
-      return {
-        key: 'l_' + l._id,
-        status: l.status,
-        design: this.getDesign(l.designId),
-        listing: l,
-        title: l.title,
-        imageUrl: this.imageUrl(l.watermarkUrl),
-        soldCount: sales.length,
-        earned: sales.reduce((sum, s) => sum + s.sellerPrice - (s.reversedAmount || 0), 0),
-        updatedAt: l.updatedAt ?? l.createdAt,
-      };
-    });
-    return [...drafts, ...items].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+  /** Số lượt bán của 1 tin bất kỳ (server đếm) */
+  soldCount(listing: Listing): number {
+    return listing.soldCount ?? this.salesOf(listing._id).length;
+  }
+
+  /** C20 – My marketplace: thiết kế nháp + tất cả tin của tôi (server tính lượt bán, tiền nhận) */
+  myMarket(_userId?: string): MyMarketItem[] {
+    return this._mine().map((r) => ({
+      key: r.key,
+      status: r.status,
+      design: r.design ?? undefined,
+      listing: r.listing,
+      title: r.listing?.title ?? 'Thiết kế chưa đăng bán',
+      imageUrl: this.imageUrl(r.listing?.watermarkUrl ?? r.design?.previewUrl),
+      soldCount: r.soldCount,
+      earned: r.earned,
+      updatedAt: r.updatedAt,
+    }));
   }
 
   myListings(userId: string): Listing[] {
-    return this._listings()
+    return this.listings()
       .filter((l) => l.sellerId === userId)
       .sort((a, b) => (b.updatedAt ?? b.createdAt).localeCompare(a.updatedAt ?? a.createdAt));
   }
 
-  /**
-   * Thiết kế được phép đăng bán: do chính user tạo (không phải thiết kế dựng từ listing đã mua)
-   * và chưa có tin nào còn hiệu lực (chờ duyệt / đang bán / bị từ chối -> dùng "Sửa & gửi lại").
-   * keepDesignId: giữ lại thiết kế của tin đang sửa.
-   */
-  sellableDesigns(userId: string, keepDesignId?: string): Design[] {
-    const busy = new Set(
-      this._listings()
-        .filter((l) => l.status !== 'UNLISTED')
-        .map((l) => l.designId),
-    );
-    return this._designs().filter(
-      (d) => d.userId === userId && !d.listingId && (!busy.has(d._id) || d._id === keepDesignId),
-    );
+  /** Thiết kế được phép đăng bán = dòng "Đang chỉnh sửa" của My marketplace (+ thiết kế của tin đang sửa) */
+  sellableDesigns(_userId: string, keepDesignId?: string): Design[] {
+    return this._mine()
+      .filter((r) => r.design && (r.status === 'EDITING' || r.design._id === keepDesignId))
+      .map((r) => r.design!);
   }
 
-  /** Vùng in của 1 sản phẩm (undefined = sản phẩm chưa hỗ trợ in mockup) */
+  hasReported(listingId: string, _reporterId?: string): boolean {
+    return this.reported().has(listingId);
+  }
+
+  /** Hỏi server tin này tôi đã báo cáo chưa (gọi khi mở trang chi tiết) */
+  checkReported(listingId: string): void {
+    if (!this.auth.user()) return;
+    this.http.get<{ hasReported: boolean }>(`${API}/${listingId}`, { withCredentials: true }).subscribe({
+      next: (r) => { if (r.hasReported) this.reported.update((s) => new Set(s).add(listingId)); },
+      error: () => undefined,
+    });
+  }
+
   printAreaOf(p: Product): PrintArea | undefined {
     return p.printArea ?? this.printAreas()[p._id];
   }
 
-  /** Sản phẩm in được thiết kế Marketplace, sản phẩm mặc định của tin đứng đầu */
   mockupProducts(products: Product[], firstId?: string): Product[] {
     const list = products.filter((p) => !!this.printAreaOf(p));
     return firstId ? [...list.filter((p) => p._id === firstId), ...list.filter((p) => p._id !== firstId)] : list;
   }
 
-  /** File in nền trong suốt của thiết kế (dùng ghép mockup). Thiếu file thì component tự dùng ảnh xem trước. */
   artUrl(designId: string): string {
     return `/uploads/art/${designId}.png`;
   }
 
-  /** Phí sàn và giá người mua trả (BR16) */
+  /** Xem trước phí (server tính lại khi lưu) */
   calcFees(sellerPrice: number): { platformFee: number; buyerDesignFee: number } {
     const price = Math.max(0, Math.round(sellerPrice || 0));
     const platformFee = Math.round(price * this.feeRate());
     return { platformFee, buyerDesignFee: price + platformFee };
   }
 
-  /** Ảnh public dạng "/market/x.png" giữ nguyên; đường dẫn tương đối thì đặt trong /dataset */
   imageUrl(path: string | null | undefined): string {
     if (!path) return '/dataset/images/products/placeholder.svg';
     if (/^(https?:|data:|blob:|\/)/i.test(path)) return path;
     return '/dataset/' + path.replace(/^\.?\/+/, '');
   }
 
-  // ---------- ghi (mock: localStorage) ----------
+  // ---------- ghi (POST / PUT /api/market) ----------
 
-  create(userId: string, input: ListingInput): Listing {
-    const design = this.getDesign(input.designId);
-    if (!design) throw new Error('Không tìm thấy thiết kế.');
-    const now = new Date().toISOString();
-    const listing: Listing = {
-      _id: 'lst_' + Date.now().toString(36),
-      sellerId: userId,
-      designId: design._id,
-      productId: design.productId, // gắn cố định với sản phẩm của thiết kế
-      title: input.title.trim(),
-      description: input.description.trim(),
-      tags: input.tags,
-      sellerPrice: input.sellerPrice,
-      ...this.calcFees(input.sellerPrice),
-      watermarkUrl: design.previewUrl, // bản thật: backend tạo ảnh watermark khi tiếp nhận
-      licenseScope: 'PRINT_ON_FIXED_PRODUCT',
-      imageAssetScope: 'WATERMARK_PREVIEW_ONLY',
-      acceptedCopyright: input.acceptedCopyright,
-      status: 'PENDING_REVIEW', // không tự hiển thị công khai
-      reviewedAt: null,
-      reviewNote: null,
-      createdAt: now,
-      updatedAt: now,
-    };
-    this.saveLocal(listing);
-    return listing;
+  create(_userId: string, input: ListingInput): Observable<Listing> {
+    return this.http.post<{ listing: Listing }>(API, input, { withCredentials: true }).pipe(map((r) => r.listing), tap(() => this.reload()));
   }
 
   /** Sửa tin -> gửi duyệt lại */
-  update(id: string, userId: string, input: ListingInput): Listing {
-    const old = this.getListing(id);
-    if (!old || old.sellerId !== userId) throw new Error('Bạn không có quyền sửa tin này.');
-    if (old.status === 'UNLISTED') throw new Error('Tin đã gỡ, không sửa được nữa.');
-    const listing: Listing = {
-      ...old,
-      title: input.title.trim(),
-      description: input.description.trim(),
-      tags: input.tags,
-      sellerPrice: input.sellerPrice,
-      ...this.calcFees(input.sellerPrice),
-      acceptedCopyright: input.acceptedCopyright,
-      status: 'PENDING_REVIEW',
-      reviewedAt: null,
-      reviewNote: null,
-      updatedAt: new Date().toISOString(),
-    };
-    this.saveLocal(listing);
-    return listing;
+  update(id: string, _userId: string, input: ListingInput): Observable<Listing> {
+    return this.http.put<{ listing: Listing }>(`${API}/${id}`, input, { withCredentials: true }).pipe(map((r) => r.listing), tap(() => this.reload()));
   }
 
-  unlist(id: string, userId: string): void {
-    const old = this.getListing(id);
-    if (!old || old.sellerId !== userId) return;
-    this.saveLocal({ ...old, status: 'UNLISTED', updatedAt: new Date().toISOString() });
+  unlist(id: string, _userId?: string): Observable<void> {
+    return this.http.post(`${API}/${id}/unlist`, {}, { withCredentials: true }).pipe(map(() => undefined), tap(() => this.reload()));
   }
 
-  report(listingId: string, reporterId: string, reason: string, description: string): CopyrightReport {
-    const report: CopyrightReport = {
-      _id: 'rpt_' + Date.now().toString(36),
-      listingId,
-      reporterId,
-      reason,
-      description: description.trim(),
-      status: 'OPEN',
-      createdAt: new Date().toISOString(),
-    };
-    const all = this.readLocal<CopyrightReport>(LOCAL_REPORTS_KEY);
-    this.writeLocal(LOCAL_REPORTS_KEY, [...all, report]);
-    return report;
-  }
-
-  hasReported(listingId: string, reporterId: string): boolean {
-    return this.readLocal<CopyrightReport>(LOCAL_REPORTS_KEY).some(
-      (r) => r.listingId === listingId && r.reporterId === reporterId,
+  report(listingId: string, _reporterId: string, reason: string, description: string): Observable<CopyrightReport> {
+    return this.http.post<{ report: CopyrightReport }>(`${API}/${listingId}/reports`, { reason, description }, { withCredentials: true }).pipe(
+      map((r) => r.report),
+      tap(() => this.reported.update((s) => new Set(s).add(listingId))),
     );
   }
 
-  /** Editor (C10) lưu thiết kế mới -> có ngay trong My marketplace / form đăng bán */
-  upsertDesign(design: Design): void {
-    this._designs.set(this.mergeById([...this._designs(), design]));
+  /** Editor / C11 vừa lưu hoặc xóa thiết kế -> tải lại My marketplace */
+  upsertDesign(_design: Design): void {
+    this.reloadMine();
   }
 
-  removeDesign(id: string): void {
-    this._designs.set(this._designs().filter((d) => d._id !== id));
+  removeDesign(_id: string): void {
+    this.reloadMine();
   }
 
-  // ---------- nội bộ ----------
-
-  private load(): void {
-    const get = <T>(file: string, fallback?: string): Observable<T[]> =>
-      this.http.get<T[]>('/dataset/' + file).pipe(
-        catchError(() => (fallback ? this.http.get<T[]>('/dataset/' + fallback) : of([] as T[]))),
-        catchError(() => of([] as T[])),
-      );
-
+  reload(): void {
     forkJoin({
-      listings: get<Listing>('listings.json', 'market_listings.json'),
-      demoListings: get<Listing>('listings-demo.json'),
-      designs: get<Design>('designs.json'),
-      sales: get<DesignSale>('designSales.json'),
-      demoSales: get<DesignSale>('designSales-demo.json'),
-      demoDesigns: get<Design>('designs-demo.json'),
-      config: this.http
-        .get<{ platformFeeRate?: number }>('/dataset/appConfig.json')
-        .pipe(catchError(() => of({} as { platformFeeRate?: number }))),
-      areas: this.http
-        .get<Record<string, PrintArea>>('/dataset/print-areas.json')
-        .pipe(catchError(() => of({} as Record<string, PrintArea>))),
-    })
-      .pipe(
-        map(({ listings, demoListings, designs, demoDesigns, sales, demoSales, config, areas }) => {
-          this._sales.set(this.mergeById([...sales, ...demoSales]));
-          if (config.platformFeeRate != null) this.feeRate.set(config.platformFeeRate);
-          this.printAreas.set(areas);
-          return {
-            listings: this.mergeById([...listings, ...demoListings, ...this.readLocal<Listing>(LOCAL_LISTINGS_KEY)]),
-            designs: this.mergeById([...designs, ...demoDesigns, ...this.readLocal<Design>('printify_designs')]).filter(
-              (d) => !this.readLocal<string>('printify_designs_deleted').includes(d._id),
-            ),
-          };
-        }),
-      )
-      .subscribe({
-        next: ({ listings, designs }) => {
-          this._listings.set(listings);
-          this._designs.set(designs);
-          this.loaded.set(true);
-        },
-        error: () => {
-          this.error.set('Không tải được dữ liệu Marketplace. Vui lòng thử lại.');
-          this.loaded.set(true);
-        },
-      });
+      pub: this.http.get<{ items: Listing[] }>(API, { params: { limit: 60 }, withCredentials: true }).pipe(map((r) => r.items)),
+      mine: this.auth.user()
+        ? this.http.get<{ items: MineRow[] }>(`${API}/mine`, { withCredentials: true }).pipe(map((r) => r.items), catchError(() => of([] as MineRow[])))
+        : of([] as MineRow[]),
+    }).subscribe({
+      next: ({ pub, mine }) => {
+        this._public.set(pub);
+        this._mine.set(mine);
+        this.error.set('');
+        this.loaded.set(true);
+      },
+      error: () => this.loadOffline(),
+    });
   }
 
-  private saveLocal(listing: Listing): void {
-    const local = this.readLocal<Listing>(LOCAL_LISTINGS_KEY).filter((l) => l._id !== listing._id);
-    this.writeLocal(LOCAL_LISTINGS_KEY, [...local, listing]);
-    this._listings.set(this.mergeById([...this._listings(), listing]));
+  private reloadMine(): void {
+    if (!this.auth.user()) return;
+    this.http.get<{ items: MineRow[] }>(`${API}/mine`, { withCredentials: true }).subscribe({ next: (items) => this._mine.set(items.items), error: () => undefined });
   }
 
-  /** Gộp theo _id, phần tử sau ghi đè phần tử trước */
+  /** Server chưa chạy: chỉ xem tin mẫu trong /dataset (không đăng / sửa được) */
+  private loadOffline(): void {
+    forkJoin({
+      a: this.http.get<Listing[]>('/dataset/listings.json').pipe(catchError(() => of([] as Listing[]))),
+      b: this.http.get<Listing[]>('/dataset/listings-demo.json').pipe(catchError(() => of([] as Listing[]))),
+    }).subscribe(({ a, b }) => {
+      this._public.set(this.mergeById([...a, ...b]).filter((l) => l.status === 'APPROVED'));
+      this._mine.set([]);
+      this.error.set('');
+      this.loaded.set(true);
+    });
+  }
+
   private mergeById<T extends { _id: string }>(items: T[]): T[] {
     return [...new Map(items.map((x) => [x._id, x])).values()];
-  }
-
-  private readLocal<T>(key: string): T[] {
-    try {
-      const raw = localStorage.getItem(key);
-      return raw ? (JSON.parse(raw) as T[]) : [];
-    } catch {
-      return [];
-    }
-  }
-
-  private writeLocal(key: string, value: unknown): void {
-    try {
-      localStorage.setItem(key, JSON.stringify(value));
-    } catch {
-      /* bỏ qua: dữ liệu vẫn còn trong phiên hiện tại */
-    }
   }
 }

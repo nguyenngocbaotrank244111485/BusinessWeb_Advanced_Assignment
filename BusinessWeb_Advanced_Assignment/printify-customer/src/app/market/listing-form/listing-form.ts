@@ -50,6 +50,7 @@ export class ListingForm {
   });
   readonly editing = signal<Listing | undefined>(undefined);
   readonly error = signal('');
+  readonly saving = signal(false);
 
   readonly designs = computed<Design[]>(() =>
     this.market.sellableDesigns(this.auth.user()?._id ?? '', this.editing()?.designId),
@@ -96,6 +97,7 @@ export class ListingForm {
 
   submit(): void {
     this.error.set('');
+    if (this.saving()) return;
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.error.set('Bạn kiểm tra lại các ô được đánh dấu đỏ nhé.');
@@ -110,14 +112,16 @@ export class ListingForm {
       sellerPrice: Math.round(Number(v.sellerPrice)),
       acceptedCopyright: v.acceptedCopyright,
     };
-    try {
-      const userId = this.auth.user()!._id;
-      if (this.isEdit) this.market.update(this.editId!, userId, input);
-      else this.market.create(userId, input);
-      this.router.navigate(['/market/my-listings'], { queryParams: { saved: this.isEdit ? 'edit' : 'new' } });
-    } catch (e) {
-      this.error.set(e instanceof Error ? e.message : 'Không lưu được tin đăng.');
-    }
+    const userId = this.auth.user()!._id;
+    const req = this.isEdit ? this.market.update(this.editId!, userId, input) : this.market.create(userId, input);
+    this.saving.set(true);
+    req.subscribe({
+      next: () => this.router.navigate(['/market/my-listings'], { queryParams: { saved: this.isEdit ? 'edit' : 'new' } }),
+      error: (e) => {
+        this.saving.set(false);
+        this.error.set(e?.status === 0 || e?.status >= 500 ? 'Không kết nối được máy chủ.' : e?.error?.message || 'Không lưu được tin đăng.');
+      },
+    });
   }
 
   private prefill(): void {

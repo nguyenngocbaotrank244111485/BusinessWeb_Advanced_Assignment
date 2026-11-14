@@ -1,83 +1,56 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, map, of, shareReplay } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, catchError, firstValueFrom, map, of, shareReplay } from 'rxjs';
 import { AdminUser } from '../models/admin.models';
 
-const SESSION_KEY = 'pf_admin_session';
-const LOCK_KEY = 'pf_admin_lock';
-/** Mật khẩu demo chung cho tài khoản Admin (chưa có API). Khi có backend: POST /api/auth/login, mật khẩu hash ở server */
+/** Mật khẩu demo do `npm run seed` đặt cho mọi tài khoản nhân viên (chỉ để điền nhanh trên máy local) */
 export const DEMO_PASSWORD = 'Admin@123';
-const MAX_FAILS = 5;
-const LOCK_MINUTES = 10;
+const API = '/api/admin/auth';
 
 /**
- * Đăng nhập Admin (D1) – giai đoạn mock: đọc user-admin.json.
- * Chỉ STAFF / SUPERADMIN vào được; tài khoản khách hàng bị từ chối với cùng một câu báo lỗi chung.
+ * Đăng nhập Admin (D1) – POST /api/admin/auth/login, phiên lưu ở server (cookie pf.admin.sid, collection adminSessions).
+ * Server kiểm tra mật khẩu (hash), khóa 10 phút sau 5 lần sai, chỉ STAFF / SUPERADMIN vào được
+ * (tài khoản khách bị từ chối với cùng một câu báo lỗi chung).
  */
 @Injectable({ providedIn: 'root' })
 export class AdminAuthService {
   private readonly http = inject(HttpClient);
 
-  readonly user = signal<AdminUser | null>(this.restore());
+  readonly user = signal<AdminUser | null>(null);
   readonly isSuperadmin = computed(() => this.user()?.role === 'SUPERADMIN');
-  readonly admins$: Observable<AdminUser[]> = this.http.get<AdminUser[]>('/dataset/user-admin.json').pipe(
+  /** Tài khoản demo hiện ở màn đăng nhập (server chỉ trả khi chạy local) */
+  readonly admins$: Observable<AdminUser[]> = this.http.get<{ items: AdminUser[] }>(`${API}/demo-accounts`).pipe(
+    map((r) => r.items),
     catchError(() => of([] as AdminUser[])),
     shareReplay(1),
   );
-  private adminList: AdminUser[] = [];
+  /** Xong khi đã hỏi server phiên hiện tại (guard chờ cái này) */
+  readonly ready: Promise<void>;
 
   constructor() {
-    this.admins$.subscribe((list) => (this.adminList = list));
+    this.ready = firstValueFrom(this.http.get<{ user: AdminUser }>(`${API}/me`, { withCredentials: true }))
+      .then((r) => this.user.set(r.user))
+      .catch(() => this.user.set(null));
   }
 
-  adminName(id: string): string | undefined {
-    return this.adminList.find((a) => a._id === id)?.name;
-  }
-
-  /** Số phút còn bị khóa (0 = không khóa) */
-  lockedMinutes(): number {
-    const until = Number(this.read(LOCK_KEY)?.['until'] ?? 0);
-    return until > Date.now() ? Math.ceil((until - Date.now()) / 60000) : 0;
+  adminName(_id: string): string | undefined {
+    return undefined;
   }
 
   login(email: string, password: string): Observable<{ ok: boolean; message?: string }> {
-    return this.admins$.pipe(
-      map((list) => {
-        if (this.lockedMinutes()) return { ok: false, message: `Đăng nhập sai nhiều lần. Thử lại sau ${this.lockedMinutes()} phút.` };
-        const found = list.find((a) => a.email.toLowerCase() === email.trim().toLowerCase());
-        if (!found || password !== DEMO_PASSWORD || (found.role !== 'STAFF' && found.role !== 'SUPERADMIN')) {
-          const fails = Number(this.read(LOCK_KEY)?.['fails'] ?? 0) + 1;
-          this.write(LOCK_KEY, fails >= MAX_FAILS ? { fails: 0, until: Date.now() + LOCK_MINUTES * 60000 } : { fails, until: 0 });
-          // không tiết lộ email có tồn tại hay không
-          return { ok: false, message: 'Email hoặc mật khẩu không đúng, hoặc tài khoản không có quyền quản trị.' };
-        }
-        this.write(LOCK_KEY, { fails: 0, until: 0 });
-        this.user.set(found);
-        this.write(SESSION_KEY, found);
+    return this.http.post<{ user: AdminUser }>(`${API}/login`, { email, password }, { withCredentials: true }).pipe(
+      map((r) => {
+        this.user.set(r.user);
         return { ok: true };
       }),
+      catchError((e: HttpErrorResponse) =>
+        of({ ok: false, message: e.status === 0 || e.status >= 500 ? 'Chưa kết nối được server (chạy npm run dev trong printify-server).' : e.error?.message ?? 'Đăng nhập không thành công.' }),
+      ),
     );
   }
 
   logout(): void {
     this.user.set(null);
-    try { localStorage.removeItem(SESSION_KEY); } catch { /* bỏ qua */ }
-  }
-
-  private restore(): AdminUser | null {
-    const u = this.read(SESSION_KEY) as AdminUser | null;
-    return u && (u.role === 'STAFF' || u.role === 'SUPERADMIN') ? u : null;
-  }
-
-  private read(key: string): Record<string, unknown> | null {
-    try {
-      return JSON.parse(localStorage.getItem(key) || 'null');
-    } catch {
-      return null;
-    }
-  }
-
-  private write(key: string, value: unknown): void {
-    try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* bỏ qua */ }
+    this.http.post(`${API}/logout`, {}, { withCredentials: true }).subscribe({ error: () => undefined });
   }
 }

@@ -2,6 +2,7 @@ import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from './services/auth-service';
+import { ApiStatusService } from './services/api-status-service';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +12,7 @@ import { AuthService } from './services/auth-service';
 })
 export class App implements OnInit {
   readonly auth = inject(AuthService); // Used by header to show Login OR Logout.
+  readonly api = inject(ApiStatusService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   searchTerm = '';

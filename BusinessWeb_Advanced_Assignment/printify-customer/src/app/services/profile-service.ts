@@ -1,3 +1,4 @@
+import { ApiStatusService } from './api-status-service';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, firstValueFrom, map, of, shareReplay } from 'rxjs';
@@ -45,6 +46,7 @@ const LOCAL_KEY = 'printify_profiles';
 export class ProfileService {
   private readonly http = inject(HttpClient);
   private readonly auth = inject(AuthService);
+  private readonly api = inject(ApiStatusService);
 
   readonly profile = signal<Profile | null>(null);
   /** Hạng thành viên của người đang đăng nhập (null = chưa đăng nhập / chưa tải) */
@@ -64,48 +66,34 @@ export class ProfileService {
       this.profile.set(null);
       return null;
     }
-    const local = this.readLocal()[me._id];
-    if (local) {
-      this.profile.set(local);
-      return local;
+    try {
+      const r = await firstValueFrom(this.http.get<{ profile: Profile }>('/api/users/me', { withCredentials: true }));
+      this.profile.set(r.profile);
+      return r.profile;
+    } catch {
+      this.profile.set(null);
+      return null;
     }
-    const users = await firstValueFrom(this.auth.users$ as unknown as Observable<Partial<Profile>[]>);
-    const raw: Partial<Profile> = users.find((u) => u._id === me._id) ?? (me as Partial<Profile>);
-    const p: Profile = {
-      _id: me._id,
-      name: raw.name ?? me.name,
-      email: raw.email ?? me.email,
-      role: raw.role ?? 'CUSTOMER',
-      status: raw.status,
-      avatar: raw.avatar ?? null,
-      nickname: raw.nickname ?? '',
-      birthday: raw.birthday ?? null,
-      membership: raw.membership ?? { totalSpent: 0, points: 0 },
-      addresses: (raw.addresses ?? []).map((a) => ({ ...a })),
-      createdAt: raw.createdAt,
-    };
-    this.profile.set(p);
-    return p;
   }
 
-  /** Lưu toàn bộ hồ sơ (PUT /users/me). Email không được đổi. false = bộ nhớ đầy */
+  /**
+   * PUT /api/users/me (gửi cả mảng addresses). Hiện ngay trên màn hình, server kiểm tra lại;
+   * server từ chối -> tải lại hồ sơ thật + báo lỗi.
+   */
   update(changes: Partial<Pick<Profile, 'name' | 'avatar' | 'addresses' | 'nickname' | 'birthday'>>): boolean {
     const cur = this.profile();
     if (!cur) return false;
-    const next: Profile = { ...cur, ...changes, email: cur.email, membership: cur.membership };
-    const all = this.readLocal();
-    all[next._id] = next;
-    try {
-      localStorage.setItem(LOCAL_KEY, JSON.stringify(all));
-    } catch {
-      return false;
-    }
-    this.profile.set(next);
-    // cập nhật tên / avatar trên header
-    const session = this.auth.user();
-    if (session && (session.name !== next.name || session.avatar !== next.avatar)) {
-      this.auth.loginLocal({ ...session, name: next.name, avatar: next.avatar });
-    }
+    this.profile.set({ ...cur, ...changes, email: cur.email, membership: cur.membership });
+    this.http.put<{ profile: Profile }>('/api/users/me', changes, { withCredentials: true }).subscribe({
+      next: (r) => {
+        this.profile.set(r.profile);
+        const session = this.auth.user();
+        if (session && (session.name !== r.profile.name || session.avatar !== r.profile.avatar)) {
+          this.auth.loginLocal({ ...session, name: r.profile.name, avatar: r.profile.avatar });
+        }
+      },
+      error: (e) => { this.api.report(e, 'Không lưu được hồ sơ.'); this.load(); },
+    });
     return true;
   }
 
@@ -127,13 +115,5 @@ export class ProfileService {
           return of('NO_SERVER' as const);
         }),
       );
-  }
-
-  private readLocal(): Record<string, Profile> {
-    try {
-      return JSON.parse(localStorage.getItem(LOCAL_KEY) || '{}') as Record<string, Profile>;
-    } catch {
-      return {};
-    }
   }
 }

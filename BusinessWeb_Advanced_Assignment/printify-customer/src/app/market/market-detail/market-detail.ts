@@ -45,9 +45,9 @@ export class MarketDetail {
   readonly isOwner = computed(() => !!this.listing() && this.auth.user()?._id === this.listing()!.sellerId);
   /** Tin chưa duyệt chỉ người đăng xem được (xem trước) */
   readonly visible = computed(() => !!this.listing() && (this.listing()!.status === 'APPROVED' || this.isOwner()));
-  readonly sellerName = computed(() => this.users().find((u) => u._id === this.listing()?.sellerId)?.name ?? 'Người dùng PrintiFy');
+  readonly sellerName = computed(() => this.listing()?.sellerName ?? this.users().find((u) => u._id === this.listing()?.sellerId)?.name ?? 'Người dùng PrintiFy');
   readonly feePercent = computed(() => Math.round(this.market.feeRate() * 100));
-  readonly soldCount = computed(() => (this.listing() ? this.market.salesOf(this.listing()!._id).length : 0));
+  readonly soldCount = computed(() => (this.listing() ? this.market.soldCount(this.listing()!) : 0));
 
   /** Sản phẩm in được thiết kế này */
   readonly printable = computed(() => this.market.mockupProducts(this.products(), this.listing()?.productId));
@@ -66,6 +66,11 @@ export class MarketDetail {
   });
 
   constructor() {
+    // hỏi server tin này mình đã báo cáo chưa
+    effect(() => {
+      const id = this.id();
+      if (id && this.auth.user()) untracked(() => this.market.checkReported(id));
+    });
     // Dữ liệu tải xong mà không có tin (hoặc tin chưa duyệt của người khác) -> về danh sách kèm thông báo
     effect(() => {
       if (this.market.loaded() && !this.visible()) {
@@ -85,7 +90,7 @@ export class MarketDetail {
   }
 
   sellerOf(l: Listing): string {
-    return this.users().find((u) => u._id === l.sellerId)?.name ?? '';
+    return l.sellerName ?? this.users().find((u) => u._id === l.sellerId)?.name ?? '';
   }
 
   pick(p: Product): void {
@@ -133,9 +138,16 @@ export class MarketDetail {
   }
 
   onReport(payload: ReportPayload): void {
-    this.market.report(this.listing()!._id, this.auth.user()!._id, payload.reason, payload.description);
-    this.showReport.set(false);
-    this.showToast('ok', 'Đã gửi báo cáo. Cảm ơn bạn đã giúp PrintiFy bảo vệ bản quyền!');
+    this.market.report(this.listing()!._id, this.auth.user()!._id, payload.reason, payload.description).subscribe({
+      next: () => {
+        this.showReport.set(false);
+        this.showToast('ok', 'Đã gửi báo cáo. Cảm ơn bạn đã giúp PrintiFy bảo vệ bản quyền!');
+      },
+      error: (e) => {
+        this.showReport.set(false);
+        this.showToast('error', e?.error?.message || 'Không gửi được báo cáo.');
+      },
+    });
   }
 
   private showToast(type: 'ok' | 'error', text: string): void {

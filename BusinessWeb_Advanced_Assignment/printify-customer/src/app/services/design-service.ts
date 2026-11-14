@@ -1,14 +1,14 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, effect, inject, signal, untracked } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, forkJoin, map, of, shareReplay } from 'rxjs';
+import { Observable, ReplaySubject, catchError, firstValueFrom, forkJoin, map, of, shareReplay, take } from 'rxjs';
 import { DesignDoc, DesignTemplate, OrderRef, SIDE_LABELS, SampleReprintRequest, SideDef, SideKey } from '../models/design.model';
 import { PrintArea, Product } from '../models/product.model';
 import { MarketService } from './market-service';
+import { AuthService } from './auth-service';
+import { OrderService } from './order-service';
+import { ApiStatusService } from './api-status-service';
 
-export const LOCAL_DESIGNS_KEY = 'printify_designs';
-/** Thiết kế đã xóa (kể cả thiết kế có sẵn trong designs.json) */
-export const DELETED_DESIGNS_KEY = 'printify_designs_deleted';
-const LOCAL_REPRINTS_KEY = 'printify_sample_reprints';
+const API = '/api/designs';
 /** Vùng in mặc định khi sản phẩm chưa khai báo (tỉ lệ 0–1 trên ảnh) */
 const DEFAULT_AREA: PrintArea = { x: 0.3, y: 0.3, width: 0.4, height: 0.4 };
 
@@ -27,42 +27,43 @@ interface PrintSidesFile {
 export class DesignService {
   private readonly http = inject(HttpClient);
   private readonly market = inject(MarketService);
+  private readonly auth = inject(AuthService);
+  private readonly orders = inject(OrderService);
+  private readonly api = inject(ApiStatusService);
 
   private readonly _designs = signal<DesignDoc[]>([]);
   readonly designs = this._designs.asReadonly();
 
-  /** Phát 1 lần khi dữ liệu đã sẵn sàng */
-  readonly ready$: Observable<void>;
+  private readonly loaded$ = new ReplaySubject<void>(1);
+  /** Phát khi đã tải xong thiết kế của tài khoản hiện tại (GET /api/designs) */
+  readonly ready$: Observable<void> = this.loaded$.pipe(take(1));
 
   private readonly templates$: Observable<DesignTemplate[]>;
   private readonly areas$: Observable<Record<string, PrintArea>>;
-  private readonly orders$: Observable<OrderRef[]>;
   private readonly sides$: Observable<PrintSidesFile>;
 
   constructor() {
     const get = <T>(file: string): Observable<T> =>
       this.http.get<T>('/dataset/' + file).pipe(catchError(() => of([] as unknown as T)));
 
-    this.ready$ = forkJoin({
-      base: get<DesignDoc[]>('designs.json'),
-      demo: get<DesignDoc[]>('designs-demo.json'),
-    }).pipe(
-      map(({ base, demo }) => {
-        const deleted = new Set(this.readLocal<string>(DELETED_DESIGNS_KEY));
-        this._designs.set(
-          this.mergeById([...base, ...demo, ...this.readLocal<DesignDoc>(LOCAL_DESIGNS_KEY)]).filter((d) => !deleted.has(d._id)),
-        );
-      }),
-      shareReplay(1),
-    );
-    this.ready$.subscribe();
+    effect(() => {
+      const me = this.auth.user()?._id;
+      untracked(() => {
+        if (!me) { this._designs.set([]); this.loaded$.next(); return; }
+        this.http.get<{ items: DesignDoc[] }>(API, { withCredentials: true }).subscribe({
+          next: (r) => { this._designs.set(r.items); this.loaded$.next(); },
+          error: (e) => { this.api.report(e, 'Không tải được thiết kế.'); this.loaded$.next(); },
+        });
+      });
+    });
 
     this.templates$ = get<DesignTemplate[]>('templates.json').pipe(shareReplay(1));
-    this.areas$ = this.http.get<Record<string, PrintArea>>('/dataset/print-areas.json').pipe(
+    // vùng in lấy từ sản phẩm trong database (Admin sửa được); server chưa chạy thì dùng file mẫu
+    this.areas$ = this.http.get<Record<string, PrintArea>>('/api/config/print-areas').pipe(
+      catchError(() => this.http.get<Record<string, PrintArea>>('/dataset/print-areas.json')),
       catchError(() => of({} as Record<string, PrintArea>)),
       shareReplay(1),
     );
-    this.orders$ = get<OrderRef[]>('orders.json').pipe(shareReplay(1));
     this.sides$ = this.http.get<PrintSidesFile>('/dataset/print-sides.json').pipe(
       catchError(() => of({} as PrintSidesFile)),
       shareReplay(1),
@@ -110,13 +111,16 @@ export class DesignService {
   }
 
   findOrder(orderId: string): Observable<OrderRef | undefined> {
-    return this.orders$.pipe(map((list) => list.find((o) => o._id === orderId)));
+    return this.http.get<{ order: OrderRef }>(`/api/orders/${orderId}`, { withCredentials: true }).pipe(
+      map((r) => r.order),
+      catchError(() => of(undefined)),
+    );
   }
 
+  /** Lượt in lại mẫu đã xin (server lưu trong dòng đơn: items[].sampleReprints) */
   reprintsOf(orderId: string, orderItemId: string): SampleReprintRequest[] {
-    return this.readLocal<SampleReprintRequest>(LOCAL_REPRINTS_KEY).filter(
-      (r) => r.orderId === orderId && r.orderItemId === orderItemId,
-    );
+    const item = this.orders.getById(orderId)?.items.find((i) => i.orderItemId === orderItemId) as { sampleReprints?: SampleReprintRequest[] } | undefined;
+    return item?.sampleReprints ?? [];
   }
 
   newId(): string {
@@ -125,61 +129,58 @@ export class DesignService {
 
   // ---------- ghi ----------
 
-  /** Lưu (tạo mới hoặc ghi đè cùng _id). false = bộ nhớ trình duyệt đầy */
-  save(doc: DesignDoc): boolean {
-    const local = this.readLocal<DesignDoc>(LOCAL_DESIGNS_KEY).filter((d) => d._id !== doc._id);
-    if (!this.writeLocal(LOCAL_DESIGNS_KEY, [...local, doc])) return false;
-    this._designs.set(this.mergeById([...this._designs(), doc]));
-    this.market.upsertDesign(doc);
-    return true;
+  /** PUT /api/designs/:id (tạo mới hoặc ghi đè). false = server từ chối / mất kết nối */
+  async save(doc: DesignDoc): Promise<boolean> {
+    try {
+      const r = await firstValueFrom(this.http.put<{ design: DesignDoc }>(`${API}/${doc._id}`, doc, { withCredentials: true }));
+      this._designs.set(this.mergeById([...this._designs(), r.design]));
+      this.market.upsertDesign(r.design);
+      return true;
+    } catch (e) {
+      this.api.report(e, 'Không lưu được thiết kế.');
+      return false;
+    }
   }
 
-  /** "Dùng lại": tạo bản sao (designId mới, giữ productId) */
-  copy(id: string, userId: string): DesignDoc | null {
-    const src = this.get(id);
-    if (!src || src.userId !== userId) return null;
-    const now = new Date().toISOString();
-    const doc: DesignDoc = { ...src, _id: this.newId(), createdAt: now, updatedAt: now };
-    return this.save(doc) ? doc : null;
+  /** "Dùng lại": server tạo bản sao (designId mới, giữ productId) */
+  async copy(id: string, _userId?: string): Promise<DesignDoc | null> {
+    try {
+      const r = await firstValueFrom(this.http.post<{ design: DesignDoc }>(`${API}/${id}/copy`, {}, { withCredentials: true }));
+      this._designs.set([...this._designs(), r.design]);
+      this.market.upsertDesign(r.design);
+      return r.design;
+    } catch (e) {
+      this.api.report(e, 'Không tạo được bản sao.');
+      return null;
+    }
   }
 
-  /** Xóa thiết kế của chính mình (DELETE /api/designs/:id). false = không có quyền / lỗi lưu */
-  remove(id: string, userId: string): boolean {
-    const doc = this.get(id);
-    if (!doc || doc.userId !== userId) return false;
-    const local = this.readLocal<DesignDoc>(LOCAL_DESIGNS_KEY).filter((d) => d._id !== id);
-    const deleted = [...new Set([...this.readLocal<string>(DELETED_DESIGNS_KEY), id])];
-    if (!this.writeLocal(LOCAL_DESIGNS_KEY, local) || !this.writeLocal(DELETED_DESIGNS_KEY, deleted)) return false;
-    this._designs.set(this._designs().filter((d) => d._id !== id));
-    this.market.removeDesign(id);
-    return true;
+  /** DELETE /api/designs/:id – server chặn nếu thiết kế đang đăng bán */
+  async remove(id: string, _userId?: string): Promise<boolean> {
+    try {
+      await firstValueFrom(this.http.delete(`${API}/${id}`, { withCredentials: true }));
+      this._designs.set(this._designs().filter((d) => d._id !== id));
+      this.market.removeDesign(id);
+      return true;
+    } catch (e) {
+      this.api.report(e, 'Không xóa được thiết kế.');
+      return false;
+    }
   }
 
-  requestReprint(req: SampleReprintRequest): boolean {
-    return this.writeLocal(LOCAL_REPRINTS_KEY, [...this.readLocal<SampleReprintRequest>(LOCAL_REPRINTS_KEY), req]);
+  /** POST /api/orders/:id/items/:itemId/reprints – server tính phí, trừ phôi nếu miễn phí */
+  async requestReprint(req: SampleReprintRequest): Promise<boolean> {
+    try {
+      await firstValueFrom(this.http.post(`/api/orders/${req.orderId}/items/${req.orderItemId}/reprints`, { designId: req.designId }, { withCredentials: true }));
+      this.orders.reload();
+      return true;
+    } catch (e) {
+      this.api.report(e, 'Không gửi được yêu cầu in lại mẫu.');
+      return false;
+    }
   }
-
-  // ---------- nội bộ ----------
 
   private mergeById<T extends { _id: string }>(items: T[]): T[] {
     return [...new Map(items.map((x) => [x._id, x])).values()];
-  }
-
-  private readLocal<T>(key: string): T[] {
-    try {
-      const raw = localStorage.getItem(key);
-      return raw ? (JSON.parse(raw) as T[]) : [];
-    } catch {
-      return [];
-    }
-  }
-
-  private writeLocal(key: string, value: unknown): boolean {
-    try {
-      localStorage.setItem(key, JSON.stringify(value));
-      return true;
-    } catch {
-      return false;
-    }
   }
 }

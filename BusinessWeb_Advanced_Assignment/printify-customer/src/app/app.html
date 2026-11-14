@@ -1,1 +1,4 @@
 <router-outlet></router-outlet>
+@if (api.message(); as m) {
+  <div class="api-toast" [class.ok]="m.ok" role="alert">{{ m.text }}</div>
+}

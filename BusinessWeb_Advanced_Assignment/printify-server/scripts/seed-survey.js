@@ -6,7 +6,7 @@ const { validateQuestions } = require('../utils/survey-validation');
 
 async function main() {
   await connectDb();
-  const file = path.join(__dirname, '../seeds/surveyQuestions.json');
+  const file = path.join(__dirname, '../seeds/surveyQuestion.json');
   const questions = JSON.parse(fs.readFileSync(file, 'utf8'));
   if (questions.length !== 20 || !validateQuestions(questions)) {
     throw new Error('Seed must contain exactly 20 valid TAM Likert-5 questions');

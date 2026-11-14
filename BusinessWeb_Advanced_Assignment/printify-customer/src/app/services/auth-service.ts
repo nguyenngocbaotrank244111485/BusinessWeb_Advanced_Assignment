@@ -61,7 +61,15 @@ export class AuthService {
       );
   }
 
-  /** Đăng nhập demo (không qua server) */
+  /** Đăng nhập nhanh tài khoản mẫu: server tạo phiên thật (POST /api/auth/demo-login, chỉ bật khi chạy local) */
+  loginDemo(userId: string): Observable<CustomerUser> {
+    return this.http.post<AuthResult>(`${this.apiUrl}/demo-login`, { userId }, { withCredentials: true }).pipe(
+      map((response) => response.user),
+      tap((user) => this.setUser(user)),
+    );
+  }
+
+  /** Cập nhật thông tin hiển thị trên header (sau khi sửa hồ sơ) */
   loginLocal(user: PublicUser): void {
     this.setUser(user);
   }

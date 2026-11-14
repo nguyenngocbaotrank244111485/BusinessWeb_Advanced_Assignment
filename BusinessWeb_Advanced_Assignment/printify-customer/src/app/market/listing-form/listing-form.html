@@ -95,7 +95,7 @@
 
           <div class="actions">
             <a routerLink="/market/my-listings" class="ghost">Hủy</a>
-            <button type="submit" class="primary">{{ isEdit ? 'Lưu & gửi duyệt lại' : 'Gửi duyệt' }}</button>
+            <button type="submit" class="primary" [disabled]="saving()">{{ saving() ? 'Đang gửi...' : isEdit ? 'Lưu & gửi duyệt lại' : 'Gửi duyệt' }}</button>
           </div>
         </section>
       </form>

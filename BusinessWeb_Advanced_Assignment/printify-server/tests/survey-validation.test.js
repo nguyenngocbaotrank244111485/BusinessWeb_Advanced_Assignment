@@ -5,7 +5,7 @@ const path = require('node:path');
 const { validateQuestions, validateSubmission } = require('../utils/survey-validation');
 
 const seed = JSON.parse(fs.readFileSync(
-  path.resolve(__dirname, '../seeds/surveyQuestions.json'), 'utf8'
+  path.resolve(__dirname, '../seeds/surveyQuestion.json'), 'utf8'
 ));
 const validAnswers = seed.map(q => ({ questionId: q._id, score: 4 }));
 
