@@ -4,7 +4,7 @@
       <div class="banner-copy">
         <nav class="breadcrumb" aria-label="Breadcrumb"><a routerLink="/">Trang chủ</a><span>/</span>Marketplace</nav>
         <h1>Khám phá mẫu thiết kế</h1>
-        <p>Chọn thiết kế của cộng đồng PrintiFy và in ngay trên sản phẩm đi kèm. Người bán nhận tiền mỗi lần thiết kế được dùng.</p>
+        <p>Chọn thiết kế của cộng đồng PrintiFy và in lên áo, túi, cốc, sổ tay... tùy bạn. Người bán nhận tiền mỗi lần thiết kế được dùng.</p>
       </div>
       <a class="btn-sell" routerLink="/market/my-listings">＋ Đăng bán thiết kế</a>
     </div>
@@ -21,11 +21,10 @@
         <input type="search" placeholder="Tìm tên thiết kế, tag, người bán..." [value]="keyword()" (input)="onType($any($event.target).value)" aria-label="Tìm thiết kế" />
       </label>
       <label class="select">
-        <span>Sản phẩm</span>
-        <select (change)="onProduct($any($event.target).value)" aria-label="Lọc theo sản phẩm">
-          <option value="" [selected]="!productId()">Tất cả sản phẩm</option>
-          @for (p of productOptions(); track p._id) {
-            <option [value]="p._id" [selected]="productId() === p._id">{{ p.name }}</option>
+        <span>Sắp xếp</span>
+        <select (change)="onSort($any($event.target).value)" aria-label="Sắp xếp">
+          @for (o of sortOptions; track o.value) {
+            <option [value]="o.value" [selected]="sort() === o.value">{{ o.label }}</option>
           }
         </select>
       </label>
@@ -40,13 +39,13 @@
     } @else {
       <p class="count">Có <b>{{ filtered().length }}</b> thiết kế @if (keyword()) { cho “{{ keyword() }}” }</p>
       @if (filtered().length === 0) {
-        <app-empty-state icon="🎨" title="Chưa có thiết kế phù hợp" message="Thử từ khóa khác hoặc bỏ bộ lọc sản phẩm nhé."
+        <app-empty-state icon="🎨" title="Chưa có thiết kế phù hợp" message="Thử từ khóa khác nhé."
           [actionText]="hasFilter() ? 'Xóa bộ lọc' : ''" (action)="clearFilters()"></app-empty-state>
       } @else {
         <div class="grid">
           @for (l of paged(); track l._id) {
             <app-listing-card [listing]="l" [imageUrl]="market.imageUrl(l.watermarkUrl)"
-              [sellerName]="sellerName(l.sellerId)" [product]="productMap().get(l.productId)"></app-listing-card>
+              [sellerName]="sellerName(l.sellerId)" [printableCount]="printableCount()"></app-listing-card>
           }
         </div>
         <app-pagination [page]="page()" [totalPages]="totalPages()" (pageChange)="onPage($event)"></app-pagination>
@@ -56,7 +55,7 @@
     <section class="how" aria-labelledby="how-title">
       <h2 id="how-title">Marketplace hoạt động thế nào?</h2>
       <ol>
-        <li><b>Chọn thiết kế</b><span>Mỗi thiết kế gắn với một sản phẩm cố định, ví dụ áo thun hay cốc sứ.</span></li>
+        <li><b>Chọn thiết kế & sản phẩm</b><span>Xem thử thiết kế trên áo, túi, cốc, gối... rồi chọn món bạn muốn in.</span></li>
         <li><b>Tùy chỉnh thêm</b><span>Mở Editor để thêm chữ hoặc ảnh của bạn lên trên thiết kế.</span></li>
         <li><b>Đặt in</b><span>Phí thiết kế tính một lần cho mỗi dòng sản phẩm trong đơn, không nhân theo số lượng.</span></li>
       </ol>

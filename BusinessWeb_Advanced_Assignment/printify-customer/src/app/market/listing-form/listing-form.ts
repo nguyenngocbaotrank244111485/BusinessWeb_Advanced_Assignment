@@ -4,7 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs';
 import { Design, Listing } from '../../models/market.model';
-import { Product } from '../../models/product.model';
+import { PrintArea, Product } from '../../models/product.model';
 import { AuthService } from '../../services/auth-service';
 import { MarketService } from '../../services/market-service';
 import { ProductService } from '../../services/product-service';
@@ -14,7 +14,7 @@ export const MAX_PRICE = 2000000;
 
 /**
  * C21 – Đăng / sửa tin: /market/my-listings/new?designId= | /market/my-listings/:listingId/edit (AuthGuard)
- * Chỉ thiết kế do user tự tạo; sản phẩm gắn theo thiết kế; gửi xong -> PENDING_REVIEW.
+ * Chỉ thiết kế do user tự tạo; người mua chọn được mọi sản phẩm có vùng in; gửi xong -> PENDING_REVIEW.
  */
 @Component({
   selector: 'app-listing-form',
@@ -56,6 +56,13 @@ export class ListingForm {
   );
   readonly selectedDesign = computed(() => this.designs().find((d) => d._id === this.value().designId));
   readonly selectedProduct = computed(() => this.productOf(this.selectedDesign()));
+  /** Xem thử thiết kế đang chọn trên vài sản phẩm khác nhau */
+  readonly previewProducts = computed(() => {
+    const all = this.market.mockupProducts(this.products(), this.selectedDesign()?.productId);
+    const seen = new Set<string>();
+    return all.filter((p) => !seen.has(p.category) && !!seen.add(p.category)).slice(0, 4);
+  });
+  readonly printableCount = computed(() => this.market.mockupProducts(this.products()).length);
   readonly fees = computed(() => this.market.calcFees(Number(this.value().sellerPrice) || 0));
   readonly feePercent = computed(() => Math.round(this.market.feeRate() * 100));
   readonly titleLength = computed(() => (this.value().title ?? '').length);
@@ -68,6 +75,10 @@ export class ListingForm {
       if (!this.market.loaded()) return;
       untracked(() => this.prefill());
     });
+  }
+
+  areaOf(p: Product): PrintArea {
+    return this.market.printAreaOf(p)!;
   }
 
   productOf(d?: Design): Product | undefined {

@@ -5,7 +5,7 @@
     "designId": "dsg_demo_101",
     "productId": "prd102",
     "title": "Đà Lạt hoàng hôn",
-    "description": "Núi tím và mặt trời hồng, hợp áo oversize màu sáng.",
+    "description": "Núi tím và mặt trời hồng, gợi nhớ những buổi chiều Đà Lạt.",
     "tags": [
       "đà lạt",
       "núi",
@@ -29,7 +29,7 @@
     "designId": "dsg_demo_102",
     "productId": "prd201",
     "title": "Sen hình học",
-    "description": "Hoa sen vẽ theo khối hình học, tông tím pastel.",
+    "description": "Hoa sen vẽ theo khối hình học, tông tím pastel nhẹ nhàng.",
     "tags": [
       "sen",
       "việt nam",
@@ -77,7 +77,7 @@
     "designId": "dsg_demo_104",
     "productId": "prd406",
     "title": "Good Night",
-    "description": "Bầu trời sao và trăng khuyết, hợp treo phòng ngủ.",
+    "description": "Bầu trời sao và trăng khuyết, hợp không gian thư giãn.",
     "tags": [
       "sao",
       "đêm",
@@ -101,7 +101,7 @@
     "designId": "dsg_demo_105",
     "productId": "prd504",
     "title": "Hoa cúc trắng",
-    "description": "Họa tiết hoa cúc trên nền hồng phấn.",
+    "description": "Họa tiết hoa cúc trắng trên nền hồng phấn.",
     "tags": [
       "hoa",
       "pattern",
@@ -148,7 +148,7 @@
     "designId": "dsg_demo_107",
     "productId": "prd601",
     "title": "Lá nhiệt đới",
-    "description": "Lá xanh nhiệt đới cho ốp lưng tươi mát.",
+    "description": "Lá xanh nhiệt đới tươi mát, hợp phong cách tối giản.",
     "tags": [
       "lá",
       "nhiệt đới",
@@ -172,7 +172,7 @@
     "designId": "dsg_demo_108",
     "productId": "prd603",
     "title": "Chill retro",
-    "description": "Mặt trời retro và chữ CHILL cho góc làm việc.",
+    "description": "Mặt trời retro và chữ CHILL cho ngày thảnh thơi.",
     "tags": [
       "retro",
       "chill"
@@ -195,7 +195,7 @@
     "designId": "dsg_demo_110",
     "productId": "prd401",
     "title": "Hello 2026",
-    "description": "Chữ chào năm mới cho sổ tay.",
+    "description": "Chữ chào năm mới 2026 rực rỡ.",
     "tags": [
       "năm mới",
       "chữ"
@@ -218,7 +218,7 @@
     "designId": "dsg_demo_111",
     "productId": "prd604",
     "title": "Bông hoa nhỏ",
-    "description": "Bông hoa hồng tối giản cho móc khóa.",
+    "description": "Bông hoa hồng tối giản, dễ thương.",
     "tags": [
       "hoa",
       "dễ thương"
@@ -241,7 +241,7 @@
     "designId": "dsg_demo_112",
     "productId": "prd501",
     "title": "Logo tự vẽ",
-    "description": "Logo cá nhân in tranh canvas.",
+    "description": "Logo cá nhân tự vẽ.",
     "tags": [
       "logo"
     ],

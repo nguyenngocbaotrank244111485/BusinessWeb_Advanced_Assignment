@@ -9,12 +9,16 @@ export const LISTING_STATUS_LABELS: Record<ListingStatus, string> = {
   UNLISTED: 'Đã gỡ',
 };
 
-/** Tin đăng bán quyền sử dụng 1 thiết kế, gắn cố định với 1 sản phẩm (R14) */
+/**
+ * Tin đăng bán quyền sử dụng 1 thiết kế.
+ * Nhóm điều chỉnh R14: người mua được chọn in thiết kế lên mọi sản phẩm có vùng in (áo, túi, cốc, sổ...);
+ * productId chỉ là sản phẩm hiển thị đầu tiên do người bán chọn khi thiết kế.
+ */
 export interface Listing {
   _id: string;
   sellerId: string;
   designId: string;
-  productId: string;
+  productId: string; // sản phẩm hiển thị mặc định
   title: string; // ≤ 100 ký tự
   description: string;
   tags: string[];

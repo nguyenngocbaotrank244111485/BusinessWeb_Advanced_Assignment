@@ -15,11 +15,13 @@ h2 { margin: 0 0 12px; font-size: 15px; color: var(--pf-ink); }
 .right h2:not(:first-child) { margin-top: 22px; }
 
 .preview { display: grid; gap: 10px; }
-.bound { display: flex; align-items: center; gap: 10px; padding: 8px; border-radius: var(--pf-radius); background: var(--pf-soft); }
-.bound img { width: 48px; height: 48px; border-radius: 10px; object-fit: contain; background: #fff; }
-.bound span { display: grid; }
-.bound small { font-size: 11px; color: var(--pf-muted); }
-.bound b { color: var(--pf-ink); font-size: 14px; }
+.mock-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-top: 4px; font-size: 13px; }
+.mock-head b { color: var(--pf-ink); }
+.mock-head span { color: var(--pf-muted); font-size: 12px; }
+.mocks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.mocks figure { margin: 0; display: grid; gap: 4px; }
+.mocks app-design-mockup { border: 1px solid var(--pf-line); border-radius: 10px; overflow: hidden; }
+.mocks figcaption { font-size: 11px; color: var(--pf-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .design-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; margin-top: 14px; }
 .design { display: grid; gap: 4px; padding: 6px; border: 2px solid var(--pf-line); border-radius: 14px; background: #fff; text-align: center; font-size: 11px; color: var(--pf-muted); }
 .design img { width: 100%; aspect-ratio: 1; border-radius: 10px; object-fit: cover; }

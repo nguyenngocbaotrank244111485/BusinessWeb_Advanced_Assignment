@@ -22,10 +22,15 @@
           @if (selectedDesign(); as d) {
             <div class="preview">
               <app-watermark-image [src]="market.imageUrl(d.previewUrl)" [alt]="'Thiết kế ' + d._id" [rounded]="true"></app-watermark-image>
-              @if (selectedProduct(); as p) {
-                <div class="bound">
-                  <img [src]="p.img_display" [alt]="p.name" appImgFallback />
-                  <span><small>Gắn cố định với sản phẩm</small><b>{{ p.name }}</b></span>
+              @if (previewProducts().length) {
+                <div class="mock-head"><b>Người mua in được trên {{ printableCount() }} sản phẩm</b><span>Ví dụ:</span></div>
+                <div class="mocks">
+                  @for (p of previewProducts(); track p._id) {
+                    <figure>
+                      <app-design-mockup [product]="p" [area]="areaOf(p)" [art]="market.artUrl(d._id)" [fallbackArt]="market.imageUrl(d.previewUrl)"></app-design-mockup>
+                      <figcaption>{{ p.name }}</figcaption>
+                    </figure>
+                  }
                 </div>
               }
             </div>
@@ -42,7 +47,7 @@
             </div>
             <p class="note">Thiết kế dựng từ tin bạn đã mua của người khác sẽ không xuất hiện ở đây.</p>
           } @else {
-            <p class="note">Khi sửa tin, bạn không đổi được thiết kế và sản phẩm.</p>
+            <p class="note">Khi sửa tin, bạn không đổi được thiết kế.</p>
           }
         </section>
 

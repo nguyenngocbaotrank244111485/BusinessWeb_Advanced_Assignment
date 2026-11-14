@@ -1,8 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Listing } from '../../models/market.model';
-import { Product } from '../../models/product.model';
 
-/** Thẻ tin đăng: ảnh watermark, tên, người bán, phí thiết kế, sản phẩm gắn cố định */
+/** Thẻ tin đăng: ảnh watermark, tên, người bán, phí thiết kế, số sản phẩm in được */
 @Component({
   selector: 'app-listing-card',
   standalone: false,
@@ -13,5 +12,6 @@ export class ListingCard {
   @Input({ required: true }) listing!: Listing;
   @Input({ required: true }) imageUrl = '';
   @Input() sellerName = '';
-  @Input() product?: Product;
+  /** Số sản phẩm có thể in thiết kế (0 = ẩn nhãn) */
+  @Input() printableCount = 0;
 }

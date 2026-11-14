@@ -8,7 +8,7 @@ import { AuthService } from '../../services/auth-service';
 import { MarketService } from '../../services/market-service';
 import { ProductService } from '../../services/product-service';
 
-/** C05 – Marketplace: /market?q=&productId=&page= – chỉ hiện tin đã duyệt */
+/** C05 – Marketplace: /market?q=&sort=&page= – chỉ hiện tin đã duyệt */
 @Component({
   selector: 'app-market-list',
   standalone: false,
@@ -26,35 +26,37 @@ export class MarketList {
   readonly products = toSignal(this.ps.getActiveProducts(), { initialValue: [] as Product[] });
   private readonly users = toSignal(this.auth.users$, { initialValue: [] as PublicUser[] });
 
+  readonly sortOptions = [
+    { value: 'newest', label: 'Mới nhất' },
+    { value: 'price-asc', label: 'Phí thiết kế thấp → cao' },
+    { value: 'price-desc', label: 'Phí thiết kế cao → thấp' },
+  ];
   readonly keyword = signal('');
-  readonly productId = signal('');
+  readonly sort = signal('newest');
   readonly page = signal(1);
   readonly notFound = signal('');
 
-  readonly productMap = computed(() => new Map(this.products().map((p) => [p._id, p])));
   private readonly userMap = computed(() => new Map(this.users().map((u) => [u._id, u.name])));
-
-  /** Chỉ những sản phẩm đang có thiết kế được bán (bộ lọc theo sản phẩm) */
-  readonly productOptions = computed(() => {
-    const ids = new Set(this.market.approved().map((l) => l.productId));
-    return this.products().filter((p) => ids.has(p._id));
-  });
+  /** Mỗi thiết kế in được trên mọi sản phẩm có vùng in */
+  readonly printableCount = computed(() => this.market.mockupProducts(this.products()).length);
 
   readonly filtered = computed(() => {
     const kw = this.normalize(this.keyword());
-    return this.market.approved().filter((l) => {
-      if (this.productId() && l.productId !== this.productId()) return false;
+    const list = this.market.approved().filter((l) => {
       if (!kw) return true;
-      const hay = [l.title, l.description, ...l.tags, this.sellerName(l.sellerId), this.productMap().get(l.productId)?.name ?? ''].join(' ');
+      const hay = [l.title, l.description, ...l.tags, this.sellerName(l.sellerId)].join(' ');
       return this.normalize(hay).includes(kw);
     });
+    if (this.sort() === 'price-asc') return [...list].sort((a, b) => a.buyerDesignFee - b.buyerDesignFee);
+    if (this.sort() === 'price-desc') return [...list].sort((a, b) => b.buyerDesignFee - a.buyerDesignFee);
+    return list;
   });
   readonly totalPages = computed(() => Math.max(1, Math.ceil(this.filtered().length / this.pageSize)));
   readonly paged = computed(() => {
     const start = (Math.min(this.page(), this.totalPages()) - 1) * this.pageSize;
     return this.filtered().slice(start, start + this.pageSize);
   });
-  readonly hasFilter = computed(() => !!(this.keyword() || this.productId()));
+  readonly hasFilter = computed(() => !!this.keyword());
 
   private readonly typed$ = new Subject<string>();
 
@@ -62,7 +64,7 @@ export class MarketList {
     const destroyRef = inject(DestroyRef);
     this.route.queryParamMap.pipe(takeUntilDestroyed(destroyRef)).subscribe((q) => {
       this.keyword.set(q.get('q') ?? '');
-      this.productId.set(q.get('productId') ?? '');
+      this.sort.set(q.get('sort') ?? 'newest');
       this.page.set(Number(q.get('page')) || 1);
       this.notFound.set(q.get('notfound') ?? '');
     });
@@ -76,7 +78,7 @@ export class MarketList {
   }
 
   onType(value: string): void { this.typed$.next(value); }
-  onProduct(id: string): void { this.updateQuery({ productId: id || null, page: null, notfound: null }); }
+  onSort(value: string): void { this.updateQuery({ sort: value === 'newest' ? null : value, page: null }); }
   onPage(p: number): void {
     this.updateQuery({ page: p > 1 ? p : null });
     window.scrollTo({ top: 0, behavior: 'smooth' });

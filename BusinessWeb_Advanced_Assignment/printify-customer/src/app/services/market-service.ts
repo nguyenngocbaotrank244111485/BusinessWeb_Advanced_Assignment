@@ -2,6 +2,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, forkJoin, map, of } from 'rxjs';
 import { CopyrightReport, Design, Listing, ListingInput } from '../models/market.model';
+import { PrintArea, Product } from '../models/product.model';
 
 const LOCAL_LISTINGS_KEY = 'printify_market_listings';
 const LOCAL_REPORTS_KEY = 'printify_market_reports';
@@ -20,6 +21,8 @@ export class MarketService {
   private readonly _listings = signal<Listing[]>([]);
   private readonly _designs = signal<Design[]>([]);
   readonly feeRate = signal(DEFAULT_FEE_RATE);
+  /** Vùng in (tỉ lệ 0–1 trên ảnh sản phẩm) để ghép mockup: print-areas.json, ưu tiên product.printArea nếu có */
+  private readonly printAreas = signal<Record<string, PrintArea>>({});
   readonly loaded = signal(false);
   readonly error = signal('');
 
@@ -66,6 +69,22 @@ export class MarketService {
     return this._designs().filter(
       (d) => d.userId === userId && !d.listingId && (!busy.has(d._id) || d._id === keepDesignId),
     );
+  }
+
+  /** Vùng in của 1 sản phẩm (undefined = sản phẩm chưa hỗ trợ in mockup) */
+  printAreaOf(p: Product): PrintArea | undefined {
+    return p.printArea ?? this.printAreas()[p._id];
+  }
+
+  /** Sản phẩm in được thiết kế Marketplace, sản phẩm mặc định của tin đứng đầu */
+  mockupProducts(products: Product[], firstId?: string): Product[] {
+    const list = products.filter((p) => !!this.printAreaOf(p));
+    return firstId ? [...list.filter((p) => p._id === firstId), ...list.filter((p) => p._id !== firstId)] : list;
+  }
+
+  /** File in nền trong suốt của thiết kế (dùng ghép mockup). Thiếu file thì component tự dùng ảnh xem trước. */
+  artUrl(designId: string): string {
+    return `/uploads/art/${designId}.png`;
   }
 
   /** Phí sàn và giá người mua trả (BR16) */
@@ -178,10 +197,14 @@ export class MarketService {
       config: this.http
         .get<{ platformFeeRate?: number }>('/dataset/appConfig.json')
         .pipe(catchError(() => of({} as { platformFeeRate?: number }))),
+      areas: this.http
+        .get<Record<string, PrintArea>>('/dataset/print-areas.json')
+        .pipe(catchError(() => of({} as Record<string, PrintArea>))),
     })
       .pipe(
-        map(({ listings, demoListings, designs, demoDesigns, config }) => {
+        map(({ listings, demoListings, designs, demoDesigns, config, areas }) => {
           if (config.platformFeeRate != null) this.feeRate.set(config.platformFeeRate);
+          this.printAreas.set(areas);
           return {
             listings: this.mergeById([...listings, ...demoListings, ...this.readLocal<Listing>(LOCAL_LISTINGS_KEY)]),
             designs: this.mergeById([...designs, ...demoDesigns]),

@@ -3,8 +3,7 @@ a { text-decoration: none; color: inherit; }
 .card { height: 100%; display: flex; flex-direction: column; background: #fff; border: 1px solid var(--pf-line); border-radius: var(--pf-radius-lg); overflow: hidden; transition: transform .2s, box-shadow .2s; }
 .card:hover { transform: translateY(-3px); box-shadow: 0 16px 34px #8b57c41f; }
 .img { position: relative; display: block; }
-.product-chip { position: absolute; left: 10px; bottom: 10px; max-width: calc(100% - 20px); display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 4px; border-radius: 999px; background: rgba(255,255,255,.94); color: var(--pf-ink); font-size: 11px; font-weight: 700; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; box-shadow: 0 4px 12px #2e253822; }
-.product-chip img { flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%; object-fit: cover; background: var(--pf-soft); }
+.product-chip { position: absolute; left: 10px; bottom: 10px; max-width: calc(100% - 20px); display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.94); color: var(--pf-ink); font-size: 11px; font-weight: 700; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; box-shadow: 0 4px 12px #2e253822; }
 .body { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px 16px; flex: 1; }
 h3 { margin: 0; font-size: 16px; line-height: 1.35; color: var(--pf-ink); }
 h3 a:hover { color: var(--pf-primary); }

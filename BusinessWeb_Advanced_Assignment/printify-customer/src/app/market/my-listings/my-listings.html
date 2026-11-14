@@ -41,7 +41,7 @@
                 <b>{{ l.title }}</b>
                 <app-status-badge [label]="labels[l.status]" [tone]="tones[l.status]"></app-status-badge>
               </div>
-              <span class="meta">{{ product(l)?.name ?? l.productId }} · Đăng {{ l.createdAt | date: 'dd/MM/yyyy' }}</span>
+              <span class="meta">Đăng {{ l.createdAt | date: 'dd/MM/yyyy' }} · Thiết kế từ {{ product(l)?.name ?? l.productId }}</span>
               <span class="meta">Bạn nhận <b>{{ l.sellerPrice | vnd }}</b> · Người mua trả {{ l.buyerDesignFee | vnd }}</span>
               @if (l.status === 'REJECTED' && l.reviewNote) {
                 <p class="review">Lý do từ chối: {{ l.reviewNote }}</p>

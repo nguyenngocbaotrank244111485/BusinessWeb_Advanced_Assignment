@@ -15,39 +15,74 @@
     }
 
     <div class="container detail">
-      <section class="preview">
-        <app-watermark-image [src]="market.imageUrl(l.watermarkUrl)" [alt]="l.title" [rounded]="true"
-          [label]="'PrintiFy · ' + sellerName()"></app-watermark-image>
-        <p class="wm-note">🔒 Ảnh xem trước có watermark để bảo vệ người bán. Bạn không tải được file gốc; thiết kế được in trực tiếp lên sản phẩm.</p>
+      <!-- ===== TRÁI: ảnh lớn ===== -->
+      <section class="viewer" aria-label="Xem trước thiết kế">
+        @if (showDesign() || !selected()) {
+          <app-watermark-image [src]="market.imageUrl(l.watermarkUrl)" [alt]="l.title" [rounded]="true"
+            [label]="'PrintiFy · ' + sellerName()"></app-watermark-image>
+        } @else if (selected(); as p) {
+          <app-design-mockup [product]="p" [area]="areaOf(p)" [art]="market.artUrl(l.designId)"
+            [fallbackArt]="market.imageUrl(l.watermarkUrl)" [alt]="l.title + ' in trên ' + p.name"
+            [rounded]="true" [watermark]="'PrintiFy · ' + sellerName()"></app-design-mockup>
+        }
+        <div class="view-switch" role="group" aria-label="Chế độ xem">
+          <button type="button" [class.active]="!showDesign()" (click)="showDesign.set(false)" [disabled]="!selected()">Trên sản phẩm</button>
+          <button type="button" [class.active]="showDesign()" (click)="showDesign.set(true)">Thiết kế gốc</button>
+        </div>
+        <p class="wm-note">🔒 Ảnh xem trước có watermark để bảo vệ người bán. Bạn không tải được file gốc; thiết kế được in trực tiếp lên sản phẩm bạn chọn.</p>
       </section>
 
+      <!-- ===== PHẢI: thông tin + chọn sản phẩm ===== -->
       <section class="info">
         <div class="tags">@for (t of l.tags; track t) { <span>#{{ t }}</span> }</div>
         <h1>{{ l.title }}</h1>
         <div class="seller"><span class="avatar" aria-hidden="true">{{ sellerName().charAt(0) }}</span>Thiết kế bởi <b>{{ sellerName() }}</b></div>
         <p class="desc">{{ l.description }}</p>
 
-        @if (product(); as p) {
-          <a class="product" [routerLink]="['/products', p.slug]">
-            <img [src]="p.img_display" [alt]="p.name" appImgFallback />
-            <span><small>In trên sản phẩm (cố định)</small><b>{{ p.name }}</b><em>Giá phôi {{ p.price | vnd }}</em></span>
-            <span class="go" aria-hidden="true">→</span>
-          </a>
+        @if (printable().length) {
+          <div class="picker">
+            <div class="picker-head">
+              <h2>Chọn sản phẩm để in</h2>
+              <span>{{ printable().length }} sản phẩm</span>
+            </div>
+            <div class="chips" role="group" aria-label="Lọc theo danh mục">
+              <button type="button" [class.active]="!category()" (click)="category.set('')">Tất cả</button>
+              @for (c of categories(); track c) {
+                <button type="button" [class.active]="category() === c" (click)="category.set(c)">{{ ps.categoryLabel(c) }}</button>
+              }
+            </div>
+            <div class="products" role="radiogroup" aria-label="Sản phẩm">
+              @for (p of shownProducts(); track p._id) {
+                <button type="button" role="radio" class="product" [class.active]="selected()?._id === p._id"
+                  [attr.aria-checked]="selected()?._id === p._id" (click)="pick(p)" [title]="p.name">
+                  <app-design-mockup [product]="p" [area]="areaOf(p)" [art]="market.artUrl(l.designId)"
+                    [fallbackArt]="market.imageUrl(l.watermarkUrl)"></app-design-mockup>
+                  <span class="p-name">{{ p.name }}</span>
+                  <span class="p-price">từ {{ p.price | vnd }}</span>
+                </button>
+              }
+            </div>
+          </div>
         }
 
-        <div class="price-box">
-          <div class="row"><span>Giá người bán</span><span>{{ l.sellerPrice | vnd }}</span></div>
-          <div class="row"><span>Phí sàn PrintiFy ({{ feePercent() }}%)</span><span>{{ l.platformFee | vnd }}</span></div>
-          <div class="row total"><span>Phí thiết kế bạn trả</span><span>{{ l.buyerDesignFee | vnd }}</span></div>
-          <p class="license">Phí thiết kế tính <b>một lần cho mỗi dòng sản phẩm</b> trong đơn, không nhân theo số lượng. Giá phôi tính riêng.</p>
-        </div>
+        @if (selected(); as p) {
+          <div class="price-box">
+            <div class="row"><span>{{ p.name }} (phôi)</span><span>từ {{ p.price | vnd }}</span></div>
+            <div class="row"><span>Phí thiết kế</span><span>{{ l.buyerDesignFee | vnd }}</span></div>
+            <div class="row sub"><span>· Người bán nhận {{ l.sellerPrice | vnd }} + phí sàn {{ feePercent() }}% {{ l.platformFee | vnd }}</span></div>
+            <div class="row total"><span>Tạm tính 1 sản phẩm</span><span>{{ estimate() | vnd }}</span></div>
+            <p class="license">Phí thiết kế tính <b>một lần cho mỗi dòng sản phẩm</b> trong đơn, không nhân theo số lượng. Giá phôi thay đổi theo màu, size bạn chọn ở bước sau.</p>
+          </div>
+        }
 
         <div class="actions">
           @if (isOwner()) {
             <button type="button" class="btn btn-primary" disabled>Đây là thiết kế của bạn</button>
             <a class="btn btn-ghost" routerLink="/market/my-listings">Quản lý tin của tôi</a>
           } @else {
-            <button type="button" class="btn btn-primary" (click)="useDesign()">✏️ Sử dụng thiết kế trên sản phẩm này</button>
+            <button type="button" class="btn btn-primary" (click)="useDesign()" [disabled]="!selected()">
+              ✏️ Dùng thiết kế này trên {{ selected()?.name ?? 'sản phẩm' }}
+            </button>
             @if (!auth.isLoggedIn()) { <p class="hint">Bạn cần đăng nhập để dùng thiết kế.</p> }
             <button type="button" class="link-report" (click)="openReport()">🚩 Báo cáo vi phạm bản quyền</button>
           }
@@ -55,12 +90,13 @@
       </section>
     </div>
 
-    @if (moreFromProduct().length) {
+    @if (moreDesigns().length) {
       <section class="container more" aria-labelledby="more-title">
-        <h2 id="more-title">Thiết kế khác cho {{ product()?.name }}</h2>
+        <h2 id="more-title">Thiết kế khác bạn có thể thích</h2>
         <div class="grid">
-          @for (m of moreFromProduct(); track m._id) {
-            <app-listing-card [listing]="m" [imageUrl]="market.imageUrl(m.watermarkUrl)" [sellerName]="sellerOf(m)" [product]="productOf(m)"></app-listing-card>
+          @for (m of moreDesigns(); track m._id) {
+            <app-listing-card [listing]="m" [imageUrl]="market.imageUrl(m.watermarkUrl)" [sellerName]="sellerOf(m)"
+              [printableCount]="printable().length"></app-listing-card>
           }
         </div>
       </section>
