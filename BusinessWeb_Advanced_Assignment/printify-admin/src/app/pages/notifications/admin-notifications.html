@@ -1,0 +1,31 @@
+<main class="page">
+  <div class="page-head">
+    <div>
+      <div class="crumbs"><a routerLink="/admin/homepage">Trang chủ</a> / Thông báo</div>
+      <h1>Thông báo</h1>
+      <p>{{ notes.unreadCount() }} chưa đọc · các việc đang chờ PrintiFy xác nhận hoặc xử lý.</p>
+    </div>
+    <button type="button" class="btn" (click)="notes.markAllRead()" [disabled]="!notes.unreadCount()">✓ Đánh dấu tất cả đã đọc</button>
+  </div>
+
+  <div class="toolbar">
+    <button type="button" class="chip" [class.active]="filter() === 'all'" (click)="filter.set('all')">Tất cả</button>
+    <button type="button" class="chip" [class.active]="filter() === 'unread'" (click)="filter.set('unread')">Chưa đọc <span class="count">{{ notes.unreadCount() }}</span></button>
+    <button type="button" class="chip" [class.active]="filter() === 'read'" (click)="filter.set('read')">Đã đọc</button>
+    <span class="spacer"></span>
+    <select class="select" (change)="type.set($any($event.target).value)" aria-label="Loại thông báo">
+      @for (t of types; track t.key) { <option [value]="t.key" [selected]="type() === t.key">{{ t.label }}</option> }
+    </select>
+  </div>
+
+  <div class="list">
+    @for (n of list(); track n.id) {
+      <button type="button" class="note" [class.unread]="!n.read" (click)="open(n)">
+        <span class="ico" aria-hidden="true">{{ n.icon }}</span>
+        <span class="body"><b>{{ n.title }}</b><span>{{ n.body }}</span><small class="muted">{{ n.at | date: 'dd/MM/yyyy HH:mm' }}</small></span>
+        @if (!n.read) { <span class="new">Mới</span> }
+        <span class="go" aria-hidden="true">→</span>
+      </button>
+    } @empty { <div class="card empty">Không có thông báo nào ở mục này. 🎉</div> }
+  </div>
+</main>

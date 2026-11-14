@@ -1,0 +1,112 @@
+<main class="page">
+  <div class="page-head">
+    <div>
+      <div class="crumbs"><a routerLink="/admin/homepage">Trang chủ</a> / Dashboard</div>
+      <h1>Dashboard</h1>
+      <p>Số liệu tính từ dữ liệu đơn hàng, kho, Marketplace và khảo sát.</p>
+    </div>
+    <div class="row filters">
+      <label class="field">Từ ngày <input class="input" type="date" [value]="fromInput()" (change)="fromInput.set($any($event.target).value)" /></label>
+      <label class="field">Đến ngày <input class="input" type="date" [value]="toInput()" (change)="toInput.set($any($event.target).value)" /></label>
+      <button type="button" class="btn primary" (click)="apply()">Áp dụng</button>
+      <button type="button" class="btn" (click)="preset(7)">7 ngày</button>
+      <button type="button" class="btn" (click)="preset(30)">30 ngày</button>
+    </div>
+  </div>
+
+  @if (!data.loaded()) { <p class="muted">Đang tải...</p> } @else {
+  <div class="grid-4 kpis">
+    <a class="kpi" routerLink="/admin/orders-list"><span class="kpi-label">Đơn trong kỳ</span><span class="kpi-value">{{ orders().length }}</span><span class="kpi-note">{{ paidOrders().length }} đơn đã thanh toán</span></a>
+    <div class="kpi"><span class="kpi-label">Doanh thu đã thanh toán</span><span class="kpi-value">{{ revenue().total | vnd }}</span><span class="kpi-note">Không tính đơn đã hủy</span></div>
+    <a class="kpi" [class.hot]="stock().out + stock().low > 0" routerLink="/admin/products-list" [queryParams]="{ stock: 'low' }"><span class="kpi-label">Tồn kho cần chú ý</span><span class="kpi-value">{{ stock().out + stock().low }}</span><span class="kpi-note">{{ stock().out }} biến thể hết · {{ stock().low }} sắp hết</span></a>
+    <a class="kpi" routerLink="/admin/marketplace" [queryParams]="{ tab: 'sales' }"><span class="kpi-label">Lượt bán thiết kế</span><span class="kpi-value">{{ market().count }}</span><span class="kpi-note">Phí sàn thu {{ market().fee | vnd }}</span></a>
+  </div>
+
+  <div class="grid-2">
+    <section class="card">
+      <div class="card-head"><h2>Đơn theo trạng thái</h2><a class="small" routerLink="/admin/orders-list">Xem đơn →</a></div>
+      <div class="bars">
+        @for (s of byStatus(); track s.status) {
+          <div class="bar-row"><span>{{ s.label }}</span><span class="bar-track"><span class="bar-fill" [style.width.%]="s.pct"></span></span><span class="num">{{ s.value }}</span></div>
+        }
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Doanh thu (đơn đã thanh toán)</h2>
+      <dl class="dl">
+        <dt>Tiền hàng</dt><dd>{{ revenue().product | vnd }}</dd>
+        <dt>Phí thiết kế Marketplace</dt><dd>{{ revenue().design | vnd }}</dd>
+        <dt>Ưu đãi thành viên</dt><dd>−{{ revenue().discount | vnd }}</dd>
+        <dt>Phí giao hàng</dt><dd>{{ revenue().shipping | vnd }}</dd>
+        <dt><b>Tổng thu</b></dt><dd class="big">{{ revenue().total | vnd }}</dd>
+      </dl>
+      <h2 class="mt">Bán chạy</h2>
+      <div class="bars">
+        @for (p of topProducts(); track p.id) {
+          <div class="bar-row"><a [routerLink]="['/admin/products-detail', p.id]">{{ p.name }}</a><span class="bar-track"><span class="bar-fill" [style.width.%]="p.pct"></span></span><span class="num">{{ p.qty }}</span></div>
+        } @empty { <p class="muted small">Chưa có đơn thanh toán trong kỳ.</p> }
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>Tồn kho</h2><a class="small" routerLink="/admin/products-list" [queryParams]="{ stock: 'low' }">Xử lý →</a></div>
+      @for (s of stock().list; track s.id + s.variant) {
+        <div class="line"><a [routerLink]="['/admin/products-detail', s.id]" [queryParams]="{ tab: 'stock' }">{{ s.name }}</a><span class="muted small">{{ s.variant }}</span><app-badge [label]="s.stock <= 0 ? 'Hết hàng' : 'Còn ' + s.stock" [tone]="s.stock <= 0 ? 'bad' : 'warn'"></app-badge></div>
+      } @empty { <p class="muted small">Không có biến thể nào dưới ngưỡng.</p> }
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>Marketplace</h2><a class="small" routerLink="/admin/marketplace">Mở Marketplace →</a></div>
+      <dl class="dl">
+        <dt>Tin đang bán</dt><dd>{{ market().approved }}</dd>
+        <dt>Tin chờ duyệt</dt><dd><a routerLink="/admin/marketplace" [queryParams]="{ tab: 'PENDING_REVIEW' }">{{ market().pending }}</a></dd>
+        <dt>Báo cáo vi phạm mở</dt><dd><a routerLink="/admin/marketplace" [queryParams]="{ tab: 'reports' }">{{ market().reports }}</a></dd>
+        <dt>Lượt bán trong kỳ</dt><dd>{{ market().count }}</dd>
+        <dt>Người bán nhận</dt><dd>{{ market().seller | vnd }}</dd>
+        <dt>Phí sàn PrintiFy</dt><dd>{{ market().fee | vnd }}</dd>
+      </dl>
+    </section>
+  </div>
+
+  <section class="card tam">
+    <div class="card-head">
+      <div><h2>Khảo sát TAM</h2><p class="muted small">{{ responses().length }} phiếu · thang Likert 1–5 · 4 nhóm × 5 câu</p></div>
+      <div class="row">
+        <label class="small row"><input type="checkbox" [checked]="includeDemo()" (change)="includeDemo.set($any($event.target).checked)" /> Gồm {{ demoCount() }} phiếu demo</label>
+        <button type="button" class="btn sm" (click)="exportCsv()">⬇ Xuất CSV</button>
+      </div>
+    </div>
+    @if (responses().length < 30) {
+      <p class="alert warn small">Cỡ mẫu nhỏ ({{ responses().length }} phiếu), chỉ để tham khảo, chưa đủ để kết luận thống kê.</p>
+    }
+    <div class="grid-2">
+      <div class="bars">
+        @for (d of tam(); track d.key) {
+          <div class="bar-row"><span [title]="d.hint">{{ d.label }}</span><span class="bar-track"><span class="bar-fill" [style.width.%]="d.pct"></span></span><span class="num">{{ d.avg | number: '1.2-2' }}</span></div>
+        }
+      </div>
+      <div class="dist" aria-label="Phân bố điểm">
+        @for (s of distribution(); track s.score) {
+          <div class="col"><span class="col-bar" [style.height.%]="s.h"></span><b>{{ s.score }}</b><small>{{ s.pct | number: '1.0-0' }}%</small></div>
+        }
+      </div>
+    </div>
+    <button type="button" class="btn link mt" (click)="showQuestions.set(!showQuestions())">{{ showQuestions() ? 'Ẩn' : 'Xem' }} điểm từng câu hỏi</button>
+    @if (showQuestions()) {
+      <div class="table-wrap mt">
+        <table class="table">
+          <thead><tr><th>#</th><th>Nhóm</th><th>Câu hỏi</th><th class="num">TB</th><th class="num">Số trả lời</th><th>Trạng thái</th></tr></thead>
+          <tbody>
+            @for (q of questions(); track q._id) {
+              <tr><td>{{ q.orderIndex }}</td><td>{{ q.dimension }}</td><td>{{ q.text }}</td><td class="num">{{ q.avg | number: '1.2-2' }}</td><td class="num">{{ q.n }}</td>
+                <td><app-badge [label]="q.isActive ? 'Đang dùng' : 'Đã tắt'" [tone]="q.isActive ? 'ok' : ''"></app-badge></td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+    <p class="muted small mt">Chỉ hiện số tổng hợp, không hiện tên người trả lời.</p>
+  </section>
+  }
+</main>

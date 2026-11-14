@@ -1,0 +1,50 @@
+[
+  {
+    "_id": "rpt_demo_1",
+    "listingId": "lst_001",
+    "reporterId": "usr_c8",
+    "reason": "Sao chép thiết kế của tôi",
+    "description": "Hình này giống hệt thiết kế tôi đã đăng trên trang cá nhân từ tháng 9.",
+    "status": "OPEN",
+    "createdAt": "2026-11-13T08:15:00.000Z",
+    "resolvedBy": null,
+    "resolvedAt": null,
+    "resolveNote": null
+  },
+  {
+    "_id": "rpt_demo_2",
+    "listingId": "lst_001",
+    "reporterId": "usr_c5",
+    "reason": "Dùng hình ảnh có bản quyền của người khác",
+    "description": "Phần hình nền có vẻ lấy từ ảnh chụp có bản quyền.",
+    "status": "OPEN",
+    "createdAt": "2026-11-14T02:40:00.000Z",
+    "resolvedBy": null,
+    "resolvedAt": null,
+    "resolveNote": null
+  },
+  {
+    "_id": "rpt_demo_3",
+    "listingId": "lst_102",
+    "reporterId": "usr_c6",
+    "reason": "Logo hoặc thương hiệu không được phép",
+    "description": "Có chi tiết giống logo của một thương hiệu đồ uống.",
+    "status": "OPEN",
+    "createdAt": "2026-11-14T05:05:00.000Z",
+    "resolvedBy": null,
+    "resolvedAt": null,
+    "resolveNote": null
+  },
+  {
+    "_id": "rpt_demo_4",
+    "listingId": "lst_101",
+    "reporterId": "usr_c7",
+    "reason": "Nội dung không phù hợp",
+    "description": "Tôi thấy nội dung hơi phản cảm.",
+    "status": "DISMISSED",
+    "createdAt": "2026-11-10T03:00:00.000Z",
+    "resolvedBy": "usr_sa",
+    "resolvedAt": "2026-11-11T02:00:00.000Z",
+    "resolveNote": "Nội dung bình thường, không vi phạm."
+  }
+]

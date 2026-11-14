@@ -1,0 +1,16 @@
+.wrap { min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; background: linear-gradient(140deg, #faf6fe, var(--pf-orchid) 60%, var(--pf-pink-50)); }
+.box { width: min(420px, 100%); padding: 30px 28px; background: #fff; border-radius: 22px; box-shadow: 0 24px 60px #8b57c422; }
+.brand { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+.logo { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--pf-gradient); color: #fff; font-weight: 900; font-size: 22px; }
+.brand b { display: block; font-size: 20px; letter-spacing: -.04em; }
+.brand em { font-style: normal; color: var(--pf-primary); }
+.brand small { display: block; font-size: 9px; letter-spacing: .3em; color: var(--pf-muted); font-weight: 800; }
+h1 { font-size: 22px; }
+p { margin: 4px 0 18px; }
+form { display: grid; gap: 14px; }
+.pw { display: flex; gap: 6px; }
+.full { width: 100%; min-height: 42px; }
+.demo { margin-top: 18px; font-size: 13px; }
+.demo summary { cursor: pointer; color: var(--pf-muted); font-weight: 650; }
+.demo-user { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%; margin-top: 6px; padding: 8px 10px; border: 1px solid var(--pf-line); border-radius: 10px; background: #fff; cursor: pointer; text-align: left; }
+.demo-user:hover { border-color: var(--pf-lilac); }

@@ -1,0 +1,8 @@
+.sec { font-size: 15px; margin: 8px 0 12px; color: var(--pf-muted); text-transform: uppercase; letter-spacing: .05em; }
+.todo { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 26px; }
+.kpi.hot { border-color: #f2c4d0; background: #fffafc; }
+.kpi:not(.hot) .kpi-value { color: var(--pf-muted); }
+.nav-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.nav-card { display: grid; gap: 6px; color: var(--pf-ink); transition: border-color .15s, transform .15s; }
+.nav-card:hover { text-decoration: none; border-color: var(--pf-lilac); transform: translateY(-2px); }
+.big { font-size: 26px; }

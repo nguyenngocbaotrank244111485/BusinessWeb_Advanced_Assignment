@@ -1,0 +1,7 @@
+.prod { display: flex; align-items: center; gap: 10px; }
+.prod b, .prod small { display: block; }
+.sum { margin-bottom: 14px; }
+.reports { display: grid; gap: 12px; }
+.rep { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: start; }
+.thumb.lg { width: 72px; height: 72px; }
+.rep ul { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 6px; font-size: 13px; }

@@ -1,0 +1,50 @@
+<div class="shell" [class.menu-open]="menuOpen()">
+  <aside class="side" aria-label="Menu quản trị">
+    <a class="brand" routerLink="/admin/homepage">
+      <span class="logo" aria-hidden="true">P</span>
+      <span><b>Print<em>iFy</em></b><small>ADMIN</small></span>
+    </a>
+    <nav>
+      @for (n of nav; track n.link) {
+        <a [routerLink]="n.link" routerLinkActive="active" (click)="menuOpen.set(false)">
+          <span class="ico" aria-hidden="true">{{ n.icon }}</span>{{ n.label }}
+          @if (badgeFor(n.code); as c) { <span class="cnt">{{ c }}</span> }
+        </a>
+      }
+    </nav>
+    <div class="side-foot">
+      <button type="button" class="btn sm" (click)="data.resetDemo()" title="Xóa các thay đổi đã thử, quay về dữ liệu mẫu">↺ Dữ liệu mẫu</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="top">
+      <button type="button" class="btn sm burger" (click)="menuOpen.set(!menuOpen())" aria-label="Mở menu">☰</button>
+      <span class="spacer"></span>
+      <div class="bell-wrap">
+        <button type="button" class="bell" (click)="bellOpen.set(!bellOpen())" [attr.aria-expanded]="bellOpen()" aria-label="Thông báo">
+          🔔 @if (notes.unreadCount()) { <span class="dot">{{ notes.unreadCount() }}</span> }
+        </button>
+        @if (bellOpen()) {
+          <div class="pop" role="dialog" aria-label="Thông báo mới">
+            <div class="pop-head"><b>Thông báo</b><button type="button" class="btn link small" (click)="notes.markAllRead()">Đánh dấu đã đọc</button></div>
+            @for (n of latest(); track n.id) {
+              <button type="button" class="pop-item" [class.unread]="!n.read" (click)="open(n)">
+                <span aria-hidden="true">{{ n.icon }}</span><span><b>{{ n.title }}</b><small>{{ n.body }}</small></span>
+              </button>
+            } @empty { <p class="empty">Không có việc cần xử lý.</p> }
+            <a class="pop-all" routerLink="/admin/notifications" (click)="bellOpen.set(false)">Xem tất cả →</a>
+          </div>
+        }
+      </div>
+      @if (auth.user(); as u) {
+        <span class="me"><span class="avatar" aria-hidden="true">{{ u.name.charAt(0) }}</span>
+          <span class="me-text"><b>{{ u.name }}</b><span class="role" [class.sa]="u.role === 'SUPERADMIN'">{{ u.role }}</span></span></span>
+      }
+      <button type="button" class="btn sm" (click)="logout()">Đăng xuất</button>
+    </header>
+    <router-outlet></router-outlet>
+  </div>
+</div>
+@if (bellOpen()) { <div class="click-away" (click)="bellOpen.set(false)"></div> }
+@if (toast(); as t) { <div class="toast" [class.bad]="!t.ok" role="status">{{ t.text }}</div> }

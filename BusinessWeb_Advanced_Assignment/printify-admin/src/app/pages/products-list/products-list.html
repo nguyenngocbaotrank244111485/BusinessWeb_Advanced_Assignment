@@ -1,0 +1,107 @@
+<main class="page">
+  <div class="page-head">
+    <div>
+      <div class="crumbs"><a routerLink="/admin/homepage">Trang chủ</a> / Sản phẩm</div>
+      <h1>Quản lý sản phẩm</h1>
+      <p>{{ data.products().length }} sản phẩm · giá đã gồm VAT · tồn kho tính theo từng biến thể.</p>
+    </div>
+    @if (auth.isSuperadmin()) { <button type="button" class="btn primary" (click)="openCreate()">＋ Thêm sản phẩm</button> }
+  </div>
+
+  <div class="toolbar">
+    <input class="input search" type="search" placeholder="Tìm theo tên hoặc mã sản phẩm..." [value]="q()" (change)="setFilter('q', $any($event.target).value)" aria-label="Tìm sản phẩm" />
+    <select class="select" [value]="category()" (change)="setFilter('category', $any($event.target).value)" aria-label="Danh mục">
+      <option value="">Tất cả danh mục</option>
+      @for (c of categories; track c.slug) { <option [value]="c.slug" [selected]="c.slug === category()">{{ c.label }}</option> }
+    </select>
+    <select class="select" (change)="setFilter('status', $any($event.target).value === 'all' ? null : $any($event.target).value)" aria-label="Trạng thái">
+      <option value="all" [selected]="status() === 'all'">Đang bán + Đã ẩn</option>
+      <option value="active" [selected]="status() === 'active'">Đang bán</option>
+      <option value="inactive" [selected]="status() === 'inactive'">Đã ẩn</option>
+    </select>
+    <select class="select" (change)="setFilter('stock', $any($event.target).value)" aria-label="Tồn kho">
+      <option value="" [selected]="!stock()">Mọi mức tồn</option>
+      <option value="low" [selected]="stock() === 'low'">Sắp hết / hết hàng</option>
+      <option value="out" [selected]="stock() === 'out'">Hết hàng</option>
+    </select>
+    @if (q() || category() || status() !== 'all' || stock()) { <button type="button" class="btn link" (click)="clear()">Xóa bộ lọc</button> }
+  </div>
+
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>Sản phẩm</th><th>Danh mục</th><th class="num">Giá</th><th class="num">Tồn</th><th>Kho</th><th>Trạng thái</th><th>Thiết kế / Marketplace</th><th></th></tr></thead>
+      <tbody>
+        @for (p of paged(); track p._id) {
+          <tr class="clickable" (click)="open(p)">
+            <td><div class="prod"><img class="thumb" [src]="data.img(p.img_display)" [alt]="p.name" loading="lazy" /><span><b>{{ p.name }}</b><small class="mono muted">{{ p._id }} · {{ p.variants.length }} biến thể</small></span></div></td>
+            <td>{{ category_(p.category) }}</td>
+            <td class="num">{{ p.price | vnd }}</td>
+            <td class="num">{{ data.totalStock(p) }}</td>
+            <td>@switch (data.stockLevel(p)) { @case ('out') { <app-badge label="Hết hàng" tone="bad"></app-badge> } @case ('low') { <app-badge label="Sắp hết" tone="warn"></app-badge> } @default { <app-badge label="Đủ hàng" tone="ok"></app-badge> } }</td>
+            <td><app-badge [label]="p.isActive ? 'Đang bán' : 'Đã ẩn'" [tone]="p.isActive ? 'ok' : ''"></app-badge></td>
+            <td class="small">{{ p.allowCustomization ? '✓ Thiết kế' : '✗ Thiết kế' }} · {{ p.allowMarketplace ? '✓ Marketplace' : '✗ Marketplace' }}</td>
+            <td><a class="btn sm" [routerLink]="['/admin/products-detail', p._id]" (click)="$event.stopPropagation()">Xem</a></td>
+          </tr>
+        } @empty { <tr><td colspan="8" class="empty">Không có sản phẩm phù hợp.</td></tr> }
+      </tbody>
+    </table>
+  </div>
+  <div class="pager">
+    <span>{{ filtered().length }} sản phẩm · trang {{ page() }}/{{ totalPages() }}</span>
+    <span class="row">
+      <button type="button" class="btn sm" [disabled]="page() <= 1" (click)="goPage(page() - 1)">← Trước</button>
+      <button type="button" class="btn sm" [disabled]="page() >= totalPages()" (click)="goPage(page() + 1)">Sau →</button>
+    </span>
+  </div>
+</main>
+
+@if (showCreate()) {
+  <div class="drawer-backdrop" (click)="showCreate.set(false)"></div>
+  <aside class="drawer" role="dialog" aria-modal="true" aria-label="Thêm sản phẩm">
+    <div class="drawer-head"><h2>Thêm sản phẩm</h2><button type="button" class="btn sm" (click)="showCreate.set(false)">Đóng</button></div>
+    <form class="drawer-body" [formGroup]="form" (ngSubmit)="create()" id="create-form" novalidate>
+      <label class="field">Tên sản phẩm <input class="input" formControlName="name" [class.bad]="bad('name')" /></label>
+      <div class="grid-2">
+        <label class="field">Danh mục
+          <select class="select" formControlName="category">@for (c of categories; track c.slug) { <option [value]="c.slug">{{ c.label }}</option> }</select>
+        </label>
+        <label class="field">Giá (VND, đã gồm VAT) <input class="input" type="number" formControlName="price" [class.bad]="bad('price')" /></label>
+      </div>
+      <label class="field">Mô tả <textarea class="textarea" formControlName="description" [class.bad]="bad('description')"></textarea>@if (bad('description')) { <small class="err">Ít nhất 10 ký tự.</small> }</label>
+      <label class="field">Ảnh chính (đường dẫn trong dataset) <input class="input" formControlName="img_display" /></label>
+      <fieldset class="box">
+        <legend>Biến thể & tồn kho ban đầu</legend>
+        <div formArrayName="variants" class="vlist">
+          @for (g of variants.controls; track $index; let i = $index) {
+            <div class="vrow" [formGroupName]="i">
+              <select class="select" formControlName="color" aria-label="Màu">@for (c of colorLabels | keyvalue; track c.key) { <option [value]="c.key">{{ c.value }}</option> }</select>
+              <input class="input" formControlName="size" placeholder="Size (để trống nếu không có)" aria-label="Size" />
+              <input class="input" type="number" formControlName="stock" aria-label="Tồn ban đầu" />
+              <button type="button" class="btn sm danger" (click)="variants.removeAt(i)" [disabled]="variants.length === 1" aria-label="Xóa biến thể">✕</button>
+            </div>
+          }
+        </div>
+        <button type="button" class="btn sm" (click)="variants.push(variantGroup())">＋ Thêm biến thể</button>
+        <small class="muted">Tồn ban đầu được ghi vào lịch sử kho (INITIAL_STOCK), không sửa thẳng số tồn.</small>
+      </fieldset>
+      <fieldset class="box">
+        <legend>Vùng in (tỉ lệ 0–1 trên ảnh)</legend>
+        <div class="grid-4">
+          <label class="field">X <input class="input" type="number" step="0.01" formControlName="printX" /></label>
+          <label class="field">Y <input class="input" type="number" step="0.01" formControlName="printY" /></label>
+          <label class="field">Rộng <input class="input" type="number" step="0.01" formControlName="printW" /></label>
+          <label class="field">Cao <input class="input" type="number" step="0.01" formControlName="printH" /></label>
+        </div>
+      </fieldset>
+      <div class="grid-2">
+        <label class="field">Ngưỡng sắp hết hàng <input class="input" type="number" formControlName="lowStockThreshold" /></label>
+        <div class="checks">
+          <label><input type="checkbox" formControlName="isActive" /> Đang bán</label>
+          <label><input type="checkbox" formControlName="allowCustomization" /> Cho phép tự thiết kế</label>
+          <label><input type="checkbox" formControlName="allowMarketplace" /> Cho phép in thiết kế Marketplace</label>
+        </div>
+      </div>
+    </form>
+    <div class="drawer-foot"><button type="button" class="btn" (click)="showCreate.set(false)">Hủy</button><button type="submit" form="create-form" class="btn primary">Thêm sản phẩm</button></div>
+  </aside>
+}

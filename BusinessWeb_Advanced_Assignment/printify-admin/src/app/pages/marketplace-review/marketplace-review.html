@@ -1,0 +1,104 @@
+<main class="page">
+  @if (!data.loaded()) { <p class="muted">Đang tải...</p> }
+  @else if (listing(); as l) {
+    <div class="page-head">
+      <div>
+        <div class="crumbs"><a routerLink="/admin/homepage">Trang chủ</a> / <a routerLink="/admin/marketplace">Marketplace</a> / {{ l.title }}</div>
+        <h1>{{ l.title }}</h1>
+        <p class="row"><app-badge [label]="labels[l.status].label" [tone]="labels[l.status].tone"></app-badge>
+          <span class="muted">{{ l._id }} · {{ data.userName(l.sellerId) }} · gửi {{ (l.updatedAt || l.createdAt) | date: 'dd/MM/yyyy HH:mm' }}</span></p>
+      </div>
+      <button type="button" class="btn" (click)="back()">← Marketplace</button>
+    </div>
+
+    <div class="cols">
+      <div class="stack">
+        <section class="card">
+          <h2>Thiết kế (ảnh có watermark)</h2>
+          <img class="art" [src]="data.img(l.watermarkUrl)" [alt]="l.title" />
+          <h2 class="mt">In thử trên sản phẩm</h2>
+          <div class="mocks">
+            @for (m of mockups(); track m.p._id) {
+              <figure>
+                <span class="stage"><img [src]="data.img(m.p.img_display)" [alt]="m.p.name" />
+                  <img class="overlay" [src]="art()" alt="" (error)="artFailed.set(true)" [style.left.%]="m.a.x * 100" [style.top.%]="m.a.y * 100" [style.width.%]="m.a.width * 100" [style.height.%]="m.a.height * 100" /></span>
+                <figcaption>{{ m.p.name }}</figcaption>
+              </figure>
+            }
+          </div>
+        </section>
+      </div>
+
+      <div class="stack">
+        <section class="card">
+          <h2>Thông tin tin đăng</h2>
+          <dl class="dl">
+            <dt>Mô tả</dt><dd class="desc">{{ l.description }}</dd>
+            <dt>Tag</dt><dd>@for (t of l.tags; track t) { <span class="tag">#{{ t }}</span> } @empty { — }</dd>
+            <dt>Sản phẩm mặc định</dt><dd><a [routerLink]="['/admin/products-detail', l.productId]">{{ product()?.name || l.productId }}</a></dd>
+            <dt>Giá người bán</dt><dd>{{ l.sellerPrice | vnd }}</dd>
+            <dt>Phí sàn 10%</dt><dd>{{ l.platformFee | vnd }}</dd>
+            <dt>Người mua trả</dt><dd><b>{{ l.buyerDesignFee | vnd }}</b> / dòng đơn</dd>
+            <dt>Lượt bán</dt><dd>{{ sales().length }}</dd>
+            @if (l.reviewNote) { <dt>Ghi chú duyệt</dt><dd>{{ l.reviewNote }}</dd> }
+            @if (l.reviewedAt) { <dt>Duyệt bởi</dt><dd>{{ data.userName(l.reviewedBy) }} · {{ l.reviewedAt | date: 'dd/MM/yyyy HH:mm' }}</dd> }
+          </dl>
+        </section>
+
+        <section class="card">
+          <h2>Kiểm tra trước khi duyệt</h2>
+          <ul class="checks">
+            @for (c of checks(); track c.text) { <li [class.bad]="!c.ok">{{ c.ok ? '✓' : '✗' }} {{ c.text }}</li> }
+          </ul>
+          <p class="muted small">Cam kết bản quyền là lời xác nhận của người bán, PrintiFy không tự xác minh quyền sở hữu.</p>
+        </section>
+
+        <section class="card" id="reports">
+          <h2>Báo cáo vi phạm ({{ reports().length }})</h2>
+          @for (r of reports(); track r._id) {
+            <div class="rep">
+              <div class="row"><b>{{ r.reason }}</b>
+                <app-badge [label]="r.status === 'OPEN' ? 'Đang mở' : r.status === 'RESOLVED' ? 'Đã gỡ tin' : 'Đã bỏ qua'" [tone]="r.status === 'OPEN' ? 'bad' : r.status === 'RESOLVED' ? 'ok' : ''"></app-badge></div>
+              <p>“{{ r.description }}”</p>
+              <p class="muted small">{{ data.userName(r.reporterId) }} · {{ r.createdAt | date: 'dd/MM/yyyy HH:mm' }}@if (r.resolveNote) { · Xử lý: {{ r.resolveNote }} }</p>
+              @if (r.status === 'OPEN' && auth.isSuperadmin()) {
+                <div class="row"><button type="button" class="btn sm danger" (click)="open({ kind: 'TAKEDOWN', report: r })">Gỡ tin</button>
+                  <button type="button" class="btn sm" (click)="open({ kind: 'DISMISS', report: r })">Bỏ qua</button></div>
+              }
+            </div>
+          } @empty { <p class="muted small">Chưa có báo cáo nào.</p> }
+        </section>
+
+        <section class="card actions-card">
+          @if (!auth.isSuperadmin()) {
+            <p class="alert info small">Bạn là STAFF: chỉ xem. Duyệt / từ chối / gỡ tin do SUPERADMIN.</p>
+          } @else if (l.status === 'PENDING_REVIEW') {
+            <h2>Quyết định</h2>
+            <div class="row"><button type="button" class="btn success" (click)="approve()">✓ Duyệt, cho hiện công khai</button>
+              <button type="button" class="btn danger" (click)="open({ kind: 'REJECT' })">Từ chối</button></div>
+          } @else if (l.status === 'APPROVED') {
+            <h2>Tin đang bán</h2>
+            <button type="button" class="btn danger" (click)="open({ kind: 'UNLIST' })">Gỡ khỏi Marketplace</button>
+          } @else { <p class="muted small">Tin {{ labels[l.status].label.toLowerCase() }}: không có thao tác. Người bán sửa và gửi lại thì tin quay về Chờ duyệt.</p> }
+        </section>
+      </div>
+    </div>
+
+    @if (ask(); as a) {
+      <div class="backdrop" (click)="ask.set(null)">
+        <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="ask-title" (click)="$event.stopPropagation()">
+          @switch (a.kind) {
+            @case ('REJECT') { <h2 id="ask-title">Từ chối tin đăng</h2><p class="muted">Người bán thấy lý do ở My marketplace và sửa gửi lại.</p> }
+            @case ('UNLIST') { <h2 id="ask-title">Gỡ tin khỏi Marketplace</h2><p class="muted">Tin không hiện công khai nữa. Đơn đã mua trước đó không bị ảnh hưởng.</p> }
+            @case ('TAKEDOWN') { <h2 id="ask-title">Gỡ tin vì vi phạm</h2><p class="muted">Tin chuyển Đã gỡ, mọi báo cáo đang mở của tin này được đóng.</p> }
+            @case ('DISMISS') { <h2 id="ask-title">Bỏ qua báo cáo</h2><p class="muted">Báo cáo không vi phạm, tin giữ nguyên.</p> }
+          }
+          <label class="field">Lý do / ghi chú (bắt buộc)<textarea class="textarea" [value]="note()" (input)="note.set($any($event.target).value)"></textarea></label>
+          <div class="actions"><button type="button" class="btn" (click)="ask.set(null)">Hủy</button><button type="button" class="btn danger solid" (click)="confirm()">Xác nhận</button></div>
+        </div>
+      </div>
+    }
+  } @else {
+    <div class="card"><h1>Không tìm thấy tin đăng</h1><p class="muted">Mã tin không tồn tại.</p><a class="btn primary" routerLink="/admin/marketplace">Về Marketplace</a></div>
+  }
+</main>

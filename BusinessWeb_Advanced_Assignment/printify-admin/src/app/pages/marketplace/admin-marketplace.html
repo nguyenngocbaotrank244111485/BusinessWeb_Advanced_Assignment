@@ -1,0 +1,95 @@
+<main class="page">
+  <div class="page-head">
+    <div>
+      <div class="crumbs"><a routerLink="/admin/homepage">Trang chủ</a> / Marketplace</div>
+      <h1>Marketplace</h1>
+      <p>Tất cả tin đăng thiết kế (kể cả chưa công khai), doanh số và báo cáo vi phạm.
+        @if (!auth.isSuperadmin()) { <b>STAFF chỉ xem</b>, duyệt / gỡ tin do SUPERADMIN. }</p>
+    </div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    @for (t of tabs(); track t.key) {
+      <button type="button" role="tab" class="tab" [class.active]="tab() === t.key" [attr.aria-selected]="tab() === t.key" (click)="setTab(t.key)">{{ t.label }}<span class="count">{{ t.count }}</span></button>
+    }
+  </div>
+
+  @switch (tab()) {
+    @case ('sales') {
+      <div class="grid-3 sum">
+        <div class="kpi"><span class="kpi-label">Người bán nhận</span><span class="kpi-value">{{ salesTotal().seller | vnd }}</span></div>
+        <div class="kpi"><span class="kpi-label">Phí sàn PrintiFy (10%)</span><span class="kpi-value">{{ salesTotal().fee | vnd }}</span></div>
+        <div class="kpi"><span class="kpi-label">Người mua trả</span><span class="kpi-value">{{ salesTotal().buyer | vnd }}</span></div>
+      </div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Ngày ghi nhận</th><th>Thiết kế</th><th>Người bán</th><th>Người mua</th><th>Đơn</th><th class="num">Người bán nhận</th><th class="num">Phí sàn</th><th class="num">Người mua trả</th><th>Trạng thái</th></tr></thead>
+          <tbody>
+            @for (s of sales(); track s._id) {
+              <tr>
+                <td>{{ s.recordedAt | date: 'dd/MM/yyyy' }}</td>
+                <td><a [routerLink]="['/admin/marketplace/review', s.listingId]">{{ data.listing(s.listingId)?.title || s.listingId }}</a></td>
+                <td>{{ data.userName(s.sellerId) }}</td>
+                <td>{{ data.userName(s.buyerId) }}</td>
+                <td><a [routerLink]="['/admin/orders-detail', s.orderId]" class="mono">{{ s.orderId.toUpperCase() }}</a></td>
+                <td class="num">{{ s.sellerPrice | vnd }}</td><td class="num">{{ s.platformFee | vnd }}</td><td class="num">{{ s.buyerDesignFee | vnd }}</td>
+                <td><app-badge [label]="s.status === 'REVERSED' ? 'Đã đảo' : 'Đã ghi nhận'" [tone]="s.status === 'REVERSED' ? 'bad' : 'ok'"></app-badge></td>
+              </tr>
+            } @empty { <tr><td colspan="9" class="empty">Chưa có lượt bán.</td></tr> }
+          </tbody>
+        </table>
+      </div>
+      <p class="muted small">Chỉ ghi nhận khi đơn đã thanh toán. Không có ví / rút tiền cho người bán (hướng phát triển).</p>
+    }
+    @case ('reports') {
+      <div class="toolbar">
+        <button type="button" class="chip" [class.active]="reportFilter() === 'OPEN'" (click)="reportFilter.set('OPEN')">Đang mở</button>
+        <button type="button" class="chip" [class.active]="reportFilter() === 'all'" (click)="reportFilter.set('all')">Tất cả</button>
+      </div>
+      <div class="reports">
+        @for (g of reportGroups(); track g.listingId) {
+          <article class="card rep">
+            <img class="thumb lg" [src]="data.img(g.listing?.watermarkUrl)" alt="" />
+            <div>
+              <div class="row"><b>{{ g.listing?.title || g.listingId }}</b>
+                @if (g.listing) { <app-badge [label]="labels[g.listing.status].label" [tone]="labels[g.listing.status].tone"></app-badge> }
+                @if (g.open) { <app-badge [label]="g.open + ' báo cáo mở'" tone="bad"></app-badge> }</div>
+              <div class="muted small">Người bán: {{ data.userName(g.listing?.sellerId) }}</div>
+              <ul>
+                @for (r of g.reports; track r._id) {
+                  <li><b>{{ r.reason }}</b> – “{{ r.description }}” <span class="muted small">· {{ data.userName(r.reporterId) }}, {{ r.createdAt | date: 'dd/MM HH:mm' }}</span>
+                    @if (r.status !== 'OPEN') { <app-badge [label]="r.status === 'RESOLVED' ? 'Đã gỡ tin' : 'Đã bỏ qua'" [tone]="r.status === 'RESOLVED' ? 'ok' : ''"></app-badge> }</li>
+                }
+              </ul>
+            </div>
+            <a class="btn sm" [routerLink]="['/admin/marketplace/review', g.listingId]" [queryParams]="{ tab: 'reports' }">{{ auth.isSuperadmin() && g.open ? 'Xử lý' : 'Xem' }}</a>
+          </article>
+        } @empty { <p class="empty card">Không có báo cáo {{ reportFilter() === 'OPEN' ? 'đang mở' : '' }}.</p> }
+      </div>
+    }
+    @default {
+      <div class="toolbar"><input class="input search" type="search" placeholder="Tìm theo tiêu đề, người bán, mã tin..." [value]="q()" (input)="q.set($any($event.target).value)" aria-label="Tìm tin" /></div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Thiết kế</th><th>Người bán</th><th>Sản phẩm mặc định</th><th class="num">Giá người bán</th><th class="num">Người mua trả</th><th class="num">Đã bán</th><th>Trạng thái</th><th>Gửi lúc</th><th></th></tr></thead>
+          <tbody>
+            @for (l of listings(); track l._id) {
+              <tr class="clickable" (click)="open(l)">
+                <td><div class="prod"><img class="thumb" [src]="data.img(l.watermarkUrl)" [alt]="l.title" loading="lazy" /><span><b>{{ l.title }}</b><small class="mono muted">{{ l._id }}</small></span></div></td>
+                <td>{{ data.userName(l.sellerId) }}</td>
+                <td>{{ productName(l.productId) }}</td>
+                <td class="num">{{ l.sellerPrice | vnd }}</td>
+                <td class="num">{{ l.buyerDesignFee | vnd }}</td>
+                <td class="num">{{ sold(l._id) }}</td>
+                <td><app-badge [label]="labels[l.status].label" [tone]="labels[l.status].tone"></app-badge>
+                  @if (reportsOf(l._id)) { <div><app-badge [label]="'🚩 ' + reportsOf(l._id)" tone="bad"></app-badge></div> }</td>
+                <td>{{ (l.updatedAt || l.createdAt) | date: 'dd/MM/yyyy' }}</td>
+                <td><a class="btn sm" [routerLink]="['/admin/marketplace/review', l._id]" (click)="$event.stopPropagation()">{{ auth.isSuperadmin() && l.status === 'PENDING_REVIEW' ? 'Duyệt' : 'Xem' }}</a></td>
+              </tr>
+            } @empty { <tr><td colspan="9" class="empty">Không có tin nào.</td></tr> }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</main>

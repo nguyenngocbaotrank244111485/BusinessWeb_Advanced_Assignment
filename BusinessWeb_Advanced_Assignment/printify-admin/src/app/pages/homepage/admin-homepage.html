@@ -1,0 +1,39 @@
+<main class="page">
+  <div class="page-head">
+    <div>
+      <h1>{{ hello }}, {{ auth.user()?.name }} 👋</h1>
+      <p>Đây là những việc đang chờ PrintiFy xử lý.</p>
+    </div>
+    <a class="btn" routerLink="/admin/notifications">🔔 {{ notes.unreadCount() }} thông báo chưa đọc</a>
+  </div>
+
+  @if (!data.loaded()) {
+    <p class="muted">Đang tải dữ liệu...</p>
+  } @else {
+    <h2 class="sec">Việc cần làm</h2>
+    <div class="todo">
+      @for (t of todo(); track t.label) {
+        <a class="kpi" [class.hot]="t.value > 0" [routerLink]="t.link" [queryParams]="t.q">
+          <span class="kpi-label"><span aria-hidden="true">{{ t.icon }}</span> {{ t.label }}</span>
+          <span class="kpi-value">{{ t.value }}</span>
+          <span class="kpi-note">{{ t.hint }}</span>
+        </a>
+      }
+    </div>
+
+    <h2 class="sec">Đi tới</h2>
+    <div class="nav-cards">
+      @for (s of shortcuts; track s.link) {
+        <a class="card nav-card" [routerLink]="s.link">
+          <span class="big" aria-hidden="true">{{ s.icon }}</span>
+          <b>{{ s.label }}</b>
+          <span class="muted small">{{ s.text }}</span>
+        </a>
+      }
+    </div>
+
+    @if (!auth.isSuperadmin()) {
+      <p class="alert info">Bạn đang dùng vai trò <b>STAFF</b>: xử lý đơn, thanh toán, kho. Thêm/sửa sản phẩm, duyệt Marketplace và xử lý báo cáo vi phạm do SUPERADMIN thực hiện.</p>
+    }
+  }
+</main>

@@ -1,0 +1,62 @@
+<main class="page">
+  <div class="page-head">
+    <div>
+      <div class="crumbs"><a routerLink="/admin/homepage">Trang chủ</a> / Đơn hàng</div>
+      <h1>Quản lý đơn hàng</h1>
+      <p>Bấm vào đơn để xử lý ở trang chi tiết. Danh sách không có nút đổi trạng thái tùy ý.</p>
+    </div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    @for (t of tabs; track t.key) {
+      <button type="button" role="tab" class="tab" [class.active]="tab() === t.key" [attr.aria-selected]="tab() === t.key" (click)="setTab(t.key)">{{ t.label }}<span class="count">{{ tabCount()[t.key] || 0 }}</span></button>
+    }
+  </div>
+
+  @if (tab() === 'confirm') {
+    <div class="subtabs" aria-label="Nhóm chờ xác nhận">
+      @for (s of subs; track s.key) {
+        <button type="button" class="chip" [class.active]="sub() === s.key" [title]="s.hint" (click)="go({ sub: s.key === 'all' ? null : s.key })">{{ s.label }}<span class="count">{{ subCount()[s.key] || 0 }}</span></button>
+      }
+      <button type="button" class="chip" disabled title="Trả hàng / hoàn tiền: hướng phát triển, chưa làm trong đồ án">Trả hàng · sắp có</button>
+    </div>
+    @if (sub() !== 'all') { @for (s of subs; track s.key) { @if (s.key === sub()) { <p class="hint muted small">{{ s.hint }}</p> } } }
+  }
+
+  <div class="toolbar">
+    <input class="input search" type="search" placeholder="Tìm mã đơn, tên khách hoặc số điện thoại..." [value]="q()" (change)="go({ q: $any($event.target).value || null })" aria-label="Tìm đơn" />
+    <select class="select" (change)="go({ sort: $any($event.target).value === 'old' ? 'old' : null })" aria-label="Sắp xếp">
+      <option value="new" [selected]="sort() === 'new'">Mới nhất trước</option>
+      <option value="old" [selected]="sort() === 'old'">Cũ nhất trước</option>
+    </select>
+  </div>
+
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>Mã đơn</th><th>Khách hàng</th><th>Ngày đặt</th><th class="num">SL</th><th class="num">Tổng tiền</th><th>Thanh toán</th><th>Trạng thái</th><th>Việc tiếp theo</th></tr></thead>
+      <tbody>
+        @for (o of paged(); track o._id) {
+          <tr class="clickable" (click)="open(o)">
+            <td><a [routerLink]="['/admin/orders-detail', o._id]" (click)="$event.stopPropagation()" class="mono"><b>{{ o._id.toUpperCase() }}</b></a>
+              @if (cancelPending(o)) { <div><app-badge label="Xin hủy" tone="bad"></app-badge></div> }</td>
+            <td>{{ data.userName(o.userId) }}<div class="muted small">{{ o.shippingInfo.phone }}</div></td>
+            <td>{{ o.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+            <td class="num">{{ qty(o) }}<div class="muted small">{{ o.items.length }} dòng</div></td>
+            <td class="num"><b>{{ o.totals.total | vnd }}</b></td>
+            <td><app-badge [label]="payLabels[o.paymentStatus]?.label || o.paymentStatus" [tone]="payLabels[o.paymentStatus]?.tone || ''"></app-badge>
+              <div class="muted small">{{ o.paymentMethod === 'MOMO' ? 'MoMo' : 'Ngân hàng' }}</div></td>
+            <td><app-badge [label]="badge(o).label" [tone]="badge(o).tone"></app-badge></td>
+            <td class="small"><b>{{ next(o) }}</b></td>
+          </tr>
+        } @empty { <tr><td colspan="8" class="empty">Không có đơn nào trong mục này.</td></tr> }
+      </tbody>
+    </table>
+  </div>
+  <div class="pager">
+    <span>{{ filtered().length }} đơn · trang {{ page() }}/{{ totalPages() }}</span>
+    <span class="row">
+      <button type="button" class="btn sm" [disabled]="page() <= 1" (click)="go({ page: page() - 1 })">← Trước</button>
+      <button type="button" class="btn sm" [disabled]="page() >= totalPages()" (click)="go({ page: page() + 1 })">Sau →</button>
+    </span>
+  </div>
+</main>

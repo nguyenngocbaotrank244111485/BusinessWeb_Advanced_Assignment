@@ -1,25 +1,5 @@
 [
   {
-    "_id": "usr_sa",
-    "name": "Quản trị viên",
-    "email": "superadmin@printify.demo",
-    "role": "SUPERADMIN",
-    "status": "ACTIVE",
-    "addresses": [],
-    "avatar": null,
-    "createdAt": "2026-10-14T06:34:47.624Z"
-  },
-  {
-    "_id": "usr_staff",
-    "name": "Nhân viên sản xuất",
-    "email": "staff@printify.demo",
-    "role": "STAFF",
-    "status": "ACTIVE",
-    "addresses": [],
-    "avatar": null,
-    "createdAt": "2026-10-14T06:34:47.624Z"
-  },
-  {
     "_id": "usr_c1",
     "name": "Nguyễn Minh An",
     "email": "an.nguyen@printify.demo",
@@ -34,10 +14,34 @@
         "ward": "Phường Bến Nghé",
         "detail": "12 Nguyễn Huệ",
         "isDefault": true
+      },
+      {
+        "_id": "adr_c1_2",
+        "name": "Nguyễn Minh An",
+        "phone": "0901234567",
+        "province": "TP. Hồ Chí Minh",
+        "ward": "Phường Linh Xuân",
+        "detail": "KTX Khu B ĐHQG, Tòa B3, phòng 512",
+        "isDefault": false
+      },
+      {
+        "_id": "adr_c1_3",
+        "name": "Trần Thị Mai (mẹ)",
+        "phone": "0912345678",
+        "province": "TP. Đà Nẵng",
+        "ward": "Phường Hải Châu",
+        "detail": "45 Lê Duẩn",
+        "isDefault": false
       }
     ],
     "avatar": null,
-    "createdAt": "2026-10-24T06:34:47.624Z"
+    "createdAt": "2026-10-24T06:34:47.624Z",
+    "nickname": "Minh An",
+    "birthday": "2003-05-14",
+    "membership": {
+      "totalSpent": 5420000,
+      "points": 542
+    }
   },
   {
     "_id": "usr_c2",

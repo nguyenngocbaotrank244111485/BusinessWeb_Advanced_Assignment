@@ -1,0 +1,217 @@
+<main class="page">
+  @if (!data.loaded()) { <p class="muted">Đang tải...</p> }
+  @else if (order(); as o) {
+    <div class="page-head">
+      <div>
+        <div class="crumbs"><a routerLink="/admin/homepage">Trang chủ</a> / <a routerLink="/admin/orders-list">Đơn hàng</a> / {{ o._id.toUpperCase() }}</div>
+        <h1>Đơn {{ o._id.toUpperCase() }}</h1>
+        <p class="row">
+          <app-badge [label]="badge()!.label" [tone]="badge()!.tone"></app-badge>
+          <app-badge [label]="payLabels[o.paymentStatus]?.label || o.paymentStatus" [tone]="payLabels[o.paymentStatus]?.tone || ''"></app-badge>
+          @if (o.cancelRequest?.status === 'PENDING') { <app-badge label="Khách xin hủy" tone="bad"></app-badge> }
+          <span class="muted">Đặt {{ o.createdAt | date: 'dd/MM/yyyy HH:mm' }} · {{ data.userName(o.userId) }}</span>
+        </p>
+      </div>
+      <button type="button" class="btn" (click)="back()">← Quay lại danh sách</button>
+    </div>
+
+    <div class="tabs" role="tablist">
+      @for (t of tabs; track t.key) {
+        <button type="button" role="tab" class="tab" [class.active]="tab() === t.key" [attr.aria-selected]="tab() === t.key" (click)="setTab(t.key)">{{ t.label }}@if (todo()[t.key]) { <span class="dot" aria-label="cần xử lý"></span> }</button>
+      }
+    </div>
+
+    @switch (tab()) {
+      <!-- ============ TỔNG QUAN ============ -->
+      @case ('overview') {
+        <div class="cols">
+          <section class="card">
+            <h2>Sản phẩm ({{ o.items.length }} dòng)</h2>
+            @for (i of o.items; track i.orderItemId) {
+              <div class="item">
+                <img class="thumb lg" [src]="img(i)" [alt]="i.productName" />
+                <div>
+                  <a [routerLink]="['/admin/products-detail', i.productId]" target="_blank"><b>{{ i.productName }}</b></a>
+                  <div class="muted small">{{ variant(i) }} · SL {{ i.qty }} × {{ i.unitPrice | vnd }}</div>
+                  @if (i.listingSnapshot) { <div class="small">🎨 Marketplace: {{ i.listingSnapshot.title }} (+{{ i.listingSnapshot.buyerDesignFee | vnd }})</div> }
+                  @else if (i.designId) { <div class="small">✏️ Thiết kế riêng của khách</div> }
+                  @else { <div class="small muted">Phôi trơn, không in thiết kế</div> }
+                </div>
+                <b class="num">{{ i.qty * i.unitPrice + (i.listingSnapshot?.buyerDesignFee || 0) | vnd }}</b>
+              </div>
+            }
+            <dl class="dl totals">
+              <dt>Tiền hàng</dt><dd>{{ o.totals.productSubtotal | vnd }}</dd>
+              <dt>Phí thiết kế</dt><dd>{{ o.totals.designFees | vnd }}</dd>
+              <dt>Ưu đãi thành viên</dt><dd>−{{ o.totals.discount | vnd }}</dd>
+              <dt>Phí giao hàng</dt><dd>{{ o.totals.shipping | vnd }}</dd>
+              <dt><b>Tổng cộng</b></dt><dd class="total">{{ o.totals.total | vnd }}</dd>
+            </dl>
+          </section>
+          <div class="stack">
+            <section class="card">
+              <h2>Người nhận</h2>
+              <dl class="dl">
+                <dt>Họ tên</dt><dd>{{ o.shippingInfo.name }}</dd>
+                <dt>Điện thoại</dt><dd>{{ o.shippingInfo.phone }}</dd>
+                <dt>Địa chỉ</dt><dd>{{ o.shippingInfo.detail }}, {{ o.shippingInfo.ward }}, {{ o.shippingInfo.province }}</dd>
+                @if (o.shippingInfo.note) { <dt>Ghi chú</dt><dd>{{ o.shippingInfo.note }}</dd> }
+                @if (o.trackingCode) { <dt>Mã vận đơn</dt><dd class="mono">{{ o.trackingCode }}</dd> }
+              </dl>
+            </section>
+            <section class="card">
+              <h2>Dòng thời gian</h2>
+              <ol class="timeline">
+                @for (t of o.timeline; track $index) {
+                  <li><b>{{ statusLabels[t.status]?.label || (t.status === 'PAID' ? 'Đã thanh toán' : t.status) }}</b> · <span class="muted">{{ t.occurredAt | date: 'dd/MM HH:mm' }} · {{ data.userName(t.actorId) }}</span>
+                    @if (t.note) { <div class="small">{{ t.note }}</div> }</li>
+                }
+              </ol>
+            </section>
+          </div>
+        </div>
+      }
+
+      <!-- ============ THANH TOÁN ============ -->
+      @case ('payment') {
+        <section class="card narrow">
+          <dl class="dl">
+            <dt>Phương thức</dt><dd>{{ o.paymentMethod === 'MOMO' ? 'Ví MoMo (QR)' : 'Chuyển khoản ngân hàng (QR)' }}</dd>
+            <dt>Số tiền</dt><dd class="total">{{ o.totals.total | vnd }}</dd>
+            <dt>Nội dung CK</dt><dd class="mono">{{ o._id.toUpperCase() }}</dd>
+            <dt>Mở QR lúc</dt><dd>{{ (o.paymentOpenedAt || o.createdAt) | date: 'dd/MM/yyyy HH:mm' }}</dd>
+            <dt>Khách báo đã trả</dt><dd>{{ o.paymentClaimedAt ? (o.paymentClaimedAt | date: 'dd/MM/yyyy HH:mm') : '—' }}</dd>
+            <dt>Xác nhận lúc</dt><dd>{{ o.paidAt ? (o.paidAt | date: 'dd/MM/yyyy HH:mm') : '—' }}</dd>
+            <dt>Trạng thái</dt><dd><app-badge [label]="payLabels[o.paymentStatus]?.label || o.paymentStatus" [tone]="payLabels[o.paymentStatus]?.tone || ''"></app-badge></dd>
+          </dl>
+          @if (o.paymentStatus === 'WAITING_STAFF' && o.orderStatus === 'PENDING_STAFF_CONFIRMATION') {
+            <p class="alert info">Đối chiếu sao kê: đúng số tiền <b>{{ o.totals.total | vnd }}</b> và nội dung <b>{{ o._id.toUpperCase() }}</b>. Xác nhận thì hệ thống <b>trừ kho</b> và chuyển bước tiếp theo.</p>
+            <div class="row"><button type="button" class="btn success" (click)="open({ kind: 'approvePay' })">✓ Xác nhận đã nhận tiền</button>
+              <button type="button" class="btn danger" (click)="open({ kind: 'rejectPay' })">Từ chối</button></div>
+          } @else if (o.orderStatus === 'PENDING_PAYMENT') {
+            <p class="alert warn">Khách chưa báo đã thanh toán. {{ expired() ? 'Mã QR đã hết hạn, đơn sẽ bị hủy.' : 'QR hết hạn lúc ' + (deadline() | date: 'HH:mm dd/MM') + '.' }} Không xác nhận khi khách chưa báo đã trả.</p>
+          } @else if (o.paymentStatus === 'REJECTED') {
+            <p class="alert bad">Đã từ chối: {{ o.paymentRejectedReason }}</p>
+          } @else if (o.paymentStatus === 'PAID') {
+            <p class="alert ok">Đã xác nhận thanh toán. Kho đã trừ lúc {{ o.stockDeductedAt ? (o.stockDeductedAt | date: 'dd/MM HH:mm') : 'xác nhận' }}{{ o.stockRestoredAt ? ', đã hoàn kho khi hủy.' : '.' }}</p>
+          }
+        </section>
+      }
+
+      <!-- ============ KIỂM TRA MẪU IN ============ -->
+      @case ('design') {
+        @if (!designItems().length) {
+          <p class="alert info">Đơn này chỉ có phôi trơn, không cần kiểm tra mẫu in.</p>
+        } @else {
+          @if (o.orderStatus !== 'DESIGN_REVIEW') { <p class="alert info">Bước kiểm tra mẫu chỉ làm khi đơn ở trạng thái “Chờ kiểm tra mẫu in”. Hiện tại: {{ badge()!.label }}.</p> }
+          <div class="designs">
+            @for (i of designItems(); track i.orderItemId) {
+              <article class="card design">
+                <img class="preview" [src]="img(i)" [alt]="'Thiết kế ' + i.productName" />
+                <div>
+                  <b>{{ i.productName }}</b><span class="muted small"> · {{ variant(i) }} · SL {{ i.qty }}</span>
+                  <div class="row mt"><app-badge [label]="reviewLabel(i).label" [tone]="reviewLabel(i).tone"></app-badge></div>
+                  @if (i.designReview?.reason) { <p class="small">Lý do: {{ i.designReview?.reason }}</p> }
+                  <ul class="small muted checklist"><li>Nằm trong vùng in, không bị cắt</li><li>Ảnh đủ nét để in</li><li>Nội dung không vi phạm (logo, bản quyền, phản cảm)</li></ul>
+                  @if (o.orderStatus === 'DESIGN_REVIEW' && (i.designReview?.status === 'PENDING' || (i.designReview?.status === 'REJECTED' && i.designReview?.resubmittedAt))) {
+                    <div class="row"><button type="button" class="btn success sm" (click)="approveDesign(i)">✓ Đạt</button>
+                      <button type="button" class="btn danger sm" (click)="open({ kind: 'rejectDesign', item: i })">Cần sửa</button></div>
+                  }
+                </div>
+              </article>
+            }
+          </div>
+        }
+      }
+
+      <!-- ============ SẢN XUẤT ============ -->
+      @case ('production') {
+        <section class="card narrow">
+          <h2>Tiến độ in</h2>
+          @for (i of o.items; track i.orderItemId) {
+            <div class="item"><img class="thumb" [src]="img(i)" alt="" /><div><b>{{ i.productName }}</b><div class="muted small">SL {{ i.qty }} · {{ i.requiresSample ? sampleLabel(i.sampleStatus) : 'Không cần in mẫu' }}</div></div>
+              @if (i.samplePhotoUrl) { <a [href]="data.img(i.samplePhotoUrl)" target="_blank" class="small">Ảnh mẫu</a> }</div>
+          }
+          @switch (o.orderStatus) {
+            @case ('SAMPLE_PRINTING') {
+              @if (!o.firstSampleStartedAt) {
+                <p class="alert info">Bấm bắt đầu khi đưa mẫu vào máy in. <b>Từ lúc này khách không hủy đơn được nữa.</b></p>
+                <button type="button" class="btn primary" (click)="startSample()">▶ Bắt đầu in mẫu</button>
+              } @else {
+                <label class="field">Link ảnh chụp mẫu in <small>(để trống: dùng ảnh thiết kế làm ảnh demo)</small>
+                  <input class="input" [value]="samplePhoto()" (input)="samplePhoto.set($any($event.target).value)" placeholder="/uploads/samples/..." /></label>
+                <button type="button" class="btn primary mt" (click)="completeSample()">Hoàn tất mẫu & gửi khách duyệt</button>
+              }
+            }
+            @case ('SAMPLE_REVIEW') { <p class="alert warn">Đang chờ khách duyệt ảnh mẫu ở trang đơn hàng của khách. Staff không duyệt thay khách.</p> }
+            @case ('PRINT_CONFIRMED') { <p class="alert info">Khách đã duyệt mẫu (hoặc đơn không cần mẫu). In chính thức rồi bấm hoàn tất.</p>
+              <button type="button" class="btn primary" (click)="completePrint()">✓ Hoàn tất in</button> }
+            @default { <p class="muted small">Bước sản xuất: {{ badge()!.label }}.</p> }
+          }
+        </section>
+      }
+
+      <!-- ============ GIAO HÀNG ============ -->
+      @case ('shipping') {
+        <section class="card narrow">
+          <dl class="dl">
+            <dt>In xong</dt><dd>{{ o.printCompletedAt ? (o.printCompletedAt | date: 'dd/MM/yyyy HH:mm') : '—' }}</dd>
+            <dt>Giao cho vận chuyển</dt><dd>{{ o.shippedAt ? (o.shippedAt | date: 'dd/MM/yyyy HH:mm') : '—' }}</dd>
+            <dt>Mã vận đơn</dt><dd class="mono">{{ o.trackingCode || '—' }}</dd>
+            <dt>Đã giao</dt><dd>{{ o.deliveredAt ? (o.deliveredAt | date: 'dd/MM/yyyy HH:mm') : '—' }}</dd>
+          </dl>
+          @if (o.orderStatus === 'PRINT_COMPLETED') {
+            <label class="field mt">Mã vận đơn
+              <span class="row"><input class="input grow" [value]="tracking()" (input)="tracking.set($any($event.target).value)" placeholder="VD: PF12345678" />
+                <button type="button" class="btn sm" (click)="suggestTracking()">Tạo mã demo</button></span></label>
+            <button type="button" class="btn primary mt" (click)="ship()">🚚 Bàn giao vận chuyển</button>
+          } @else if (o.orderStatus === 'SHIPPING') {
+            <button type="button" class="btn success mt" (click)="deliver()">✓ Xác nhận đã giao</button>
+          } @else if (o.orderStatus !== 'COMPLETED') { <p class="muted small mt">Giao hàng sau khi in xong.</p> }
+        </section>
+      }
+
+      <!-- ============ YÊU CẦU HỦY ============ -->
+      @case ('cancel') {
+        <section class="card narrow">
+          @if (o.cancelRequest; as c) {
+            <dl class="dl">
+              <dt>Lý do</dt><dd>{{ c.reason }}</dd>
+              <dt>Ghi chú của khách</dt><dd>{{ c.note || '—' }}</dd>
+              <dt>Gửi lúc</dt><dd>{{ c.requestedAt | date: 'dd/MM/yyyy HH:mm' }}</dd>
+              <dt>Trạng thái</dt><dd><app-badge [label]="c.status === 'PENDING' ? 'Chờ duyệt' : c.status === 'APPROVED' ? 'Đã đồng ý' : 'Đã từ chối'" [tone]="c.status === 'PENDING' ? 'action' : c.status === 'APPROVED' ? 'ok' : 'bad'"></app-badge></dd>
+              @if (c.resolveNote) { <dt>Phản hồi</dt><dd>{{ c.resolveNote }}</dd> }
+            </dl>
+            @if (c.status === 'PENDING') {
+              <p class="alert info small">{{ o.paymentStatus === 'PAID' ? 'Đơn đã thanh toán: đồng ý hủy sẽ hoàn kho 1 lần, PrintiFy liên hệ khách hoàn tiền.' : 'Đơn chưa thanh toán: hủy không ảnh hưởng kho.' }}</p>
+              <div class="row"><button type="button" class="btn danger solid" (click)="open({ kind: 'cancel', decision: 'APPROVE' })">Đồng ý hủy</button>
+                <button type="button" class="btn" (click)="open({ kind: 'cancel', decision: 'REJECT' })">Từ chối</button></div>
+            }
+          } @else { <p class="muted">Khách chưa gửi yêu cầu hủy cho đơn này.</p> }
+          <p class="muted small mt">Trả hàng / hoàn tiền sau khi giao: hướng phát triển, chưa làm trong đồ án.</p>
+        </section>
+      }
+    }
+
+    @if (ask(); as a) {
+      <div class="backdrop" (click)="ask.set(null)">
+        <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="ask-title" (click)="$event.stopPropagation()">
+          @switch (a.kind) {
+            @case ('approvePay') { <h2 id="ask-title">Xác nhận đã nhận {{ o.totals.total | vnd }}?</h2><p class="muted">Hệ thống trừ kho và chuyển đơn sang bước tiếp theo. Không hoàn tác được.</p> }
+            @case ('rejectPay') { <h2 id="ask-title">Từ chối thanh toán</h2><p class="muted">Đơn sẽ chuyển sang Đã hủy. Chưa trừ kho nên không cần hoàn.</p> }
+            @case ('rejectDesign') { <h2 id="ask-title">Mẫu cần chỉnh sửa</h2><p class="muted">Khách sẽ thấy lý do và chọn sửa lại hoặc vẫn in (chấp nhận rủi ro).</p> }
+            @case ('cancel') { <h2 id="ask-title">{{ $any(a).decision === 'APPROVE' ? 'Đồng ý hủy đơn?' : 'Từ chối yêu cầu hủy' }}</h2> }
+          }
+          @if (a.kind !== 'approvePay') {
+            <label class="field">{{ a.kind === 'cancel' && $any(a).decision === 'APPROVE' ? 'Ghi chú (không bắt buộc)' : 'Lý do (bắt buộc)' }}
+              <textarea class="textarea" [value]="note()" (input)="note.set($any($event.target).value)"></textarea></label>
+          }
+          <div class="actions"><button type="button" class="btn" (click)="ask.set(null)">Hủy</button>
+            <button type="button" class="btn" [class.primary]="a.kind === 'approvePay'" [class.danger]="a.kind !== 'approvePay'" (click)="confirm()">Xác nhận</button></div>
+        </div>
+      </div>
+    }
+  } @else {
+    <div class="card"><h1>Không tìm thấy đơn hàng</h1><p class="muted">Mã đơn không tồn tại.</p><a class="btn primary" routerLink="/admin/orders-list">Về danh sách đơn</a></div>
+  }
+</main>

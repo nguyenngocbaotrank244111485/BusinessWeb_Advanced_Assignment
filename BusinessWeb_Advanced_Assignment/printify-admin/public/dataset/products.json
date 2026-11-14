@@ -5,108 +5,106 @@
     "category": "ao-thun",
     "price": 180000,
     "description": "Áo thun cotton 100%, form regular, in thiết kế theo yêu cầu.",
-    "img_display": "/images/products/prd101_white_ao-thun-cotton-basic.png",
+    "img_display": "images/products/prd101_white_ao-thun-cotton-basic.png",
     "img_detail": [
-      "/images/products/prd101_detail1.png"
+      "images/products/prd101_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.28,
-      "y": 0.22,
-      "width": 0.44,
-      "height": 0.5
-    },
     "variants": [
       {
         "_id": "prd101-white-s",
         "color": "white",
         "size": "S",
         "stock": 40,
-        "imageUrl": "/images/products/prd101_white_ao-thun-cotton-basic.png"
+        "imageUrl": "images/products/prd101_white_ao-thun-cotton-basic.png"
       },
       {
         "_id": "prd101-white-m",
         "color": "white",
         "size": "M",
         "stock": 37,
-        "imageUrl": "/images/products/prd101_white_ao-thun-cotton-basic.png"
+        "imageUrl": "images/products/prd101_white_ao-thun-cotton-basic.png"
       },
       {
         "_id": "prd101-white-l",
         "color": "white",
         "size": "L",
         "stock": 29,
-        "imageUrl": "/images/products/prd101_white_ao-thun-cotton-basic.png"
+        "imageUrl": "images/products/prd101_white_ao-thun-cotton-basic.png"
       },
       {
         "_id": "prd101-white-xl",
         "color": "white",
         "size": "XL",
         "stock": 26,
-        "imageUrl": "/images/products/prd101_white_ao-thun-cotton-basic.png"
+        "imageUrl": "images/products/prd101_white_ao-thun-cotton-basic.png"
       },
       {
         "_id": "prd101-black-s",
         "color": "black",
         "size": "S",
         "stock": 35,
-        "imageUrl": "/images/products/prd101_black_ao-thun-cotton-basic.png"
+        "imageUrl": "images/products/prd101_black_ao-thun-cotton-basic.png"
       },
       {
         "_id": "prd101-black-m",
         "color": "black",
         "size": "M",
         "stock": 32,
-        "imageUrl": "/images/products/prd101_black_ao-thun-cotton-basic.png"
+        "imageUrl": "images/products/prd101_black_ao-thun-cotton-basic.png"
       },
       {
         "_id": "prd101-black-l",
         "color": "black",
         "size": "L",
         "stock": 24,
-        "imageUrl": "/images/products/prd101_black_ao-thun-cotton-basic.png"
+        "imageUrl": "images/products/prd101_black_ao-thun-cotton-basic.png"
       },
       {
         "_id": "prd101-black-xl",
         "color": "black",
         "size": "XL",
         "stock": 25,
-        "imageUrl": "/images/products/prd101_black_ao-thun-cotton-basic.png"
+        "imageUrl": "images/products/prd101_black_ao-thun-cotton-basic.png"
       },
       {
         "_id": "prd101-navy-s",
         "color": "navy",
         "size": "S",
         "stock": 28,
-        "imageUrl": "/images/products/prd101_navy_ao-thun-cotton-basic.png"
+        "imageUrl": "images/products/prd101_navy_ao-thun-cotton-basic.png"
       },
       {
         "_id": "prd101-navy-m",
         "color": "navy",
         "size": "M",
         "stock": 25,
-        "imageUrl": "/images/products/prd101_navy_ao-thun-cotton-basic.png"
+        "imageUrl": "images/products/prd101_navy_ao-thun-cotton-basic.png"
       },
       {
         "_id": "prd101-navy-l",
         "color": "navy",
         "size": "L",
         "stock": 17,
-        "imageUrl": "/images/products/prd101_navy_ao-thun-cotton-basic.png"
+        "imageUrl": "images/products/prd101_navy_ao-thun-cotton-basic.png"
       },
       {
         "_id": "prd101-navy-xl",
         "color": "navy",
         "size": "XL",
         "stock": 16,
-        "imageUrl": "/images/products/prd101_navy_ao-thun-cotton-basic.png"
+        "imageUrl": "images/products/prd101_navy_ao-thun-cotton-basic.png"
       }
     ],
-    "createdAt": "2026-09-14T06:34:47.624Z",
-    "updatedAt": "2026-11-08T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.3,
+      "y": 0.2,
+      "width": 0.4,
+      "height": 0.58
+    }
   },
   {
     "_id": "prd102",
@@ -114,108 +112,106 @@
     "category": "ao-thun",
     "price": 200000,
     "description": "Áo thun oversize unisex, vải dày dặn, phù hợp in họa tiết lớn.",
-    "img_display": "/images/products/prd102_white_ao-thun-oversize-unisex.png",
+    "img_display": "images/products/prd102_white_ao-thun-oversize-unisex.png",
     "img_detail": [
-      "/images/products/prd102_detail1.png"
+      "images/products/prd102_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.28,
-      "y": 0.22,
-      "width": 0.44,
-      "height": 0.5
-    },
     "variants": [
       {
         "_id": "prd102-white-s",
         "color": "white",
         "size": "S",
         "stock": 39,
-        "imageUrl": "/images/products/prd102_white_ao-thun-oversize-unisex.png"
+        "imageUrl": "images/products/prd102_white_ao-thun-oversize-unisex.png"
       },
       {
         "_id": "prd102-white-m",
         "color": "white",
         "size": "M",
         "stock": 36,
-        "imageUrl": "/images/products/prd102_white_ao-thun-oversize-unisex.png"
+        "imageUrl": "images/products/prd102_white_ao-thun-oversize-unisex.png"
       },
       {
         "_id": "prd102-white-l",
         "color": "white",
         "size": "L",
         "stock": 34,
-        "imageUrl": "/images/products/prd102_white_ao-thun-oversize-unisex.png"
+        "imageUrl": "images/products/prd102_white_ao-thun-oversize-unisex.png"
       },
       {
         "_id": "prd102-white-xl",
         "color": "white",
         "size": "XL",
         "stock": 26,
-        "imageUrl": "/images/products/prd102_white_ao-thun-oversize-unisex.png"
+        "imageUrl": "images/products/prd102_white_ao-thun-oversize-unisex.png"
       },
       {
         "_id": "prd102-black-s",
         "color": "black",
         "size": "S",
         "stock": 34,
-        "imageUrl": "/images/products/prd102_black_ao-thun-oversize-unisex.png"
+        "imageUrl": "images/products/prd102_black_ao-thun-oversize-unisex.png"
       },
       {
         "_id": "prd102-black-m",
         "color": "black",
         "size": "M",
         "stock": 31,
-        "imageUrl": "/images/products/prd102_black_ao-thun-oversize-unisex.png"
+        "imageUrl": "images/products/prd102_black_ao-thun-oversize-unisex.png"
       },
       {
         "_id": "prd102-black-l",
         "color": "black",
         "size": "L",
         "stock": 29,
-        "imageUrl": "/images/products/prd102_black_ao-thun-oversize-unisex.png"
+        "imageUrl": "images/products/prd102_black_ao-thun-oversize-unisex.png"
       },
       {
         "_id": "prd102-black-xl",
         "color": "black",
         "size": "XL",
         "stock": 26,
-        "imageUrl": "/images/products/prd102_black_ao-thun-oversize-unisex.png"
+        "imageUrl": "images/products/prd102_black_ao-thun-oversize-unisex.png"
       },
       {
         "_id": "prd102-beige-s",
         "color": "beige",
         "size": "S",
         "stock": 29,
-        "imageUrl": "/images/products/prd102_beige_ao-thun-oversize-unisex.png"
+        "imageUrl": "images/products/prd102_beige_ao-thun-oversize-unisex.png"
       },
       {
         "_id": "prd102-beige-m",
         "color": "beige",
         "size": "M",
         "stock": 26,
-        "imageUrl": "/images/products/prd102_beige_ao-thun-oversize-unisex.png"
+        "imageUrl": "images/products/prd102_beige_ao-thun-oversize-unisex.png"
       },
       {
         "_id": "prd102-beige-l",
         "color": "beige",
         "size": "L",
         "stock": 24,
-        "imageUrl": "/images/products/prd102_beige_ao-thun-oversize-unisex.png"
+        "imageUrl": "images/products/prd102_beige_ao-thun-oversize-unisex.png"
       },
       {
         "_id": "prd102-beige-xl",
         "color": "beige",
         "size": "XL",
         "stock": 16,
-        "imageUrl": "/images/products/prd102_beige_ao-thun-oversize-unisex.png"
+        "imageUrl": "images/products/prd102_beige_ao-thun-oversize-unisex.png"
       }
     ],
-    "createdAt": "2026-09-15T06:34:47.624Z",
-    "updatedAt": "2026-11-09T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.3,
+      "y": 0.22,
+      "width": 0.4,
+      "height": 0.56
+    }
   },
   {
     "_id": "prd103",
@@ -223,80 +219,78 @@
     "category": "ao-thun",
     "price": 220000,
     "description": "Áo polo cổ chỉ may chắc chắn, phong cách lịch sự, có vùng in ngực và lưng.",
-    "img_display": "/images/products/prd103_white_ao-polo-basic.png",
+    "img_display": "images/products/prd103_white_ao-polo-basic.png",
     "img_detail": [
-      "/images/products/prd103_detail1.png"
+      "images/products/prd103_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.28,
-      "y": 0.22,
-      "width": 0.44,
-      "height": 0.5
-    },
     "variants": [
       {
         "_id": "prd103-white-s",
         "color": "white",
         "size": "S",
         "stock": 37,
-        "imageUrl": "/images/products/prd103_white_ao-polo-basic.png"
+        "imageUrl": "images/products/prd103_white_ao-polo-basic.png"
       },
       {
         "_id": "prd103-white-m",
         "color": "white",
         "size": "M",
         "stock": 34,
-        "imageUrl": "/images/products/prd103_white_ao-polo-basic.png"
+        "imageUrl": "images/products/prd103_white_ao-polo-basic.png"
       },
       {
         "_id": "prd103-white-l",
         "color": "white",
         "size": "L",
         "stock": 32,
-        "imageUrl": "/images/products/prd103_white_ao-polo-basic.png"
+        "imageUrl": "images/products/prd103_white_ao-polo-basic.png"
       },
       {
         "_id": "prd103-white-xl",
         "color": "white",
         "size": "XL",
         "stock": 27,
-        "imageUrl": "/images/products/prd103_white_ao-polo-basic.png"
+        "imageUrl": "images/products/prd103_white_ao-polo-basic.png"
       },
       {
         "_id": "prd103-black-s",
         "color": "black",
         "size": "S",
         "stock": 33,
-        "imageUrl": "/images/products/prd103_black_ao-polo-basic.png"
+        "imageUrl": "images/products/prd103_black_ao-polo-basic.png"
       },
       {
         "_id": "prd103-black-m",
         "color": "black",
         "size": "M",
         "stock": 30,
-        "imageUrl": "/images/products/prd103_black_ao-polo-basic.png"
+        "imageUrl": "images/products/prd103_black_ao-polo-basic.png"
       },
       {
         "_id": "prd103-black-l",
         "color": "black",
         "size": "L",
         "stock": 28,
-        "imageUrl": "/images/products/prd103_black_ao-polo-basic.png"
+        "imageUrl": "images/products/prd103_black_ao-polo-basic.png"
       },
       {
         "_id": "prd103-black-xl",
         "color": "black",
         "size": "XL",
         "stock": 26,
-        "imageUrl": "/images/products/prd103_black_ao-polo-basic.png"
+        "imageUrl": "images/products/prd103_black_ao-polo-basic.png"
       }
     ],
-    "createdAt": "2026-09-16T06:34:47.624Z",
-    "updatedAt": "2026-11-10T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.3,
+      "y": 0.38,
+      "width": 0.4,
+      "height": 0.42
+    }
   },
   {
     "_id": "prd104",
@@ -304,80 +298,78 @@
     "category": "ao-thun",
     "price": 210000,
     "description": "Áo thun tay dài cotton mềm, dễ phối đồ, in thiết kế theo yêu cầu.",
-    "img_display": "/images/products/prd104_white_ao-thun-tay-dai.png",
+    "img_display": "images/products/prd104_white_ao-thun-tay-dai.png",
     "img_detail": [
-      "/images/products/prd104_detail1.png"
+      "images/products/prd104_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.28,
-      "y": 0.22,
-      "width": 0.44,
-      "height": 0.5
-    },
     "variants": [
       {
         "_id": "prd104-white-s",
         "color": "white",
         "size": "S",
         "stock": 36,
-        "imageUrl": "/images/products/prd104_white_ao-thun-tay-dai.png"
+        "imageUrl": "images/products/prd104_white_ao-thun-tay-dai.png"
       },
       {
         "_id": "prd104-white-m",
         "color": "white",
         "size": "M",
         "stock": 33,
-        "imageUrl": "/images/products/prd104_white_ao-thun-tay-dai.png"
+        "imageUrl": "images/products/prd104_white_ao-thun-tay-dai.png"
       },
       {
         "_id": "prd104-white-l",
         "color": "white",
         "size": "L",
         "stock": 31,
-        "imageUrl": "/images/products/prd104_white_ao-thun-tay-dai.png"
+        "imageUrl": "images/products/prd104_white_ao-thun-tay-dai.png"
       },
       {
         "_id": "prd104-white-xl",
         "color": "white",
         "size": "XL",
         "stock": 28,
-        "imageUrl": "/images/products/prd104_white_ao-thun-tay-dai.png"
+        "imageUrl": "images/products/prd104_white_ao-thun-tay-dai.png"
       },
       {
         "_id": "prd104-black-s",
         "color": "black",
         "size": "S",
         "stock": 31,
-        "imageUrl": "/images/products/prd104_black_ao-thun-tay-dai.png"
+        "imageUrl": "images/products/prd104_black_ao-thun-tay-dai.png"
       },
       {
         "_id": "prd104-black-m",
         "color": "black",
         "size": "M",
         "stock": 28,
-        "imageUrl": "/images/products/prd104_black_ao-thun-tay-dai.png"
+        "imageUrl": "images/products/prd104_black_ao-thun-tay-dai.png"
       },
       {
         "_id": "prd104-black-l",
         "color": "black",
         "size": "L",
         "stock": 26,
-        "imageUrl": "/images/products/prd104_black_ao-thun-tay-dai.png"
+        "imageUrl": "images/products/prd104_black_ao-thun-tay-dai.png"
       },
       {
         "_id": "prd104-black-xl",
         "color": "black",
         "size": "XL",
         "stock": 21,
-        "imageUrl": "/images/products/prd104_black_ao-thun-tay-dai.png"
+        "imageUrl": "images/products/prd104_black_ao-thun-tay-dai.png"
       }
     ],
-    "createdAt": "2026-09-17T06:34:47.624Z",
-    "updatedAt": "2026-11-11T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.3,
+      "y": 0.2,
+      "width": 0.4,
+      "height": 0.58
+    }
   },
   {
     "_id": "prd105",
@@ -385,80 +377,78 @@
     "category": "ao-thun",
     "price": 150000,
     "description": "Áo ba lỗ thoáng mát, hợp in slogan hoặc họa tiết tối giản.",
-    "img_display": "/images/products/prd105_white_ao-ba-lo-tank-top.png",
+    "img_display": "images/products/prd105_white_ao-ba-lo-tank-top.png",
     "img_detail": [
-      "/images/products/prd105_detail1.png"
+      "images/products/prd105_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.3,
-      "y": 0.25,
-      "width": 0.4,
-      "height": 0.45
-    },
     "variants": [
       {
         "_id": "prd105-white-s",
         "color": "white",
         "size": "S",
         "stock": 35,
-        "imageUrl": "/images/products/prd105_white_ao-ba-lo-tank-top.png"
+        "imageUrl": "images/products/prd105_white_ao-ba-lo-tank-top.png"
       },
       {
         "_id": "prd105-white-m",
         "color": "white",
         "size": "M",
         "stock": 32,
-        "imageUrl": "/images/products/prd105_white_ao-ba-lo-tank-top.png"
+        "imageUrl": "images/products/prd105_white_ao-ba-lo-tank-top.png"
       },
       {
         "_id": "prd105-white-l",
         "color": "white",
         "size": "L",
         "stock": 30,
-        "imageUrl": "/images/products/prd105_white_ao-ba-lo-tank-top.png"
+        "imageUrl": "images/products/prd105_white_ao-ba-lo-tank-top.png"
       },
       {
         "_id": "prd105-white-xl",
         "color": "white",
         "size": "XL",
         "stock": 29,
-        "imageUrl": "/images/products/prd105_white_ao-ba-lo-tank-top.png"
+        "imageUrl": "images/products/prd105_white_ao-ba-lo-tank-top.png"
       },
       {
         "_id": "prd105-black-s",
         "color": "black",
         "size": "S",
         "stock": 30,
-        "imageUrl": "/images/products/prd105_black_ao-ba-lo-tank-top.png"
+        "imageUrl": "images/products/prd105_black_ao-ba-lo-tank-top.png"
       },
       {
         "_id": "prd105-black-m",
         "color": "black",
         "size": "M",
         "stock": 27,
-        "imageUrl": "/images/products/prd105_black_ao-ba-lo-tank-top.png"
+        "imageUrl": "images/products/prd105_black_ao-ba-lo-tank-top.png"
       },
       {
         "_id": "prd105-black-l",
         "color": "black",
         "size": "L",
         "stock": 25,
-        "imageUrl": "/images/products/prd105_black_ao-ba-lo-tank-top.png"
+        "imageUrl": "images/products/prd105_black_ao-ba-lo-tank-top.png"
       },
       {
         "_id": "prd105-black-xl",
         "color": "black",
         "size": "XL",
         "stock": 22,
-        "imageUrl": "/images/products/prd105_black_ao-ba-lo-tank-top.png"
+        "imageUrl": "images/products/prd105_black_ao-ba-lo-tank-top.png"
       }
     ],
-    "createdAt": "2026-09-18T06:34:47.624Z",
-    "updatedAt": "2026-11-12T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.36,
+      "y": 0.38,
+      "width": 0.28,
+      "height": 0.48
+    }
   },
   {
     "_id": "prd106",
@@ -466,80 +456,78 @@
     "category": "ao-thun",
     "price": 280000,
     "description": "Sweater cổ tròn giữ ấm, bề mặt in rõ nét, phù hợp thiết kế theo mùa.",
-    "img_display": "/images/products/prd106_white_ao-sweater-co-tron.png",
+    "img_display": "images/products/prd106_white_ao-sweater-co-tron.png",
     "img_detail": [
-      "/images/products/prd106_detail1.png"
+      "images/products/prd106_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.28,
-      "y": 0.22,
-      "width": 0.44,
-      "height": 0.5
-    },
     "variants": [
       {
         "_id": "prd106-white-s",
         "color": "white",
         "size": "S",
         "stock": 39,
-        "imageUrl": "/images/products/prd106_white_ao-sweater-co-tron.png"
+        "imageUrl": "images/products/prd106_white_ao-sweater-co-tron.png"
       },
       {
         "_id": "prd106-white-m",
         "color": "white",
         "size": "M",
         "stock": 36,
-        "imageUrl": "/images/products/prd106_white_ao-sweater-co-tron.png"
+        "imageUrl": "images/products/prd106_white_ao-sweater-co-tron.png"
       },
       {
         "_id": "prd106-white-l",
         "color": "white",
         "size": "L",
         "stock": 34,
-        "imageUrl": "/images/products/prd106_white_ao-sweater-co-tron.png"
+        "imageUrl": "images/products/prd106_white_ao-sweater-co-tron.png"
       },
       {
         "_id": "prd106-white-xl",
         "color": "white",
         "size": "XL",
         "stock": 30,
-        "imageUrl": "/images/products/prd106_white_ao-sweater-co-tron.png"
+        "imageUrl": "images/products/prd106_white_ao-sweater-co-tron.png"
       },
       {
         "_id": "prd106-gray-s",
         "color": "gray",
         "size": "S",
         "stock": 24,
-        "imageUrl": "/images/products/prd106_gray_ao-sweater-co-tron.png"
+        "imageUrl": "images/products/prd106_gray_ao-sweater-co-tron.png"
       },
       {
         "_id": "prd106-gray-m",
         "color": "gray",
         "size": "M",
         "stock": 21,
-        "imageUrl": "/images/products/prd106_gray_ao-sweater-co-tron.png"
+        "imageUrl": "images/products/prd106_gray_ao-sweater-co-tron.png"
       },
       {
         "_id": "prd106-gray-l",
         "color": "gray",
         "size": "L",
         "stock": 19,
-        "imageUrl": "/images/products/prd106_gray_ao-sweater-co-tron.png"
+        "imageUrl": "images/products/prd106_gray_ao-sweater-co-tron.png"
       },
       {
         "_id": "prd106-gray-xl",
         "color": "gray",
         "size": "XL",
         "stock": 14,
-        "imageUrl": "/images/products/prd106_gray_ao-sweater-co-tron.png"
+        "imageUrl": "images/products/prd106_gray_ao-sweater-co-tron.png"
       }
     ],
-    "createdAt": "2026-09-19T06:34:47.624Z",
-    "updatedAt": "2026-11-13T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.3,
+      "y": 0.2,
+      "width": 0.4,
+      "height": 0.58
+    }
   },
   {
     "_id": "prd107",
@@ -547,108 +535,106 @@
     "category": "ao-thun",
     "price": 350000,
     "description": "Hoodie nỉ bông trơn, túi kangaroo, vùng in rộng phía ngực và lưng.",
-    "img_display": "/images/products/prd107_white_ao-hoodie-tron.png",
+    "img_display": "images/products/prd107_white_ao-hoodie-tron.png",
     "img_detail": [
-      "/images/products/prd107_detail1.png"
+      "images/products/prd107_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.3,
-      "y": 0.2,
-      "width": 0.4,
-      "height": 0.45
-    },
     "variants": [
       {
         "_id": "prd107-white-s",
         "color": "white",
         "size": "S",
         "stock": 38,
-        "imageUrl": "/images/products/prd107_white_ao-hoodie-tron.png"
+        "imageUrl": "images/products/prd107_white_ao-hoodie-tron.png"
       },
       {
         "_id": "prd107-white-m",
         "color": "white",
         "size": "M",
         "stock": 35,
-        "imageUrl": "/images/products/prd107_white_ao-hoodie-tron.png"
+        "imageUrl": "images/products/prd107_white_ao-hoodie-tron.png"
       },
       {
         "_id": "prd107-white-l",
         "color": "white",
         "size": "L",
         "stock": 33,
-        "imageUrl": "/images/products/prd107_white_ao-hoodie-tron.png"
+        "imageUrl": "images/products/prd107_white_ao-hoodie-tron.png"
       },
       {
         "_id": "prd107-white-xl",
         "color": "white",
         "size": "XL",
         "stock": 30,
-        "imageUrl": "/images/products/prd107_white_ao-hoodie-tron.png"
+        "imageUrl": "images/products/prd107_white_ao-hoodie-tron.png"
       },
       {
         "_id": "prd107-black-s",
         "color": "black",
         "size": "S",
         "stock": 33,
-        "imageUrl": "/images/products/prd107_black_ao-hoodie-tron.png"
+        "imageUrl": "images/products/prd107_black_ao-hoodie-tron.png"
       },
       {
         "_id": "prd107-black-m",
         "color": "black",
         "size": "M",
         "stock": 30,
-        "imageUrl": "/images/products/prd107_black_ao-hoodie-tron.png"
+        "imageUrl": "images/products/prd107_black_ao-hoodie-tron.png"
       },
       {
         "_id": "prd107-black-l",
         "color": "black",
         "size": "L",
         "stock": 28,
-        "imageUrl": "/images/products/prd107_black_ao-hoodie-tron.png"
+        "imageUrl": "images/products/prd107_black_ao-hoodie-tron.png"
       },
       {
         "_id": "prd107-black-xl",
         "color": "black",
         "size": "XL",
         "stock": 23,
-        "imageUrl": "/images/products/prd107_black_ao-hoodie-tron.png"
+        "imageUrl": "images/products/prd107_black_ao-hoodie-tron.png"
       },
       {
         "_id": "prd107-gray-s",
         "color": "gray",
         "size": "S",
         "stock": 25,
-        "imageUrl": "/images/products/prd107_gray_ao-hoodie-tron.png"
+        "imageUrl": "images/products/prd107_gray_ao-hoodie-tron.png"
       },
       {
         "_id": "prd107-gray-m",
         "color": "gray",
         "size": "M",
         "stock": 22,
-        "imageUrl": "/images/products/prd107_gray_ao-hoodie-tron.png"
+        "imageUrl": "images/products/prd107_gray_ao-hoodie-tron.png"
       },
       {
         "_id": "prd107-gray-l",
         "color": "gray",
         "size": "L",
         "stock": 20,
-        "imageUrl": "/images/products/prd107_gray_ao-hoodie-tron.png"
+        "imageUrl": "images/products/prd107_gray_ao-hoodie-tron.png"
       },
       {
         "_id": "prd107-gray-xl",
         "color": "gray",
         "size": "XL",
         "stock": 13,
-        "imageUrl": "/images/products/prd107_gray_ao-hoodie-tron.png"
+        "imageUrl": "images/products/prd107_gray_ao-hoodie-tron.png"
       }
     ],
-    "createdAt": "2026-09-20T06:34:47.624Z",
-    "updatedAt": "2026-11-08T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.33,
+      "y": 0.32,
+      "width": 0.34,
+      "height": 0.26
+    }
   },
   {
     "_id": "prd201",
@@ -656,45 +642,43 @@
     "category": "tui-vai",
     "price": 95000,
     "description": "Túi tote canvas dày, quai chịu lực, vùng in lớn cho thiết kế tùy chỉnh.",
-    "img_display": "/images/products/prd201_white_tui-tote-canvas-classic.png",
+    "img_display": "images/products/prd201_white_tui-tote-canvas-classic.png",
     "img_detail": [
-      "/images/products/prd201_detail1.png"
+      "images/products/prd201_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.25,
-      "y": 0.3,
-      "width": 0.5,
-      "height": 0.45
-    },
     "variants": [
       {
         "_id": "prd201-white",
         "color": "white",
         "size": null,
         "stock": 37,
-        "imageUrl": "/images/products/prd201_white_tui-tote-canvas-classic.png"
+        "imageUrl": "images/products/prd201_white_tui-tote-canvas-classic.png"
       },
       {
         "_id": "prd201-beige",
         "color": "beige",
         "size": null,
         "stock": 28,
-        "imageUrl": "/images/products/prd201_beige_tui-tote-canvas-classic.png"
+        "imageUrl": "images/products/prd201_beige_tui-tote-canvas-classic.png"
       },
       {
         "_id": "prd201-black",
         "color": "black",
         "size": null,
         "stock": 35,
-        "imageUrl": "/images/products/prd201_black_tui-tote-canvas-classic.png"
+        "imageUrl": "images/products/prd201_black_tui-tote-canvas-classic.png"
       }
     ],
-    "createdAt": "2026-09-21T06:34:47.624Z",
-    "updatedAt": "2026-11-09T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.28,
+      "y": 0.46,
+      "width": 0.44,
+      "height": 0.46
+    }
   },
   {
     "_id": "prd202",
@@ -702,38 +686,36 @@
     "category": "tui-vai",
     "price": 75000,
     "description": "Túi tote mini gọn nhẹ, hợp đựng đồ nhỏ, quà tặng cá nhân hóa.",
-    "img_display": "/images/products/prd202_white_tui-tote-mini.png",
+    "img_display": "images/products/prd202_white_tui-tote-mini.png",
     "img_detail": [
-      "/images/products/prd202_detail1.png"
+      "images/products/prd202_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.25,
-      "y": 0.3,
-      "width": 0.5,
-      "height": 0.45
-    },
     "variants": [
       {
         "_id": "prd202-white",
         "color": "white",
         "size": null,
         "stock": 38,
-        "imageUrl": "/images/products/prd202_white_tui-tote-mini.png"
+        "imageUrl": "images/products/prd202_white_tui-tote-mini.png"
       },
       {
         "_id": "prd202-beige",
         "color": "beige",
         "size": null,
         "stock": 29,
-        "imageUrl": "/images/products/prd202_beige_tui-tote-mini.png"
+        "imageUrl": "images/products/prd202_beige_tui-tote-mini.png"
       }
     ],
-    "createdAt": "2026-09-22T06:34:47.624Z",
-    "updatedAt": "2026-11-10T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.29,
+      "y": 0.4,
+      "width": 0.42,
+      "height": 0.45
+    }
   },
   {
     "_id": "prd203",
@@ -741,38 +723,36 @@
     "category": "tui-vai",
     "price": 130000,
     "description": "Túi tote canvas có khóa kéo bảo quản đồ bên trong an toàn hơn.",
-    "img_display": "/images/products/prd203_beige_tui-tote-co-khoa-keo.png",
+    "img_display": "images/products/prd203_beige_tui-tote-co-khoa-keo.png",
     "img_detail": [
-      "/images/products/prd203_detail1.png"
+      "images/products/prd203_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.25,
-      "y": 0.3,
-      "width": 0.5,
-      "height": 0.45
-    },
     "variants": [
       {
         "_id": "prd203-beige",
         "color": "beige",
         "size": null,
         "stock": 30,
-        "imageUrl": "/images/products/prd203_beige_tui-tote-co-khoa-keo.png"
+        "imageUrl": "images/products/prd203_beige_tui-tote-co-khoa-keo.png"
       },
       {
         "_id": "prd203-black",
         "color": "black",
         "size": null,
         "stock": 31,
-        "imageUrl": "/images/products/prd203_black_tui-tote-co-khoa-keo.png"
+        "imageUrl": "images/products/prd203_black_tui-tote-co-khoa-keo.png"
       }
     ],
-    "createdAt": "2026-09-23T06:34:47.624Z",
-    "updatedAt": "2026-11-11T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.26,
+      "y": 0.44,
+      "width": 0.48,
+      "height": 0.42
+    }
   },
   {
     "_id": "prd204",
@@ -780,38 +760,36 @@
     "category": "tui-vai",
     "price": 85000,
     "description": "Balo dây rút canvas nhẹ, phù hợp đi học, đi biển, in thiết kế riêng.",
-    "img_display": "/images/products/prd204_white_balo-day-rut-vai.png",
+    "img_display": "images/products/prd204_white_balo-day-rut-vai.png",
     "img_detail": [
-      "/images/products/prd204_detail1.png"
+      "images/products/prd204_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.25,
-      "y": 0.3,
-      "width": 0.5,
-      "height": 0.45
-    },
     "variants": [
       {
         "_id": "prd204-white",
         "color": "white",
         "size": null,
         "stock": 35,
-        "imageUrl": "/images/products/prd204_white_balo-day-rut-vai.png"
+        "imageUrl": "images/products/prd204_white_balo-day-rut-vai.png"
       },
       {
         "_id": "prd204-black",
         "color": "black",
         "size": null,
         "stock": 33,
-        "imageUrl": "/images/products/prd204_black_balo-day-rut-vai.png"
+        "imageUrl": "images/products/prd204_black_balo-day-rut-vai.png"
       }
     ],
-    "createdAt": "2026-09-24T06:34:47.624Z",
-    "updatedAt": "2026-11-12T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.27,
+      "y": 0.32,
+      "width": 0.46,
+      "height": 0.36
+    }
   },
   {
     "_id": "prd205",
@@ -819,38 +797,36 @@
     "category": "tui-vai",
     "price": 60000,
     "description": "Túi pouch canvas đa dụng, đựng phụ kiện, mỹ phẩm hoặc bút vẽ.",
-    "img_display": "/images/products/prd205_beige_tui-pouch-canvas.png",
+    "img_display": "images/products/prd205_beige_tui-pouch-canvas.png",
     "img_detail": [
-      "/images/products/prd205_detail1.png"
+      "images/products/prd205_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.25,
-      "y": 0.3,
-      "width": 0.5,
-      "height": 0.45
-    },
     "variants": [
       {
         "_id": "prd205-beige",
         "color": "beige",
         "size": null,
         "stock": 26,
-        "imageUrl": "/images/products/prd205_beige_tui-pouch-canvas.png"
+        "imageUrl": "images/products/prd205_beige_tui-pouch-canvas.png"
       },
       {
         "_id": "prd205-black",
         "color": "black",
         "size": null,
         "stock": 34,
-        "imageUrl": "/images/products/prd205_black_tui-pouch-canvas.png"
+        "imageUrl": "images/products/prd205_black_tui-pouch-canvas.png"
       }
     ],
-    "createdAt": "2026-09-25T06:34:47.624Z",
-    "updatedAt": "2026-11-13T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.2,
+      "y": 0.38,
+      "width": 0.5,
+      "height": 0.3
+    }
   },
   {
     "_id": "prd206",
@@ -858,38 +834,36 @@
     "category": "tui-vai",
     "price": 40000,
     "description": "Túi đựng bút canvas hình chữ nhật, vùng in nhỏ cho logo hoặc tên riêng.",
-    "img_display": "/images/products/prd206_white_tui-dung-but-canvas.png",
+    "img_display": "images/products/prd206_white_tui-dung-but-canvas.png",
     "img_detail": [
-      "/images/products/prd206_detail1.png"
+      "images/products/prd206_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.25,
-      "y": 0.3,
-      "width": 0.5,
-      "height": 0.45
-    },
     "variants": [
       {
         "_id": "prd206-white",
         "color": "white",
         "size": null,
         "stock": 37,
-        "imageUrl": "/images/products/prd206_white_tui-dung-but-canvas.png"
+        "imageUrl": "images/products/prd206_white_tui-dung-but-canvas.png"
       },
       {
         "_id": "prd206-beige",
         "color": "beige",
         "size": null,
         "stock": 28,
-        "imageUrl": "/images/products/prd206_beige_tui-dung-but-canvas.png"
+        "imageUrl": "images/products/prd206_beige_tui-dung-but-canvas.png"
       }
     ],
-    "createdAt": "2026-09-26T06:34:47.624Z",
-    "updatedAt": "2026-11-08T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.2,
+      "y": 0.48,
+      "width": 0.6,
+      "height": 0.38
+    }
   },
   {
     "_id": "prd207",
@@ -897,38 +871,36 @@
     "category": "tui-vai",
     "price": 70000,
     "description": "Túi giữ nhiệt vải đựng hộp cơm, lớp lót giữ nhiệt bên trong.",
-    "img_display": "/images/products/prd207_beige_tui-giu-hop-com-vai.png",
+    "img_display": "images/products/prd207_beige_tui-giu-hop-com-vai.png",
     "img_detail": [
-      "/images/products/prd207_detail1.png"
+      "images/products/prd207_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.25,
-      "y": 0.3,
-      "width": 0.5,
-      "height": 0.45
-    },
     "variants": [
       {
         "_id": "prd207-beige",
         "color": "beige",
         "size": null,
         "stock": 29,
-        "imageUrl": "/images/products/prd207_beige_tui-giu-hop-com-vai.png"
+        "imageUrl": "images/products/prd207_beige_tui-giu-hop-com-vai.png"
       },
       {
         "_id": "prd207-black",
         "color": "black",
         "size": null,
         "stock": 30,
-        "imageUrl": "/images/products/prd207_black_tui-giu-hop-com-vai.png"
+        "imageUrl": "images/products/prd207_black_tui-giu-hop-com-vai.png"
       }
     ],
-    "createdAt": "2026-09-27T06:34:47.624Z",
-    "updatedAt": "2026-11-09T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.39,
+      "y": 0.34,
+      "width": 0.29,
+      "height": 0.36
+    }
   },
   {
     "_id": "prd301",
@@ -936,31 +908,29 @@
     "category": "binh-nuoc",
     "price": 120000,
     "description": "Cốc sứ trắng 350ml, in nhiệt bền màu, phù hợp làm quà tặng.",
-    "img_display": "/images/products/prd301_white_coc-su-in-hinh-350ml.png",
+    "img_display": "images/products/prd301_white_coc-su-in-hinh-350ml.png",
     "img_detail": [
-      "/images/products/prd301_detail1.png"
+      "images/products/prd301_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.2,
-      "y": 0.25,
-      "width": 0.6,
-      "height": 0.5
-    },
     "variants": [
       {
         "_id": "prd301-white",
         "color": "white",
         "size": "350ml",
         "stock": 38,
-        "imageUrl": "/images/products/prd301_white_coc-su-in-hinh-350ml.png"
+        "imageUrl": "images/products/prd301_white_coc-su-in-hinh-350ml.png"
       }
     ],
-    "createdAt": "2026-09-28T06:34:47.624Z",
-    "updatedAt": "2026-11-10T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.25,
+      "y": 0.33,
+      "width": 0.38,
+      "height": 0.38
+    }
   },
   {
     "_id": "prd302",
@@ -968,38 +938,36 @@
     "category": "binh-nuoc",
     "price": 95000,
     "description": "Cốc sứ mini 250ml xinh xắn, hợp in hình nhỏ hoặc chữ ký tặng.",
-    "img_display": "/images/products/prd302_white_coc-su-mini-250ml.png",
+    "img_display": "images/products/prd302_white_coc-su-mini-250ml.png",
     "img_detail": [
-      "/images/products/prd302_detail1.png"
+      "images/products/prd302_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.2,
-      "y": 0.25,
-      "width": 0.6,
-      "height": 0.5
-    },
     "variants": [
       {
         "_id": "prd302-white",
         "color": "white",
         "size": "250ml",
         "stock": 37,
-        "imageUrl": "/images/products/prd302_white_coc-su-mini-250ml.png"
+        "imageUrl": "images/products/prd302_white_coc-su-mini-250ml.png"
       },
       {
         "_id": "prd302-black",
         "color": "black",
         "size": "250ml",
         "stock": 35,
-        "imageUrl": "/images/products/prd302_black_coc-su-mini-250ml.png"
+        "imageUrl": "images/products/prd302_black_coc-su-mini-250ml.png"
       }
     ],
-    "createdAt": "2026-09-29T06:34:47.624Z",
-    "updatedAt": "2026-11-11T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.29,
+      "y": 0.36,
+      "width": 0.34,
+      "height": 0.3
+    }
   },
   {
     "_id": "prd303",
@@ -1007,38 +975,36 @@
     "category": "binh-nuoc",
     "price": 135000,
     "description": "Cốc sứ hai tông màu trong - ngoài tương phản, điểm nhấn cho thiết kế.",
-    "img_display": "/images/products/prd303_white-black_coc-su-hai-tong-mau-350ml.png",
+    "img_display": "images/products/prd303_white-black_coc-su-hai-tong-mau-350ml.png",
     "img_detail": [
-      "/images/products/prd303_detail1.png"
+      "images/products/prd303_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.2,
-      "y": 0.25,
-      "width": 0.6,
-      "height": 0.5
-    },
     "variants": [
       {
         "_id": "prd303-white-black",
         "color": "white-black",
         "size": "350ml",
         "stock": 20,
-        "imageUrl": "/images/products/prd303_white-black_coc-su-hai-tong-mau-350ml.png"
+        "imageUrl": "images/products/prd303_white-black_coc-su-hai-tong-mau-350ml.png"
       },
       {
         "_id": "prd303-white-blue",
         "color": "white-blue",
         "size": "350ml",
         "stock": 17,
-        "imageUrl": "/images/products/prd303_white-blue_coc-su-hai-tong-mau-350ml.png"
+        "imageUrl": "images/products/prd303_white-blue_coc-su-hai-tong-mau-350ml.png"
       }
     ],
-    "createdAt": "2026-09-30T06:34:47.624Z",
-    "updatedAt": "2026-11-12T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.23,
+      "y": 0.32,
+      "width": 0.42,
+      "height": 0.38
+    }
   },
   {
     "_id": "prd304",
@@ -1046,31 +1012,29 @@
     "category": "binh-nuoc",
     "price": 110000,
     "description": "Cốc tráng men trong suốt viền đen, hiện rõ hình in bên trong.",
-    "img_display": "/images/products/prd304_white_coc-trang-men-vien-den.png",
+    "img_display": "images/products/prd304_white_coc-trang-men-vien-den.png",
     "img_detail": [
-      "/images/products/prd304_detail1.png"
+      "images/products/prd304_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.2,
-      "y": 0.25,
-      "width": 0.6,
-      "height": 0.5
-    },
     "variants": [
       {
         "_id": "prd304-white",
         "color": "white",
         "size": "350ml",
         "stock": 39,
-        "imageUrl": "/images/products/prd304_white_coc-trang-men-vien-den.png"
+        "imageUrl": "images/products/prd304_white_coc-trang-men-vien-den.png"
       }
     ],
-    "createdAt": "2026-10-01T06:34:47.624Z",
-    "updatedAt": "2026-11-13T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.26,
+      "y": 0.34,
+      "width": 0.4,
+      "height": 0.34
+    }
   },
   {
     "_id": "prd305",
@@ -1078,38 +1042,36 @@
     "category": "binh-nuoc",
     "price": 220000,
     "description": "Ly giữ nhiệt inox 450ml, giữ nóng/lạnh 6 giờ, in bao quanh ly.",
-    "img_display": "/images/products/prd305_white_ly-giu-nhiet-dang-thang-450ml.png",
+    "img_display": "images/products/prd305_white_ly-giu-nhiet-dang-thang-450ml.png",
     "img_detail": [
-      "/images/products/prd305_detail1.png"
+      "images/products/prd305_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.15,
-      "y": 0.2,
-      "width": 0.7,
-      "height": 0.6
-    },
     "variants": [
       {
         "_id": "prd305-white",
         "color": "white",
         "size": "450ml",
         "stock": 40,
-        "imageUrl": "/images/products/prd305_white_ly-giu-nhiet-dang-thang-450ml.png"
+        "imageUrl": "images/products/prd305_white_ly-giu-nhiet-dang-thang-450ml.png"
       },
       {
         "_id": "prd305-black",
         "color": "black",
         "size": "450ml",
         "stock": 32,
-        "imageUrl": "/images/products/prd305_black_ly-giu-nhiet-dang-thang-450ml.png"
+        "imageUrl": "images/products/prd305_black_ly-giu-nhiet-dang-thang-450ml.png"
       }
     ],
-    "createdAt": "2026-10-02T06:34:47.624Z",
-    "updatedAt": "2026-11-08T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.4,
+      "y": 0.38,
+      "width": 0.2,
+      "height": 0.38
+    }
   },
   {
     "_id": "prd306",
@@ -1117,38 +1079,36 @@
     "category": "binh-nuoc",
     "price": 150000,
     "description": "Bình nước nhôm thể thao 600ml, nắp gập tiện mang theo, in logo riêng.",
-    "img_display": "/images/products/prd306_white_binh-nuoc-nhom-the-thao-600ml.png",
+    "img_display": "images/products/prd306_white_binh-nuoc-nhom-the-thao-600ml.png",
     "img_detail": [
-      "/images/products/prd306_detail1.png"
+      "images/products/prd306_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.15,
-      "y": 0.2,
-      "width": 0.7,
-      "height": 0.6
-    },
     "variants": [
       {
         "_id": "prd306-white",
         "color": "white",
         "size": "600ml",
         "stock": 36,
-        "imageUrl": "/images/products/prd306_white_binh-nuoc-nhom-the-thao-600ml.png"
+        "imageUrl": "images/products/prd306_white_binh-nuoc-nhom-the-thao-600ml.png"
       },
       {
         "_id": "prd306-silver",
         "color": "silver",
         "size": "600ml",
         "stock": 20,
-        "imageUrl": "/images/products/prd306_silver_binh-nuoc-nhom-the-thao-600ml.png"
+        "imageUrl": "images/products/prd306_silver_binh-nuoc-nhom-the-thao-600ml.png"
       }
     ],
-    "createdAt": "2026-10-03T06:34:47.624Z",
-    "updatedAt": "2026-11-09T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.4,
+      "y": 0.42,
+      "width": 0.2,
+      "height": 0.38
+    }
   },
   {
     "_id": "prd307",
@@ -1156,45 +1116,43 @@
     "category": "binh-nuoc",
     "price": 280000,
     "description": "Bình giữ nhiệt inox 500ml hai lớp chân không, in thiết kế bền màu.",
-    "img_display": "/images/products/prd307_white_binh-giu-nhiet-inox-500ml.png",
+    "img_display": "images/products/prd307_white_binh-giu-nhiet-inox-500ml.png",
     "img_detail": [
-      "/images/products/prd307_detail1.png"
+      "images/products/prd307_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.15,
-      "y": 0.2,
-      "width": 0.7,
-      "height": 0.6
-    },
     "variants": [
       {
         "_id": "prd307-white",
         "color": "white",
         "size": "500ml",
         "stock": 37,
-        "imageUrl": "/images/products/prd307_white_binh-giu-nhiet-inox-500ml.png"
+        "imageUrl": "images/products/prd307_white_binh-giu-nhiet-inox-500ml.png"
       },
       {
         "_id": "prd307-black",
         "color": "black",
         "size": "500ml",
         "stock": 35,
-        "imageUrl": "/images/products/prd307_black_binh-giu-nhiet-inox-500ml.png"
+        "imageUrl": "images/products/prd307_black_binh-giu-nhiet-inox-500ml.png"
       },
       {
         "_id": "prd307-silver",
         "color": "silver",
         "size": "500ml",
         "stock": 21,
-        "imageUrl": "/images/products/prd307_silver_binh-giu-nhiet-inox-500ml.png"
+        "imageUrl": "images/products/prd307_silver_binh-giu-nhiet-inox-500ml.png"
       }
     ],
-    "createdAt": "2026-10-04T06:34:47.624Z",
-    "updatedAt": "2026-11-10T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.42,
+      "y": 0.38,
+      "width": 0.2,
+      "height": 0.38
+    }
   },
   {
     "_id": "prd401",
@@ -1202,38 +1160,36 @@
     "category": "van-phong-pham",
     "price": 65000,
     "description": "Sổ tay lò xo A5 gáy xoắn, bìa in thiết kế riêng, 100 trang kẻ ngang.",
-    "img_display": "/images/products/prd401_white_so-tay-lo-xo-a5.png",
+    "img_display": "images/products/prd401_white_so-tay-lo-xo-a5.png",
     "img_detail": [
-      "/images/products/prd401_detail1.png"
+      "images/products/prd401_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.2,
-      "y": 0.25,
-      "width": 0.6,
-      "height": 0.5
-    },
     "variants": [
       {
         "_id": "prd401-white",
         "color": "white",
         "size": "A5",
         "stock": 40,
-        "imageUrl": "/images/products/prd401_white_so-tay-lo-xo-a5.png"
+        "imageUrl": "images/products/prd401_white_so-tay-lo-xo-a5.png"
       },
       {
         "_id": "prd401-black",
         "color": "black",
         "size": "A5",
         "stock": 32,
-        "imageUrl": "/images/products/prd401_black_so-tay-lo-xo-a5.png"
+        "imageUrl": "images/products/prd401_black_so-tay-lo-xo-a5.png"
       }
     ],
-    "createdAt": "2026-10-05T06:34:47.624Z",
-    "updatedAt": "2026-11-11T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.3,
+      "y": 0.2,
+      "width": 0.42,
+      "height": 0.6
+    }
   },
   {
     "_id": "prd402",
@@ -1241,45 +1197,43 @@
     "category": "van-phong-pham",
     "price": 80000,
     "description": "Sổ tay bìa cứng A5 cao cấp, phù hợp làm sổ ghi chú quà tặng.",
-    "img_display": "/images/products/prd402_white_so-tay-bia-cung-a5.png",
+    "img_display": "images/products/prd402_white_so-tay-bia-cung-a5.png",
     "img_detail": [
-      "/images/products/prd402_detail1.png"
+      "images/products/prd402_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.2,
-      "y": 0.25,
-      "width": 0.6,
-      "height": 0.5
-    },
     "variants": [
       {
         "_id": "prd402-white",
         "color": "white",
         "size": "A5",
         "stock": 35,
-        "imageUrl": "/images/products/prd402_white_so-tay-bia-cung-a5.png"
+        "imageUrl": "images/products/prd402_white_so-tay-bia-cung-a5.png"
       },
       {
         "_id": "prd402-beige",
         "color": "beige",
         "size": "A5",
         "stock": 26,
-        "imageUrl": "/images/products/prd402_beige_so-tay-bia-cung-a5.png"
+        "imageUrl": "images/products/prd402_beige_so-tay-bia-cung-a5.png"
       },
       {
         "_id": "prd402-black",
         "color": "black",
         "size": "A5",
         "stock": 33,
-        "imageUrl": "/images/products/prd402_black_so-tay-bia-cung-a5.png"
+        "imageUrl": "images/products/prd402_black_so-tay-bia-cung-a5.png"
       }
     ],
-    "createdAt": "2026-10-06T06:34:47.624Z",
-    "updatedAt": "2026-11-12T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.3,
+      "y": 0.2,
+      "width": 0.4,
+      "height": 0.6
+    }
   },
   {
     "_id": "prd403",
@@ -1287,38 +1241,36 @@
     "category": "van-phong-pham",
     "price": 90000,
     "description": "Sổ nhật ký bìa mềm A6 nhỏ gọn, có dây buộc, in tên hoặc câu chữ.",
-    "img_display": "/images/products/prd403_white_so-nhat-ky-bia-mem-a6.png",
+    "img_display": "images/products/prd403_white_so-nhat-ky-bia-mem-a6.png",
     "img_detail": [
-      "/images/products/prd403_detail1.png"
+      "images/products/prd403_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.2,
-      "y": 0.25,
-      "width": 0.6,
-      "height": 0.5
-    },
     "variants": [
       {
         "_id": "prd403-white",
         "color": "white",
         "size": "A6",
         "stock": 37,
-        "imageUrl": "/images/products/prd403_white_so-nhat-ky-bia-mem-a6.png"
+        "imageUrl": "images/products/prd403_white_so-nhat-ky-bia-mem-a6.png"
       },
       {
         "_id": "prd403-black",
         "color": "black",
         "size": "A6",
         "stock": 35,
-        "imageUrl": "/images/products/prd403_black_so-nhat-ky-bia-mem-a6.png"
+        "imageUrl": "images/products/prd403_black_so-nhat-ky-bia-mem-a6.png"
       }
     ],
-    "createdAt": "2026-10-07T06:34:47.624Z",
-    "updatedAt": "2026-11-13T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.3,
+      "y": 0.22,
+      "width": 0.42,
+      "height": 0.56
+    }
   },
   {
     "_id": "prd404",
@@ -1326,31 +1278,29 @@
     "category": "van-phong-pham",
     "price": 15000,
     "description": "Bưu thiếp A6 giấy cáp, in một mặt, giá economy cho đơn số lượng lớn.",
-    "img_display": "/images/products/prd404_white_buu-thiep-postcard-a6.png",
+    "img_display": "images/products/prd404_white_buu-thiep-postcard-a6.png",
     "img_detail": [
-      "/images/products/prd404_detail1.png"
+      "images/products/prd404_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.1,
-      "y": 0.1,
-      "width": 0.8,
-      "height": 0.8
-    },
     "variants": [
       {
         "_id": "prd404-white",
         "color": "white",
         "size": "A6",
         "stock": 3,
-        "imageUrl": "/images/products/prd404_white_buu-thiep-postcard-a6.png"
+        "imageUrl": "images/products/prd404_white_buu-thiep-postcard-a6.png"
       }
     ],
-    "createdAt": "2026-10-08T06:34:47.624Z",
-    "updatedAt": "2026-11-08T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.14,
+      "y": 0.28,
+      "width": 0.72,
+      "height": 0.44
+    }
   },
   {
     "_id": "prd405",
@@ -1358,38 +1308,36 @@
     "category": "van-phong-pham",
     "price": 25000,
     "description": "Thiệp gập A5 giấy mỹ thuật, in thiết kế sinh nhật, lễ hội theo yêu cầu.",
-    "img_display": "/images/products/prd405_white_thiep-chuc-mung-gap-a5.png",
+    "img_display": "images/products/prd405_white_thiep-chuc-mung-gap-a5.png",
     "img_detail": [
-      "/images/products/prd405_detail1.png"
+      "images/products/prd405_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.1,
-      "y": 0.1,
-      "width": 0.8,
-      "height": 0.8
-    },
     "variants": [
       {
         "_id": "prd405-white",
         "color": "white",
         "size": "A5",
         "stock": 39,
-        "imageUrl": "/images/products/prd405_white_thiep-chuc-mung-gap-a5.png"
+        "imageUrl": "images/products/prd405_white_thiep-chuc-mung-gap-a5.png"
       },
       {
         "_id": "prd405-cream",
         "color": "cream",
         "size": "A5",
         "stock": 16,
-        "imageUrl": "/images/products/prd405_cream_thiep-chuc-mung-gap-a5.png"
+        "imageUrl": "images/products/prd405_cream_thiep-chuc-mung-gap-a5.png"
       }
     ],
-    "createdAt": "2026-10-09T06:34:47.624Z",
-    "updatedAt": "2026-11-09T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.31,
+      "y": 0.28,
+      "width": 0.38,
+      "height": 0.44
+    }
   },
   {
     "_id": "prd406",
@@ -1397,31 +1345,29 @@
     "category": "van-phong-pham",
     "price": 45000,
     "description": "Poster A4 giấy bóng mờ, in màu sắc rực rỡ cho phòng làm việc.",
-    "img_display": "/images/products/prd406_white_poster-giay-a4.png",
+    "img_display": "images/products/prd406_white_poster-giay-a4.png",
     "img_detail": [
-      "/images/products/prd406_detail1.png"
+      "images/products/prd406_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.1,
-      "y": 0.08,
-      "width": 0.8,
-      "height": 0.84
-    },
     "variants": [
       {
         "_id": "prd406-white",
         "color": "white",
         "size": "A4",
         "stock": 40,
-        "imageUrl": "/images/products/prd406_white_poster-giay-a4.png"
+        "imageUrl": "images/products/prd406_white_poster-giay-a4.png"
       }
     ],
-    "createdAt": "2026-10-10T06:34:47.624Z",
-    "updatedAt": "2026-11-10T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.25,
+      "y": 0.15,
+      "width": 0.5,
+      "height": 0.7
+    }
   },
   {
     "_id": "prd407",
@@ -1429,38 +1375,36 @@
     "category": "van-phong-pham",
     "price": 90000,
     "description": "Lịch để bàn A5 12 tháng, đế gỗ đứng, mỗi trang in một thiết kế.",
-    "img_display": "/images/products/prd407_white_lich-de-ban-a5.png",
+    "img_display": "images/products/prd407_white_lich-de-ban-a5.png",
     "img_detail": [
-      "/images/products/prd407_detail1.png"
+      "images/products/prd407_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.2,
-      "y": 0.25,
-      "width": 0.6,
-      "height": 0.5
-    },
     "variants": [
       {
         "_id": "prd407-white",
         "color": "white",
         "size": "A5",
         "stock": 35,
-        "imageUrl": "/images/products/prd407_white_lich-de-ban-a5.png"
+        "imageUrl": "images/products/prd407_white_lich-de-ban-a5.png"
       },
       {
         "_id": "prd407-cream",
         "color": "cream",
         "size": "A5",
         "stock": 19,
-        "imageUrl": "/images/products/prd407_cream_lich-de-ban-a5.png"
+        "imageUrl": "images/products/prd407_cream_lich-de-ban-a5.png"
       }
     ],
-    "createdAt": "2026-10-11T06:34:47.624Z",
-    "updatedAt": "2026-11-11T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.2,
+      "y": 0.38,
+      "width": 0.6,
+      "height": 0.26
+    }
   },
   {
     "_id": "prd501",
@@ -1468,31 +1412,29 @@
     "category": "trang-tri",
     "price": 190000,
     "description": "Tranh canvas 20x30cm khung gỗ thông, in màu chuẩn theo thiết kế.",
-    "img_display": "/images/products/prd501_white_tranh-canvas-20x30cm.png",
+    "img_display": "images/products/prd501_white_tranh-canvas-20x30cm.png",
     "img_detail": [
-      "/images/products/prd501_detail1.png"
+      "images/products/prd501_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.12,
-      "y": 0.12,
-      "width": 0.76,
-      "height": 0.76
-    },
     "variants": [
       {
         "_id": "prd501-white",
         "color": "white",
         "size": "20x30",
         "stock": 39,
-        "imageUrl": "/images/products/prd501_white_tranh-canvas-20x30cm.png"
+        "imageUrl": "images/products/prd501_white_tranh-canvas-20x30cm.png"
       }
     ],
-    "createdAt": "2026-10-12T06:34:47.624Z",
-    "updatedAt": "2026-11-12T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.32,
+      "y": 0.16,
+      "width": 0.34,
+      "height": 0.7
+    }
   },
   {
     "_id": "prd502",
@@ -1500,31 +1442,29 @@
     "category": "trang-tri",
     "price": 290000,
     "description": "Tranh canvas 30x40cm khung gỗ, độ phân giải cao, treo phòng khách.",
-    "img_display": "/images/products/prd502_white_tranh-canvas-30x40cm.png",
+    "img_display": "images/products/prd502_white_tranh-canvas-30x40cm.png",
     "img_detail": [
-      "/images/products/prd502_detail1.png"
+      "images/products/prd502_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.12,
-      "y": 0.12,
-      "width": 0.76,
-      "height": 0.76
-    },
     "variants": [
       {
         "_id": "prd502-white",
         "color": "white",
         "size": "30x40",
         "stock": 40,
-        "imageUrl": "/images/products/prd502_white_tranh-canvas-30x40cm.png"
+        "imageUrl": "images/products/prd502_white_tranh-canvas-30x40cm.png"
       }
     ],
-    "createdAt": "2026-10-13T06:34:47.624Z",
-    "updatedAt": "2026-11-13T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.24,
+      "y": 0.27,
+      "width": 0.52,
+      "height": 0.5
+    }
   },
   {
     "_id": "prd503",
@@ -1532,38 +1472,36 @@
     "category": "trang-tri",
     "price": 160000,
     "description": "Tranh A4 đóng khung mica mỏng, nhẹ, dễ treo, in theo yêu cầu.",
-    "img_display": "/images/products/prd503_white_tranh-dong-khung-a4.png",
+    "img_display": "images/products/prd503_white_tranh-dong-khung-a4.png",
     "img_detail": [
-      "/images/products/prd503_detail1.png"
+      "images/products/prd503_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.12,
-      "y": 0.12,
-      "width": 0.76,
-      "height": 0.76
-    },
     "variants": [
       {
         "_id": "prd503-white",
         "color": "white",
         "size": "A4",
         "stock": 35,
-        "imageUrl": "/images/products/prd503_white_tranh-dong-khung-a4.png"
+        "imageUrl": "images/products/prd503_white_tranh-dong-khung-a4.png"
       },
       {
         "_id": "prd503-black",
         "color": "black",
         "size": "A4",
         "stock": 33,
-        "imageUrl": "/images/products/prd503_black_tranh-dong-khung-a4.png"
+        "imageUrl": "images/products/prd503_black_tranh-dong-khung-a4.png"
       }
     ],
-    "createdAt": "2026-10-14T06:34:47.624Z",
-    "updatedAt": "2026-11-08T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.22,
+      "y": 0.32,
+      "width": 0.56,
+      "height": 0.36
+    }
   },
   {
     "_id": "prd504",
@@ -1571,38 +1509,36 @@
     "category": "trang-tri",
     "price": 120000,
     "description": "Vỏ gối vuông 40x40cm vải nhung ngắn, in hai mặt tùy chọn.",
-    "img_display": "/images/products/prd504_white_vo-goi-vuong-40x40cm.png",
+    "img_display": "images/products/prd504_white_vo-goi-vuong-40x40cm.png",
     "img_detail": [
-      "/images/products/prd504_detail1.png"
+      "images/products/prd504_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.12,
-      "y": 0.12,
-      "width": 0.76,
-      "height": 0.76
-    },
     "variants": [
       {
         "_id": "prd504-white",
         "color": "white",
         "size": "40x40",
         "stock": 37,
-        "imageUrl": "/images/products/prd504_white_vo-goi-vuong-40x40cm.png"
+        "imageUrl": "images/products/prd504_white_vo-goi-vuong-40x40cm.png"
       },
       {
         "_id": "prd504-beige",
         "color": "beige",
         "size": "40x40",
         "stock": 27,
-        "imageUrl": "/images/products/prd504_beige_vo-goi-vuong-40x40cm.png"
+        "imageUrl": "images/products/prd504_beige_vo-goi-vuong-40x40cm.png"
       }
     ],
-    "createdAt": "2026-10-15T06:34:47.624Z",
-    "updatedAt": "2026-11-09T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.3,
+      "y": 0.32,
+      "width": 0.4,
+      "height": 0.38
+    }
   },
   {
     "_id": "prd505",
@@ -1610,38 +1546,36 @@
     "category": "trang-tri",
     "price": 110000,
     "description": "Vỏ gối chữ nhật 30x50cm vải lụa mềm, hợp in ảnh cặp đôi.",
-    "img_display": "/images/products/prd505_white_vo-goi-chu-nhat-30x50cm.png",
+    "img_display": "images/products/prd505_white_vo-goi-chu-nhat-30x50cm.png",
     "img_detail": [
-      "/images/products/prd505_detail1.png"
+      "images/products/prd505_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.12,
-      "y": 0.12,
-      "width": 0.76,
-      "height": 0.76
-    },
     "variants": [
       {
         "_id": "prd505-white",
         "color": "white",
         "size": "30x50",
         "stock": 38,
-        "imageUrl": "/images/products/prd505_white_vo-goi-chu-nhat-30x50cm.png"
+        "imageUrl": "images/products/prd505_white_vo-goi-chu-nhat-30x50cm.png"
       },
       {
         "_id": "prd505-beige",
         "color": "beige",
         "size": "30x50",
         "stock": 28,
-        "imageUrl": "/images/products/prd505_beige_vo-goi-chu-nhat-30x50cm.png"
+        "imageUrl": "images/products/prd505_beige_vo-goi-chu-nhat-30x50cm.png"
       }
     ],
-    "createdAt": "2026-10-16T06:34:47.624Z",
-    "updatedAt": "2026-11-10T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.3,
+      "y": 0.32,
+      "width": 0.4,
+      "height": 0.36
+    }
   },
   {
     "_id": "prd506",
@@ -1649,38 +1583,36 @@
     "category": "trang-tri",
     "price": 35000,
     "description": "Lót ly vuông 10x10cm gỗ mica, bề mặt in chống trầy.",
-    "img_display": "/images/products/prd506_white_lot-ly-vuong-10x10cm.png",
+    "img_display": "images/products/prd506_white_lot-ly-vuong-10x10cm.png",
     "img_detail": [
-      "/images/products/prd506_detail1.png"
+      "images/products/prd506_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.12,
-      "y": 0.12,
-      "width": 0.76,
-      "height": 0.76
-    },
     "variants": [
       {
         "_id": "prd506-white",
         "color": "white",
         "size": "10x10",
         "stock": 39,
-        "imageUrl": "/images/products/prd506_white_lot-ly-vuong-10x10cm.png"
+        "imageUrl": "images/products/prd506_white_lot-ly-vuong-10x10cm.png"
       },
       {
         "_id": "prd506-beige",
         "color": "beige",
         "size": "10x10",
         "stock": 30,
-        "imageUrl": "/images/products/prd506_beige_lot-ly-vuong-10x10cm.png"
+        "imageUrl": "images/products/prd506_beige_lot-ly-vuong-10x10cm.png"
       }
     ],
-    "createdAt": "2026-10-17T06:34:47.624Z",
-    "updatedAt": "2026-11-11T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.24,
+      "y": 0.24,
+      "width": 0.54,
+      "height": 0.54
+    }
   },
   {
     "_id": "prd507",
@@ -1688,38 +1620,36 @@
     "category": "trang-tri",
     "price": 95000,
     "description": "Thảm vải để bàn 30x40cm, mặt vải nhám in rõ, mặt cao su chống trượt.",
-    "img_display": "/images/products/prd507_white_tham-vai-de-ban-30x40cm.png",
+    "img_display": "images/products/prd507_white_tham-vai-de-ban-30x40cm.png",
     "img_detail": [
-      "/images/products/prd507_detail1.png"
+      "images/products/prd507_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.12,
-      "y": 0.12,
-      "width": 0.76,
-      "height": 0.76
-    },
     "variants": [
       {
         "_id": "prd507-white",
         "color": "white",
         "size": "30x40",
         "stock": 40,
-        "imageUrl": "/images/products/prd507_white_tham-vai-de-ban-30x40cm.png"
+        "imageUrl": "images/products/prd507_white_tham-vai-de-ban-30x40cm.png"
       },
       {
         "_id": "prd507-beige",
         "color": "beige",
         "size": "30x40",
         "stock": 25,
-        "imageUrl": "/images/products/prd507_beige_tham-vai-de-ban-30x40cm.png"
+        "imageUrl": "images/products/prd507_beige_tham-vai-de-ban-30x40cm.png"
       }
     ],
-    "createdAt": "2026-10-18T06:34:47.624Z",
-    "updatedAt": "2026-11-12T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.14,
+      "y": 0.22,
+      "width": 0.72,
+      "height": 0.55
+    }
   },
   {
     "_id": "prd601",
@@ -1727,45 +1657,43 @@
     "category": "phu-kien",
     "price": 130000,
     "description": "Ốp lưng điện thoại trơn nhiều dòng máy, in thiết kế bền màu.",
-    "img_display": "/images/products/prd601_white_op-lung-dien-thoai-tron.png",
+    "img_display": "images/products/prd601_white_op-lung-dien-thoai-tron.png",
     "img_detail": [
-      "/images/products/prd601_detail1.png"
+      "images/products/prd601_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.25,
-      "y": 0.2,
-      "width": 0.5,
-      "height": 0.6
-    },
     "variants": [
       {
         "_id": "prd601-white",
         "color": "white",
         "size": null,
         "stock": 38,
-        "imageUrl": "/images/products/prd601_white_op-lung-dien-thoai-tron.png"
+        "imageUrl": "images/products/prd601_white_op-lung-dien-thoai-tron.png"
       },
       {
         "_id": "prd601-black",
         "color": "black",
         "size": null,
         "stock": 30,
-        "imageUrl": "/images/products/prd601_black_op-lung-dien-thoai-tron.png"
+        "imageUrl": "images/products/prd601_black_op-lung-dien-thoai-tron.png"
       },
       {
         "_id": "prd601-clear",
         "color": "clear",
         "size": null,
         "stock": 15,
-        "imageUrl": "/images/products/prd601_clear_op-lung-dien-thoai-tron.png"
+        "imageUrl": "images/products/prd601_clear_op-lung-dien-thoai-tron.png"
       }
     ],
-    "createdAt": "2026-10-19T06:34:47.624Z",
-    "updatedAt": "2026-11-13T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.34,
+      "y": 0.36,
+      "width": 0.32,
+      "height": 0.48
+    }
   },
   {
     "_id": "prd602",
@@ -1773,38 +1701,36 @@
     "category": "phu-kien",
     "price": 60000,
     "description": "Lót chuột chữ nhật 22x18cm, mặt vải in ảnh, đế cao su bám bàn.",
-    "img_display": "/images/products/prd602_white_lot-chuot-chu-nhat.png",
+    "img_display": "images/products/prd602_white_lot-chuot-chu-nhat.png",
     "img_detail": [
-      "/images/products/prd602_detail1.png"
+      "images/products/prd602_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.25,
-      "y": 0.2,
-      "width": 0.5,
-      "height": 0.6
-    },
     "variants": [
       {
         "_id": "prd602-white",
         "color": "white",
         "size": null,
         "stock": 39,
-        "imageUrl": "/images/products/prd602_white_lot-chuot-chu-nhat.png"
+        "imageUrl": "images/products/prd602_white_lot-chuot-chu-nhat.png"
       },
       {
         "_id": "prd602-black",
         "color": "black",
         "size": null,
         "stock": 31,
-        "imageUrl": "/images/products/prd602_black_lot-chuot-chu-nhat.png"
+        "imageUrl": "images/products/prd602_black_lot-chuot-chu-nhat.png"
       }
     ],
-    "createdAt": "2026-10-20T06:34:47.624Z",
-    "updatedAt": "2026-11-08T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.12,
+      "y": 0.2,
+      "width": 0.76,
+      "height": 0.6
+    }
   },
   {
     "_id": "prd603",
@@ -1812,38 +1738,36 @@
     "category": "phu-kien",
     "price": 140000,
     "description": "Desk mat 60x30cm phủ toàn bàn phím, viền khâu chỉ, in thiết kế riêng.",
-    "img_display": "/images/products/prd603_white_tham-ban-desk-mat-60x30cm.png",
+    "img_display": "images/products/prd603_white_tham-ban-desk-mat-60x30cm.png",
     "img_detail": [
-      "/images/products/prd603_detail1.png"
+      "images/products/prd603_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.15,
-      "y": 0.2,
-      "width": 0.7,
-      "height": 0.6
-    },
     "variants": [
       {
         "_id": "prd603-white",
         "color": "white",
         "size": "60x30",
         "stock": 40,
-        "imageUrl": "/images/products/prd603_white_tham-ban-desk-mat-60x30cm.png"
+        "imageUrl": "images/products/prd603_white_tham-ban-desk-mat-60x30cm.png"
       },
       {
         "_id": "prd603-black",
         "color": "black",
         "size": "60x30",
         "stock": 32,
-        "imageUrl": "/images/products/prd603_black_tham-ban-desk-mat-60x30cm.png"
+        "imageUrl": "images/products/prd603_black_tham-ban-desk-mat-60x30cm.png"
       }
     ],
-    "createdAt": "2026-10-21T06:34:47.624Z",
-    "updatedAt": "2026-11-09T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.23,
+      "y": 0.33,
+      "width": 0.54,
+      "height": 0.33
+    }
   },
   {
     "_id": "prd604",
@@ -1851,38 +1775,103 @@
     "category": "phu-kien",
     "price": 45000,
     "description": "Móc khóa mica chữ nhật in hai mặt, kèm vòng kim loại chắc chắn.",
-    "img_display": "/images/products/prd604_clear_moc-khoa-mica-chu-nhat.png",
+    "img_display": "images/products/prd604_clear_moc-khoa-mica-chu-nhat.png",
     "img_detail": [
-      "/images/products/prd604_detail1.png"
+      "images/products/prd604_detail1.png"
     ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.25,
-      "y": 0.2,
-      "width": 0.5,
-      "height": 0.6
-    },
     "variants": [
       {
         "_id": "prd604-clear",
         "color": "clear",
         "size": null,
         "stock": 5,
-        "imageUrl": "/images/products/prd604_clear_moc-khoa-mica-chu-nhat.png"
+        "imageUrl": "images/products/prd604_clear_moc-khoa-mica-chu-nhat.png"
       },
       {
         "_id": "prd604-white",
         "color": "white",
         "size": null,
         "stock": 4,
-        "imageUrl": "/images/products/prd604_white_moc-khoa-mica-chu-nhat.png"
+        "imageUrl": "images/products/prd604_white_moc-khoa-mica-chu-nhat.png"
       }
     ],
-    "createdAt": "2026-10-22T06:34:47.624Z",
-    "updatedAt": "2026-11-10T06:34:47.624Z"
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.2,
+      "y": 0.32,
+      "width": 0.6,
+      "height": 0.4
+    }
+  },
+  {
+    "_id": "prd606",
+    "name": "Thẻ hành lý cá nhân",
+    "category": "phu-kien",
+    "price": 55000,
+    "description": "Thẻ hành lý da PU cá nhân, kèm dây đeo, in tên và thông tin liên lạc.",
+    "img_display": "images/products/prd606_white_the-hanh-ly-ca-nhan.png",
+    "img_detail": [
+      "images/products/prd606_detail1.png"
+    ],
+    "variants": [
+      {
+        "_id": "prd606-white",
+        "color": "white",
+        "size": null,
+        "stock": 38,
+        "imageUrl": "images/products/prd606_white_the-hanh-ly-ca-nhan.png"
+      },
+      {
+        "_id": "prd606-black",
+        "color": "black",
+        "size": null,
+        "stock": 30,
+        "imageUrl": "images/products/prd606_black_the-hanh-ly-ca-nhan.png"
+      }
+    ],
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.36,
+      "y": 0.45,
+      "width": 0.28,
+      "height": 0.35
+    }
+  },
+  {
+    "_id": "prd607",
+    "name": "Nam châm tủ lạnh chữ nhật",
+    "category": "phu-kien",
+    "price": 30000,
+    "description": "Nam châm tủ lạnh chữ nhật in ảnh hoặc lịch, quà lưu niệm phổ biến.",
+    "img_display": "images/products/prd607_white_nam-cham-tu-lanh-chu-nhat.png",
+    "img_detail": [
+      "images/products/prd607_detail1.png"
+    ],
+    "variants": [
+      {
+        "_id": "prd607-white",
+        "color": "white",
+        "size": null,
+        "stock": 39,
+        "imageUrl": "images/products/prd607_white_nam-cham-tu-lanh-chu-nhat.png"
+      }
+    ],
+    "isActive": true,
+    "allowCustomization": true,
+    "allowMarketplace": true,
+    "lowStockThreshold": 5,
+    "printArea": {
+      "x": 0.32,
+      "y": 0.32,
+      "width": 0.36,
+      "height": 0.36
+    }
   },
   {
     "_id": "prd605",
@@ -1890,9 +1879,9 @@
     "category": "phu-kien",
     "price": 40000,
     "description": "Móc khóa mica vuông mini, in hình theo yêu cầu, làm quà tặng sự kiện.",
-    "img_display": "/images/products/prd605_clear_moc-khoa-mica-vuong.png",
+    "img_display": "images/products/prd605_clear_moc-khoa-mica-vuong.png",
     "img_detail": [
-      "/images/products/prd605_detail1.png"
+      "images/products/prd605_detail1.png"
     ],
     "allowCustomization": true,
     "allowMarketplace": true,
@@ -1910,81 +1899,10 @@
         "color": "clear",
         "size": null,
         "stock": 14,
-        "imageUrl": "/images/products/prd605_clear_moc-khoa-mica-vuong.png"
+        "imageUrl": "images/products/prd605_clear_moc-khoa-mica-vuong.png"
       }
     ],
     "createdAt": "2026-10-23T06:34:47.624Z",
     "updatedAt": "2026-11-11T06:34:47.624Z"
-  },
-  {
-    "_id": "prd606",
-    "name": "Thẻ hành lý cá nhân",
-    "category": "phu-kien",
-    "price": 55000,
-    "description": "Thẻ hành lý da PU cá nhân, kèm dây đeo, in tên và thông tin liên lạc.",
-    "img_display": "/images/products/prd606_white_the-hanh-ly-ca-nhan.png",
-    "img_detail": [
-      "/images/products/prd606_detail1.png"
-    ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.25,
-      "y": 0.2,
-      "width": 0.5,
-      "height": 0.6
-    },
-    "variants": [
-      {
-        "_id": "prd606-white",
-        "color": "white",
-        "size": null,
-        "stock": 38,
-        "imageUrl": "/images/products/prd606_white_the-hanh-ly-ca-nhan.png"
-      },
-      {
-        "_id": "prd606-black",
-        "color": "black",
-        "size": null,
-        "stock": 30,
-        "imageUrl": "/images/products/prd606_black_the-hanh-ly-ca-nhan.png"
-      }
-    ],
-    "createdAt": "2026-10-24T06:34:47.624Z",
-    "updatedAt": "2026-11-12T06:34:47.624Z"
-  },
-  {
-    "_id": "prd607",
-    "name": "Nam châm tủ lạnh chữ nhật",
-    "category": "phu-kien",
-    "price": 30000,
-    "description": "Nam châm tủ lạnh chữ nhật in ảnh hoặc lịch, quà lưu niệm phổ biến.",
-    "img_display": "/images/products/prd607_white_nam-cham-tu-lanh-chu-nhat.png",
-    "img_detail": [
-      "/images/products/prd607_detail1.png"
-    ],
-    "allowCustomization": true,
-    "allowMarketplace": true,
-    "isActive": true,
-    "lowStockThreshold": 5,
-    "printArea": {
-      "x": 0.25,
-      "y": 0.2,
-      "width": 0.5,
-      "height": 0.6
-    },
-    "variants": [
-      {
-        "_id": "prd607-white",
-        "color": "white",
-        "size": null,
-        "stock": 39,
-        "imageUrl": "/images/products/prd607_white_nam-cham-tu-lanh-chu-nhat.png"
-      }
-    ],
-    "createdAt": "2026-10-25T06:34:47.624Z",
-    "updatedAt": "2026-11-13T06:34:47.624Z"
   }
 ]

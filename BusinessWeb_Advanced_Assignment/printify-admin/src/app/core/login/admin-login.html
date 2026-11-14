@@ -1,0 +1,32 @@
+<main class="wrap">
+  <section class="box">
+    <div class="brand"><span class="logo" aria-hidden="true">P</span><span><b>Print<em>iFy</em></b><small>ADMIN</small></span></div>
+    <h1>Đăng nhập quản trị</h1>
+    <p class="muted">Dành cho nhân viên (STAFF) và quản trị viên (SUPERADMIN).</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <label class="field">Email
+        <input class="input" type="email" formControlName="email" autocomplete="username" [class.bad]="invalid('email')" />
+        @if (invalid('email')) { <small class="err">{{ form.controls.email.hasError('required') ? 'Nhập email.' : 'Email chưa đúng định dạng.' }}</small> }
+      </label>
+      <label class="field">Mật khẩu
+        <span class="pw">
+          <input class="input" [type]="showPassword() ? 'text' : 'password'" formControlName="password" autocomplete="current-password" [class.bad]="invalid('password')" />
+          <button type="button" class="btn sm" (click)="showPassword.set(!showPassword())" [attr.aria-label]="showPassword() ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'">{{ showPassword() ? 'Ẩn' : 'Hiện' }}</button>
+        </span>
+        @if (invalid('password')) { <small class="err">Nhập mật khẩu.</small> }
+      </label>
+      @if (error()) { <div class="alert bad" role="alert">{{ error() }}</div> }
+      <button type="submit" class="btn primary full" [disabled]="loading()">{{ loading() ? 'Đang đăng nhập...' : 'Đăng nhập' }}</button>
+    </form>
+
+    <details class="demo">
+      <summary>Tài khoản demo (mật khẩu <code>{{ demoPassword }}</code>)</summary>
+      @for (a of admins(); track a.email) {
+        <button type="button" class="demo-user" (click)="fill(a)">
+          <span>{{ a.name }}</span><span class="role" [class.sa]="a.role === 'SUPERADMIN'">{{ a.role }}</span>
+        </button>
+      }
+    </details>
+  </section>
+</main>

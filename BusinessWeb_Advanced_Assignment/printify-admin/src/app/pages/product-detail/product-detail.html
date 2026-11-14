@@ -1,0 +1,152 @@
+<main class="page">
+  @if (!data.loaded()) { <p class="muted">Đang tải...</p> }
+  @else if (product(); as p) {
+    <div class="page-head">
+      <div>
+        <div class="crumbs"><a routerLink="/admin/homepage">Trang chủ</a> / <a routerLink="/admin/products-list">Sản phẩm</a> / {{ p.name }}</div>
+        <h1>{{ p.name }}</h1>
+        <p><span class="mono">{{ p._id }}</span> · {{ categoryLabel(p.category) }} · {{ p.price | vnd }}
+          · <app-badge [label]="p.isActive ? 'Đang bán' : 'Đã ẩn'" [tone]="p.isActive ? 'ok' : ''"></app-badge></p>
+      </div>
+      <div class="row">
+        <a class="btn" routerLink="/admin/products-list">← Danh sách</a>
+        @if (auth.isSuperadmin()) { <button type="button" class="btn" (click)="toggleActive()">{{ p.isActive ? 'Ẩn sản phẩm' : 'Mở bán lại' }}</button> }
+      </div>
+    </div>
+
+    <div class="tabs" role="tablist">
+      @for (t of tabs; track t.key) { <button type="button" role="tab" class="tab" [class.active]="tab() === t.key" [attr.aria-selected]="tab() === t.key" (click)="setTab(t.key)">{{ t.label }}</button> }
+    </div>
+
+    @switch (tab()) {
+      @case ('info') {
+        <div class="layout">
+          <section class="card gallery">
+            <img class="main-img" [src]="data.img(p.img_display)" [alt]="p.name" />
+            <div class="thumbs">@for (src of p.img_detail; track src) { <img class="thumb" [src]="data.img(src)" alt="" /> }</div>
+          </section>
+          <section class="card">
+            <div class="card-head"><h2>Thông tin bán hàng</h2>
+              @if (auth.isSuperadmin() && !editing()) { <button type="button" class="btn sm" (click)="startEdit()">✏️ Sửa</button> }
+            </div>
+            @if (!editing()) {
+              <dl class="dl">
+                <dt>Tên</dt><dd>{{ p.name }}</dd>
+                <dt>Danh mục</dt><dd>{{ categoryLabel(p.category) }}</dd>
+                <dt>Giá (gồm VAT)</dt><dd>{{ p.price | vnd }}</dd>
+                <dt>Mô tả</dt><dd class="desc">{{ p.description }}</dd>
+                <dt>Ngưỡng sắp hết</dt><dd>{{ p.lowStockThreshold }}</dd>
+                <dt>Cho phép</dt><dd>{{ p.allowCustomization ? '✓ Tự thiết kế' : '✗ Tự thiết kế' }} · {{ p.allowMarketplace ? '✓ Marketplace' : '✗ Marketplace' }}</dd>
+                <dt>Cập nhật</dt><dd>{{ p.updatedAt ? (p.updatedAt | date: 'dd/MM/yyyy HH:mm') : '—' }}</dd>
+              </dl>
+              @if (!auth.isSuperadmin()) { <p class="alert info small">STAFF chỉ xem thông tin; sửa giá, mô tả do SUPERADMIN. Bạn vẫn điều chỉnh tồn kho được ở tab “Biến thể & kho”.</p> }
+            } @else {
+              <form class="edit" [formGroup]="form" (ngSubmit)="save()" novalidate>
+                <label class="field">Tên <input class="input" formControlName="name" /></label>
+                <div class="grid-2">
+                  <label class="field">Danh mục <select class="select" formControlName="category">@for (c of categories; track c.slug) { <option [value]="c.slug">{{ c.label }}</option> }</select></label>
+                  <label class="field">Giá (VND) <input class="input" type="number" formControlName="price" /></label>
+                </div>
+                <label class="field">Mô tả <textarea class="textarea" formControlName="description"></textarea>
+                  @if (form.controls.description.touched && form.controls.description.invalid) { <small class="err">Ít nhất 10 ký tự.</small> }</label>
+                <div class="grid-2">
+                  <label class="field">Ngưỡng sắp hết <input class="input" type="number" formControlName="lowStockThreshold" /></label>
+                  <div class="checks">
+                    <label><input type="checkbox" formControlName="isActive" /> Đang bán</label>
+                    <label><input type="checkbox" formControlName="allowCustomization" /> Cho phép tự thiết kế</label>
+                    <label><input type="checkbox" formControlName="allowMarketplace" /> Cho phép Marketplace</label>
+                  </div>
+                </div>
+                <p class="muted small">Đổi giá không ảnh hưởng đơn đã đặt (đơn giữ giá lúc mua). Giỏ hàng của khách sẽ báo “giá đã đổi”.</p>
+                <div class="row"><button type="submit" class="btn primary">Lưu</button><button type="button" class="btn" (click)="cancelEdit()">Hủy</button></div>
+              </form>
+            }
+          </section>
+        </div>
+      }
+      @case ('stock') {
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Biến thể</th><th>Mã</th><th class="num">Tồn</th><th>Cảnh báo</th><th></th></tr></thead>
+            <tbody>
+              @for (v of p.variants; track v._id) {
+                <tr>
+                  <td><b>{{ colorLabel(v.color) }}</b>{{ v.size ? ' / ' + v.size : '' }}</td>
+                  <td class="mono">{{ v._id }}</td>
+                  <td class="num"><b>{{ v.stock }}</b></td>
+                  <td>@if (v.stock <= 0) { <app-badge label="Hết hàng" tone="bad"></app-badge> } @else if (v.stock <= p.lowStockThreshold) { <app-badge label="Sắp hết" tone="warn"></app-badge> } @else { <app-badge label="Bình thường" tone="ok"></app-badge> }</td>
+                  <td><button type="button" class="btn sm" (click)="openAdjust(v)">Điều chỉnh</button></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <p class="muted small">Kho tự trừ khi Staff xác nhận thanh toán và tự hoàn khi hủy đơn đã thanh toán. Điều chỉnh tay chỉ dùng khi kiểm kê, nhập hàng, hàng lỗi.</p>
+      }
+      @case ('print') {
+        <div class="layout">
+          <section class="card">
+            <h2>Xem trước vùng in</h2>
+            <div class="stage">
+              <img [src]="data.img(p.img_display)" [alt]="p.name" />
+              <span class="area" [style.left.%]="area().x * 100" [style.top.%]="area().y * 100" [style.width.%]="area().width * 100" [style.height.%]="area().height * 100"><small>Vùng in</small></span>
+            </div>
+          </section>
+          <section class="card">
+            <h2>Số đo (tỉ lệ 0–1 trên ảnh)</h2>
+            <div class="grid-2">
+              <label class="field">X (lề trái) <input class="input" type="number" step="0.01" min="0" max="1" [value]="area().x" (input)="setArea('x', $any($event.target).value)" [disabled]="!auth.isSuperadmin()" /></label>
+              <label class="field">Y (lề trên) <input class="input" type="number" step="0.01" min="0" max="1" [value]="area().y" (input)="setArea('y', $any($event.target).value)" [disabled]="!auth.isSuperadmin()" /></label>
+              <label class="field">Rộng <input class="input" type="number" step="0.01" min="0" max="1" [value]="area().width" (input)="setArea('width', $any($event.target).value)" [disabled]="!auth.isSuperadmin()" /></label>
+              <label class="field">Cao <input class="input" type="number" step="0.01" min="0" max="1" [value]="area().height" (input)="setArea('height', $any($event.target).value)" [disabled]="!auth.isSuperadmin()" /></label>
+            </div>
+            <p class="alert warn small">Vùng in dùng chung cho Editor (C10) và mockup Marketplace (C05/C06). Đổi ảnh sản phẩm hoặc vùng in thì kiểm tra lại mockup. Đơn đã đặt giữ nguyên bản thiết kế cũ.</p>
+            @if (auth.isSuperadmin()) { <button type="button" class="btn primary" (click)="saveArea()">Lưu vùng in</button> }
+            @else { <p class="muted small">Chỉ SUPERADMIN được chỉnh vùng in.</p> }
+          </section>
+        </div>
+      }
+      @case ('history') {
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Thời gian</th><th>Loại</th><th>Biến thể</th><th class="num">Thay đổi</th><th>Đơn / lý do</th><th>Người làm</th></tr></thead>
+            <tbody>
+              @for (m of history(); track m._id) {
+                <tr>
+                  <td>{{ m.recordedAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+                  <td>{{ movementLabels[m.type] || m.type }}</td>
+                  <td>{{ variantText(m.variantId) }}</td>
+                  <td class="num" [class.neg]="m.quantityDelta < 0" [class.pos]="m.quantityDelta > 0">{{ m.quantityDelta > 0 ? '+' : '' }}{{ m.quantityDelta }}</td>
+                  <td>@if (m.originalOrderId) { <a [routerLink]="['/admin/orders-detail', m.originalOrderId]">{{ m.originalOrderId.toUpperCase() }}</a> } {{ m.reason || '' }}</td>
+                  <td>{{ data.userName(m.actorId) }}</td>
+                </tr>
+              } @empty { <tr><td colspan="6" class="empty">Chưa có biến động kho.</td></tr> }
+            </tbody>
+          </table>
+        </div>
+      }
+    }
+
+    @if (adjustFor(); as v) {
+      <div class="backdrop" (click)="adjustFor.set(null)">
+        <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="adj-title" (click)="$event.stopPropagation()">
+          <h2 id="adj-title">Điều chỉnh tồn kho</h2>
+          <p class="muted">{{ p.name }} · {{ colorLabel(v.color) }}{{ v.size ? ' / ' + v.size : '' }} · đang có <b>{{ v.stock }}</b></p>
+          <div class="grid-2">
+            <label class="field">Số thay đổi (+ nhập, − xuất) <input class="input" type="number" [value]="delta()" (input)="delta.set(+$any($event.target).value)" /></label>
+            <label class="field">Tồn sau điều chỉnh <input class="input" [value]="v.stock + (+delta() || 0)" disabled /></label>
+          </div>
+          <label class="field">Lý do <small>(bắt buộc, ghi vào lịch sử kho)</small>
+            <input class="input" [value]="reason()" (input)="reason.set($any($event.target).value)" placeholder="Ví dụ: nhập lô mới, kiểm kê lệch, hàng lỗi" /></label>
+          <div class="actions"><button type="button" class="btn" (click)="adjustFor.set(null)">Hủy</button><button type="button" class="btn primary" (click)="confirmAdjust()">Lưu điều chỉnh</button></div>
+        </div>
+      </div>
+    }
+  } @else {
+    <div class="card empty-state">
+      <h1>Không tìm thấy sản phẩm</h1>
+      <p class="muted">Mã sản phẩm không tồn tại hoặc đã bị xóa.</p>
+      <a class="btn primary" routerLink="/admin/products-list">Về danh sách sản phẩm</a>
+    </div>
+  }
+</main>

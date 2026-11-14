@@ -1,0 +1,216 @@
+[
+  {
+    "_id": "dsg_c1_tee",
+    "userId": "usr_c1",
+    "productId": "prd101",
+    "canvasJSON": {
+      "version": "5.3.1",
+      "background": "transparent",
+      "objects": [
+        {
+          "type": "textbox",
+          "left": 120,
+          "top": 160,
+          "width": 220,
+          "fontSize": 32,
+          "fill": "#111111",
+          "text": "An's Tee"
+        }
+      ]
+    },
+    "previewUrl": "/uploads/designs/dsg_c1_tee.png",
+    "listingId": null,
+    "personalOverlayJSON": null,
+    "protectedAssetId": null,
+    "createdAt": "2026-11-09T06:34:47.624Z",
+    "updatedAt": "2026-11-10T06:34:47.624Z"
+  },
+  {
+    "_id": "dsg_c2_tee_art",
+    "userId": "usr_c2",
+    "productId": "prd101",
+    "previewUrl": "/uploads/designs/dsg_c2_tee_art.png",
+    "listingId": null,
+    "personalOverlayJSON": null,
+    "protectedAssetId": null,
+    "createdAt": "2026-10-30T06:34:47.624Z",
+    "updatedAt": "2026-10-30T06:34:47.624Z"
+  },
+  {
+    "_id": "dsg_c2_mug_art",
+    "userId": "usr_c2",
+    "productId": "prd301",
+    "previewUrl": "/uploads/designs/dsg_c2_mug_art.png",
+    "listingId": null,
+    "personalOverlayJSON": null,
+    "protectedAssetId": null,
+    "createdAt": "2026-11-01T06:34:47.624Z",
+    "updatedAt": "2026-11-01T06:34:47.624Z"
+  },
+  {
+    "_id": "dsg_c1_buyer",
+    "userId": "usr_c1",
+    "productId": "prd101",
+    "previewUrl": "/uploads/designs/dsg_c1_buyer.png",
+    "listingId": "lst_001",
+    "personalOverlayJSON": {
+      "version": "5.3.1",
+      "objects": [
+        {
+          "type": "textbox",
+          "left": 140,
+          "top": 300,
+          "width": 120,
+          "fontSize": 18,
+          "fill": "#222222",
+          "text": "An"
+        }
+      ]
+    },
+    "createdAt": "2026-11-07T06:34:47.624Z",
+    "updatedAt": "2026-11-07T06:34:47.624Z"
+  },
+  {
+    "_id": "dsg_demo_101",
+    "userId": "usr_c4",
+    "productId": "prd102",
+    "previewUrl": "/market/lst_101_wm.png",
+    "listingId": null,
+    "personalOverlayJSON": null,
+    "protectedAssetId": null,
+    "createdAt": "2026-11-03T03:00:00.000Z",
+    "updatedAt": "2026-11-03T03:00:00.000Z"
+  },
+  {
+    "_id": "dsg_demo_102",
+    "userId": "usr_c5",
+    "productId": "prd201",
+    "previewUrl": "/market/lst_102_wm.png",
+    "listingId": null,
+    "personalOverlayJSON": null,
+    "protectedAssetId": null,
+    "createdAt": "2026-11-04T03:00:00.000Z",
+    "updatedAt": "2026-11-04T03:00:00.000Z"
+  },
+  {
+    "_id": "dsg_demo_103",
+    "userId": "usr_c6",
+    "productId": "prd301",
+    "previewUrl": "/market/lst_103_wm.png",
+    "listingId": null,
+    "personalOverlayJSON": null,
+    "protectedAssetId": null,
+    "createdAt": "2026-11-05T03:00:00.000Z",
+    "updatedAt": "2026-11-05T03:00:00.000Z"
+  },
+  {
+    "_id": "dsg_demo_104",
+    "userId": "usr_c7",
+    "productId": "prd406",
+    "previewUrl": "/market/lst_104_wm.png",
+    "listingId": null,
+    "personalOverlayJSON": null,
+    "protectedAssetId": null,
+    "createdAt": "2026-11-06T03:00:00.000Z",
+    "updatedAt": "2026-11-06T03:00:00.000Z"
+  },
+  {
+    "_id": "dsg_demo_105",
+    "userId": "usr_c8",
+    "productId": "prd504",
+    "previewUrl": "/market/lst_105_wm.png",
+    "listingId": null,
+    "personalOverlayJSON": null,
+    "protectedAssetId": null,
+    "createdAt": "2026-11-07T03:00:00.000Z",
+    "updatedAt": "2026-11-07T03:00:00.000Z"
+  },
+  {
+    "_id": "dsg_demo_106",
+    "userId": "usr_c2",
+    "productId": "prd107",
+    "previewUrl": "/market/lst_106_wm.png",
+    "listingId": null,
+    "personalOverlayJSON": null,
+    "protectedAssetId": null,
+    "createdAt": "2026-11-08T03:00:00.000Z",
+    "updatedAt": "2026-11-08T03:00:00.000Z"
+  },
+  {
+    "_id": "dsg_demo_107",
+    "userId": "usr_c4",
+    "productId": "prd601",
+    "previewUrl": "/market/lst_107_wm.png",
+    "listingId": null,
+    "personalOverlayJSON": null,
+    "protectedAssetId": null,
+    "createdAt": "2026-11-09T03:00:00.000Z",
+    "updatedAt": "2026-11-09T03:00:00.000Z"
+  },
+  {
+    "_id": "dsg_demo_108",
+    "userId": "usr_c5",
+    "productId": "prd603",
+    "previewUrl": "/market/lst_108_wm.png",
+    "listingId": null,
+    "personalOverlayJSON": null,
+    "protectedAssetId": null,
+    "createdAt": "2026-11-10T03:00:00.000Z",
+    "updatedAt": "2026-11-10T03:00:00.000Z"
+  },
+  {
+    "_id": "dsg_demo_110",
+    "userId": "usr_c1",
+    "productId": "prd401",
+    "previewUrl": "/market/lst_110_wm.png",
+    "listingId": null,
+    "personalOverlayJSON": null,
+    "protectedAssetId": null,
+    "createdAt": "2026-11-11T03:00:00.000Z",
+    "updatedAt": "2026-11-11T03:00:00.000Z"
+  },
+  {
+    "_id": "dsg_demo_111",
+    "userId": "usr_c1",
+    "productId": "prd604",
+    "previewUrl": "/market/lst_111_wm.png",
+    "listingId": null,
+    "personalOverlayJSON": null,
+    "protectedAssetId": null,
+    "createdAt": "2026-11-09T03:00:00.000Z",
+    "updatedAt": "2026-11-09T03:00:00.000Z"
+  },
+  {
+    "_id": "dsg_demo_112",
+    "userId": "usr_c1",
+    "productId": "prd501",
+    "previewUrl": "/market/lst_112_wm.png",
+    "listingId": null,
+    "personalOverlayJSON": null,
+    "protectedAssetId": null,
+    "createdAt": "2026-11-08T03:00:00.000Z",
+    "updatedAt": "2026-11-08T03:00:00.000Z"
+  },
+  {
+    "_id": "dsg_demo_c1_sunflower",
+    "userId": "usr_c1",
+    "productId": "prd302",
+    "previewUrl": "/uploads/designs/dsg_demo_c1_sunflower.png",
+    "listingId": null,
+    "personalOverlayJSON": null,
+    "protectedAssetId": null,
+    "createdAt": "2026-11-12T03:00:00.000Z",
+    "updatedAt": "2026-11-12T03:00:00.000Z"
+  },
+  {
+    "_id": "dsg_demo_c1_city",
+    "userId": "usr_c1",
+    "productId": "prd202",
+    "previewUrl": "/uploads/designs/dsg_demo_c1_city.png",
+    "listingId": null,
+    "personalOverlayJSON": null,
+    "protectedAssetId": null,
+    "createdAt": "2026-11-13T03:00:00.000Z",
+    "updatedAt": "2026-11-13T03:00:00.000Z"
+  }
+]

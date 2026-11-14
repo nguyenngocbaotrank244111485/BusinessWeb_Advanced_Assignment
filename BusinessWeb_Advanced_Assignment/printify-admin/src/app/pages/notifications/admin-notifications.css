@@ -1,0 +1,9 @@
+.list { display: grid; gap: 8px; max-width: 900px; }
+.note { display: grid; grid-template-columns: 40px 1fr auto auto; align-items: center; gap: 12px; width: 100%; padding: 14px 16px; border: 1px solid var(--pf-line); border-radius: 14px; background: #fff; text-align: left; cursor: pointer; }
+.note:hover { border-color: var(--pf-lilac); }
+.note.unread { background: #fdf9ff; border-left: 4px solid var(--pf-primary); }
+.ico { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--pf-soft); font-size: 20px; }
+.body { display: grid; gap: 2px; font-size: 13px; }
+.body b { font-size: 14px; }
+.new { padding: 2px 8px; border-radius: 999px; background: var(--pf-accent); color: #fff; font-size: 11px; font-weight: 800; }
+.go { color: var(--pf-muted); }

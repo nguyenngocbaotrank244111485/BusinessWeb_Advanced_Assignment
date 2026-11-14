@@ -1,0 +1,14 @@
+.layout { display: grid; grid-template-columns: minmax(260px, 380px) 1fr; gap: 16px; align-items: start; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+.main-img { display: block; width: 100%; aspect-ratio: 1; object-fit: contain; border-radius: 12px; background: var(--pf-soft); }
+.thumbs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.desc { font-weight: 500; line-height: 1.6; }
+.edit { display: grid; gap: 12px; }
+.checks { display: grid; gap: 6px; font-size: 13px; padding-top: 4px; }
+.stage { position: relative; aspect-ratio: 1; border-radius: 12px; background: var(--pf-soft); overflow: hidden; }
+.stage img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.area { position: absolute; border: 2px dashed var(--pf-primary); background: #8b57c41a; border-radius: 4px; }
+.area small { position: absolute; left: 4px; top: 2px; font-size: 11px; font-weight: 700; color: var(--pf-primary-dark); }
+.neg { color: var(--pf-danger); font-weight: 700; }
+.pos { color: var(--pf-success); font-weight: 700; }
+.empty-state { display: grid; gap: 10px; justify-items: start; max-width: 520px; }

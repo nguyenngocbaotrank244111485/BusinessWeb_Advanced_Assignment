@@ -1,0 +1,14 @@
+.filters { align-items: flex-end; }
+.filters .field { font-size: 12px; }
+.kpis { margin-bottom: 16px; }
+.grid-2 { margin-bottom: 16px; }
+.big { font-size: 18px; color: var(--pf-primary-dark); }
+.mt { margin-top: 16px; }
+.line { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px dashed var(--pf-line); font-size: 13px; }
+.line:last-child { border-bottom: 0; }
+.tam .card-head { align-items: flex-start; }
+.tam p { margin: 2px 0 0; }
+.dist { display: flex; align-items: flex-end; justify-content: space-around; gap: 10px; height: 160px; padding: 0 8px; border-bottom: 1px solid var(--pf-line); }
+.col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 2px; height: 100%; flex: 1; }
+.col-bar { width: 100%; max-width: 44px; min-height: 2px; border-radius: 8px 8px 0 0; background: var(--pf-gradient); }
+.col small { color: var(--pf-muted); font-size: 11px; }
