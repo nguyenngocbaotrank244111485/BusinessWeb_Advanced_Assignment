@@ -1,0 +1,116 @@
+<main class="page">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a routerLink="/cart">Giỏ hàng</a><span>›</span><b>Thanh toán</b>@if (order()) { <span>›</span><b>Đặt hàng thành công</b> }
+    </nav>
+
+    @if (order(); as o) {
+      <!-- ===== Đã tạo đơn ===== -->
+      <section class="success">
+        <span class="big" aria-hidden="true">{{ o.orderStatus === 'PENDING_STAFF_CONFIRMATION' ? '⏳' : '🧾' }}</span>
+        <h1>{{ o.orderStatus === 'PENDING_STAFF_CONFIRMATION' ? 'Đã ghi nhận thanh toán' : 'Đã tạo đơn hàng' }}</h1>
+        <p>Mã đơn <b>{{ o._id.toUpperCase() }}</b> · Tổng <b>{{ o.totals.total | vnd }}</b> ·
+          {{ o.orderStatus === 'PENDING_STAFF_CONFIRMATION' ? 'Chờ PrintiFy xác nhận thanh toán' : 'Chờ thanh toán' }}</p>
+        <div class="success-actions">
+          @if (o.orderStatus === 'PENDING_PAYMENT') {
+            <button type="button" class="btn-pay" (click)="showQr.set(true)">Mở lại mã QR</button>
+          }
+          <button type="button" class="btn-ghost" (click)="viewOrder()">Xem chi tiết đơn</button>
+          <a class="btn-ghost" routerLink="/products">Tiếp tục mua sắm</a>
+        </div>
+      </section>
+    } @else {
+      <h1>Thanh toán</h1>
+      <form class="layout" [formGroup]="form" (ngSubmit)="pay()" novalidate>
+        <!-- ===== TRÁI (2/3): thông tin nhận hàng + thanh toán ===== -->
+        <div class="left">
+          <section class="card">
+            <h2>1. Thông tin nhận hàng</h2>
+            @if (addresses().length) {
+              <div class="saved" role="radiogroup" aria-label="Địa chỉ đã lưu">
+                @for (a of addresses(); track a._id) {
+                  <button type="button" role="radio" class="addr" [class.active]="addressChoice() === a._id" [attr.aria-checked]="addressChoice() === a._id" (click)="useAddress(a)">
+                    <b>{{ a.name }} · {{ a.phone }}</b>
+                    <span>{{ a.detail }}, {{ a.ward }}, {{ a.province }}</span>
+                    @if (a.isDefault) { <em>Mặc định</em> }
+                  </button>
+                }
+                <button type="button" role="radio" class="addr new" [class.active]="addressChoice() === 'new'" [attr.aria-checked]="addressChoice() === 'new'" (click)="newAddress()">
+                  <b>＋ Giao đến địa chỉ khác</b>
+                </button>
+              </div>
+            }
+
+            <div class="grid">
+              <label class="field">Họ tên người nhận
+                <input type="text" formControlName="name" autocomplete="name" [class.bad]="invalid('name')" />
+                @if (invalid('name')) { <small>Bạn nhập họ tên người nhận nhé.</small> }
+              </label>
+              <label class="field">Số điện thoại
+                <input type="tel" formControlName="phone" autocomplete="tel" placeholder="0901234567" [class.bad]="invalid('phone')" />
+                @if (invalid('phone')) { <small>Số điện thoại gồm 10 số, bắt đầu bằng 03, 05, 07, 08 hoặc 09.</small> }
+              </label>
+              <label class="field">Tỉnh / Thành phố
+                <input type="text" formControlName="province" list="province-list" [class.bad]="invalid('province')" />
+                <datalist id="province-list">@for (p of provinces; track p) { <option [value]="p"></option> }</datalist>
+                @if (invalid('province')) { <small>Bạn chọn tỉnh / thành phố nhé.</small> }
+              </label>
+              <label class="field">Phường / Xã
+                <input type="text" formControlName="ward" [class.bad]="invalid('ward')" />
+                @if (invalid('ward')) { <small>Bạn nhập phường / xã nhé.</small> }
+              </label>
+              <label class="field wide">Địa chỉ chi tiết (số nhà, tên đường)
+                <input type="text" formControlName="detail" autocomplete="street-address" [class.bad]="invalid('detail')" />
+                @if (invalid('detail')) { <small>Địa chỉ cần ít nhất 5 ký tự.</small> }
+              </label>
+              <label class="field wide">Ghi chú cho người giao (không bắt buộc)
+                <textarea rows="2" formControlName="note" placeholder="Ví dụ: giao giờ hành chính"></textarea>
+              </label>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2>2. Phương thức thanh toán</h2>
+            <div class="method" role="radio" aria-checked="true">
+              <span class="dot" aria-hidden="true"></span>
+              <span><b>Chuyển khoản qua mã QR</b><small>Sau khi đặt hàng, mã QR hiện ra và có hiệu lực {{ cfg().orderPaymentMinutes }} phút. PrintiFy xác nhận thanh toán rồi mới bắt đầu in.</small></span>
+            </div>
+          </section>
+        </div>
+
+        <!-- ===== PHẢI (1/3): sản phẩm + tổng ===== -->
+        <aside class="right">
+          <section class="card items">
+            <h2>Sản phẩm ({{ qty() }})</h2>
+            <ul>
+              @for (l of lines(); track l.item.key) {
+                <li>
+                  <span class="thumb"><img [src]="l.item.imageUrl" [alt]="l.item.name" appImgFallback /><em>{{ l.item.quantity }}</em></span>
+                  <span class="txt">
+                    <b>{{ l.item.name }}</b>
+                    <small>{{ variantText(l.item.color, l.item.size) }}</small>
+                    @if (l.item.listingId) { <small class="design">🎨 {{ l.item.listingTitle }} (+{{ l.item.designFee | vnd }})</small> }
+                  </span>
+                  <span class="amt">{{ l.price * l.item.quantity | vnd }}</span>
+                </li>
+              }
+            </ul>
+            <a class="edit" routerLink="/cart">Sửa giỏ hàng</a>
+          </section>
+
+          <app-order-summary [totals]="totals()" [itemCount]="qty()" title="Thanh toán" [threshold]="cfg().discountThresholdVnd" [discountPercent]="cfg().discountRate * 100">
+            @if (error()) { <p class="err" role="alert">{{ error() }}</p> }
+            <button type="submit" class="btn-pay" [disabled]="submitting() || !lines().length">
+              {{ submitting() ? 'Đang tạo đơn...' : 'Thanh toán ' + (totals().total | vnd) }}
+            </button>
+            <p class="terms">Bấm Thanh toán là bạn đồng ý với điều khoản đặt in của PrintiFy.</p>
+          </app-order-summary>
+        </aside>
+      </form>
+    }
+  </div>
+
+  @if (showQr() && order(); as o) {
+    <app-qr-payment-dialog [order]="o" [qrImageUrl]="cfg().qrImageUrl" (claimed)="claim()" (closed)="showQr.set(false)" (viewOrder)="viewOrder()"></app-qr-payment-dialog>
+  }
+</main>

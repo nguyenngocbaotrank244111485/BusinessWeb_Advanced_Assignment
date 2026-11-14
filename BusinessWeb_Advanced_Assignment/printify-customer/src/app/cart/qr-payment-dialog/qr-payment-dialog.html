@@ -1,0 +1,42 @@
+<div class="backdrop" (click)="closed.emit()"></div>
+<section class="dialog" role="dialog" aria-modal="true" aria-labelledby="qr-title">
+  <button type="button" class="x" (click)="closed.emit()" aria-label="Đóng">✕</button>
+
+  @if (order.orderStatus === 'PENDING_STAFF_CONFIRMATION') {
+    <div class="done">
+      <span class="big" aria-hidden="true">⏳</span>
+      <h2 id="qr-title">Đã ghi nhận thanh toán</h2>
+      <p>PrintiFy sẽ kiểm tra giao dịch và xác nhận đơn <b>{{ transferNote }}</b> sớm nhất. Bạn sẽ nhận thông báo khi đơn được xác nhận.</p>
+      <button type="button" class="primary" (click)="viewOrder.emit()">Xem đơn hàng</button>
+    </div>
+  } @else if (expired()) {
+    <div class="done">
+      <span class="big" aria-hidden="true">⌛</span>
+      <h2 id="qr-title">Hết thời gian thanh toán</h2>
+      <p>Mã QR của đơn <b>{{ transferNote }}</b> đã hết hạn. Đơn chưa thanh toán sẽ được hủy tự động, bạn có thể đặt lại từ giỏ hàng.</p>
+      <button type="button" class="primary" (click)="viewOrder.emit()">Xem đơn hàng</button>
+    </div>
+  } @else {
+    <h2 id="qr-title">Quét mã để thanh toán</h2>
+    <p class="sub">Đơn <b>{{ transferNote }}</b> đang chờ thanh toán</p>
+
+    <div class="timer" [class.low]="remainingMs() < 120000" aria-live="polite">
+      <span>Mã hết hạn sau</span><b>{{ mmss() }}</b>
+      <div class="bar"><div [style.width.%]="progress()"></div></div>
+    </div>
+
+    <img class="qr" [src]="qrImageUrl" alt="Mã QR chuyển khoản PrintiFy" />
+
+    <dl class="info">
+      <div><dt>Số tiền</dt><dd><b>{{ order.totals.total | vnd }}</b> <button type="button" (click)="copy(order.totals.total + '', 'amount')">{{ copied() === 'amount' ? 'Đã chép' : 'Chép' }}</button></dd></div>
+      <div><dt>Nội dung chuyển khoản</dt><dd><b>{{ transferNote }}</b> <button type="button" (click)="copy(transferNote, 'note')">{{ copied() === 'note' ? 'Đã chép' : 'Chép' }}</button></dd></div>
+      <div><dt>Người nhận</dt><dd>CONG TY PRINTIFY (tài khoản demo)</dd></div>
+    </dl>
+    <p class="warn">Bản demo: mã QR chỉ để minh họa, không chuyển tiền thật. Ghi đúng nội dung chuyển khoản để PrintiFy đối soát.</p>
+
+    <div class="actions">
+      <button type="button" class="ghost" (click)="viewOrder.emit()">Thanh toán sau</button>
+      <button type="button" class="primary" (click)="claimed.emit()">Tôi đã thanh toán</button>
+    </div>
+  }
+</section>

@@ -83,6 +83,7 @@
             <button type="button" class="btn btn-primary" (click)="useDesign()" [disabled]="!selected()">
               ✏️ Dùng thiết kế này trên {{ selected()?.name ?? 'sản phẩm' }}
             </button>
+            <button type="button" class="btn btn-ghost" (click)="addToCart()" [disabled]="!selected()">🛒 Thêm vào giỏ (bản đặt mặc định)</button>
             @if (!auth.isLoggedIn()) { <p class="hint">Bạn cần đăng nhập để dùng thiết kế.</p> }
             <button type="button" class="link-report" (click)="openReport()">🚩 Báo cáo vi phạm bản quyền</button>
           }
@@ -108,6 +109,7 @@
   }
 
   @if (toast(); as t) {
-    <div class="toast" [class.error]="t.type === 'error'" role="status">{{ t.type === 'ok' ? '✅' : '⚠️' }} {{ t.text }}</div>
+    <div class="toast" [class.error]="t.type === 'error'" role="status">{{ t.type === 'ok' ? '✅' : '⚠️' }} {{ t.text }}
+      @if (t.type === 'ok' && t.text.includes('giỏ')) { <a routerLink="/cart">Xem giỏ hàng →</a> }</div>
   }
 </main>
