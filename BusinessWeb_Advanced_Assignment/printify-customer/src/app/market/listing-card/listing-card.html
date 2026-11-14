@@ -1,6 +1,7 @@
 <article class="card">
   <a class="img" [routerLink]="['/market', listing._id]" [attr.aria-label]="'Xem thiết kế ' + listing.title">
     <app-watermark-image [src]="imageUrl" [alt]="listing.title"></app-watermark-image>
+    @if (mine) { <span class="mine">Của bạn</span> }
     @if (printableCount) {
       <span class="product-chip">👕☕👜 In được trên {{ printableCount }} sản phẩm</span>
     }

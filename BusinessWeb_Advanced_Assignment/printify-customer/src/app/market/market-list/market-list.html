@@ -6,7 +6,7 @@
         <h1>Khám phá mẫu thiết kế</h1>
         <p>Chọn thiết kế của cộng đồng PrintiFy và in lên áo, túi, cốc, sổ tay... tùy bạn. Người bán nhận tiền mỗi lần thiết kế được dùng.</p>
       </div>
-      <a class="btn-sell" routerLink="/market/my-listings">＋ Đăng bán thiết kế</a>
+      <a class="btn-sell" routerLink="/market/my-listings">My marketplace →</a>
     </div>
   </section>
 
@@ -14,6 +14,13 @@
     @if (notFound()) {
       <div class="notice" role="alert">Thiết kế “{{ notFound() }}” không tồn tại hoặc chưa được duyệt. Mời bạn xem các thiết kế khác nhé.</div>
     }
+
+    <div class="scope" role="tablist" aria-label="Phạm vi">
+      <button type="button" role="tab" [attr.aria-selected]="scope() === 'all'" [class.active]="scope() === 'all'" (click)="onScope('all')">Tất cả thiết kế</button>
+      @if (auth.isLoggedIn()) {
+        <button type="button" role="tab" [attr.aria-selected]="scope() === 'mine'" [class.active]="scope() === 'mine'" (click)="onScope('mine')">Của tôi đang bán <small>{{ myCount() }}</small></button>
+      }
+    </div>
 
     <div class="toolbar">
       <label class="search">
@@ -38,14 +45,17 @@
       <app-empty-state icon="⚠️" title="Có lỗi xảy ra" [message]="market.error()"></app-empty-state>
     } @else {
       <p class="count">Có <b>{{ filtered().length }}</b> thiết kế @if (keyword()) { cho “{{ keyword() }}” }</p>
-      @if (filtered().length === 0) {
+      @if (filtered().length === 0 && scope() === 'mine' && !keyword()) {
+        <app-empty-state icon="🎨" title="Bạn chưa có thiết kế nào đang bán" message="Vào My marketplace để đăng bán thiết kế của bạn."
+          actionText="Mở My marketplace" (action)="goMine()"></app-empty-state>
+      } @else if (filtered().length === 0) {
         <app-empty-state icon="🎨" title="Chưa có thiết kế phù hợp" message="Thử từ khóa khác nhé."
           [actionText]="hasFilter() ? 'Xóa bộ lọc' : ''" (action)="clearFilters()"></app-empty-state>
       } @else {
         <div class="grid">
           @for (l of paged(); track l._id) {
             <app-listing-card [listing]="l" [imageUrl]="market.imageUrl(l.watermarkUrl)"
-              [sellerName]="sellerName(l.sellerId)" [printableCount]="printableCount()"></app-listing-card>
+              [sellerName]="sellerName(l.sellerId)" [printableCount]="printableCount()" [mine]="l.sellerId === myId()"></app-listing-card>
           }
         </div>
         <app-pagination [page]="page()" [totalPages]="totalPages()" (pageChange)="onPage($event)"></app-pagination>

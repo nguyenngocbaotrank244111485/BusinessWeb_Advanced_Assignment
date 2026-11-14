@@ -1,16 +1,21 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LISTING_STATUS_LABELS, Listing, ListingStatus } from '../../models/market.model';
+import { LISTING_STATUS_LABELS, MyMarketItem, MyMarketStatus } from '../../models/market.model';
 import { Product } from '../../models/product.model';
 import { AuthService } from '../../services/auth-service';
 import { MarketService } from '../../services/market-service';
 import { ProductService } from '../../services/product-service';
 import { BadgeTone } from '../../shared/status-badge/status-badge';
 
-type Filter = 'ALL' | ListingStatus;
+/** Bộ lọc: theo trạng thái, riêng SOLD = tin có ít nhất 1 lượt bán */
+type Filter = 'ALL' | 'SOLD' | MyMarketStatus;
 
-/** C20 – Tin đăng của tôi: /market/my-listings (AuthGuard). Seller = Customer đã đăng nhập. */
+/**
+ * C20 – My marketplace: /market/my-listings (AuthGuard)
+ * Thiết kế đang chỉnh sửa (nháp) + tin chờ duyệt / đang bán / bị từ chối (kèm lý do) / đã gỡ,
+ * kèm số lượt bán và tiền đã nhận. Form đăng / sửa tin là một phần của màn này.
+ */
 @Component({
   selector: 'app-my-listings',
   standalone: false,
@@ -23,14 +28,16 @@ export class MyListings {
   private readonly ps = inject(ProductService);
   private readonly router = inject(Router);
 
-  readonly labels = LISTING_STATUS_LABELS;
-  readonly tones: Record<ListingStatus, BadgeTone> = {
-    DRAFT: 'neutral', PENDING_REVIEW: 'warning', APPROVED: 'success', REJECTED: 'danger', UNLISTED: 'neutral',
+  readonly labels: Record<MyMarketStatus, string> = { ...LISTING_STATUS_LABELS, EDITING: 'Đang chỉnh sửa', APPROVED: 'Đang bán' };
+  readonly tones: Record<MyMarketStatus, BadgeTone> = {
+    EDITING: 'info', DRAFT: 'info', PENDING_REVIEW: 'warning', APPROVED: 'success', REJECTED: 'danger', UNLISTED: 'neutral',
   };
   readonly filters: { value: Filter; label: string }[] = [
     { value: 'ALL', label: 'Tất cả' },
+    { value: 'EDITING', label: 'Đang chỉnh sửa' },
     { value: 'PENDING_REVIEW', label: 'Chờ duyệt' },
-    { value: 'APPROVED', label: 'Đã duyệt' },
+    { value: 'APPROVED', label: 'Đang bán' },
+    { value: 'SOLD', label: 'Đã bán' },
     { value: 'REJECTED', label: 'Bị từ chối' },
     { value: 'UNLISTED', label: 'Đã gỡ' },
   ];
@@ -39,12 +46,15 @@ export class MyListings {
   readonly filter = signal<Filter>('ALL');
   /** Tin đang chờ xác nhận gỡ (xác nhận ngay trên dòng, không dùng confirm()) */
   readonly confirmUnlist = signal<string | null>(null);
+  /** Tin đang mở danh sách người mua */
+  readonly openSales = signal<string | null>(null);
   readonly toast = signal('');
   private toastTimer?: ReturnType<typeof setTimeout>;
 
-  readonly mine = computed(() => this.market.myListings(this.auth.user()?._id ?? ''));
-  readonly visible = computed(() => (this.filter() === 'ALL' ? this.mine() : this.mine().filter((l) => l.status === this.filter())));
-  readonly sellableCount = computed(() => this.market.sellableDesigns(this.auth.user()?._id ?? '').length);
+  readonly items = computed(() => this.market.myMarket(this.auth.user()?._id ?? ''));
+  readonly visible = computed(() => this.items().filter((i) => this.match(i, this.filter())));
+  readonly totalSold = computed(() => this.items().reduce((s, i) => s + i.soldCount, 0));
+  readonly totalEarned = computed(() => this.items().reduce((s, i) => s + i.earned, 0));
 
   constructor() {
     const saved = inject(ActivatedRoute).snapshot.queryParamMap.get('saved');
@@ -52,23 +62,40 @@ export class MyListings {
   }
 
   count(f: Filter): number {
-    return f === 'ALL' ? this.mine().length : this.mine().filter((l) => l.status === f).length;
+    return this.items().filter((i) => this.match(i, f)).length;
   }
 
-  product(l: Listing): Product | undefined {
-    return this.products().find((p) => p._id === l.productId);
+  productName(id?: string): string {
+    return this.products().find((p) => p._id === id)?.name ?? '';
   }
 
-  canEdit(l: Listing): boolean { return l.status !== 'UNLISTED'; }
-  canUnlist(l: Listing): boolean { return l.status === 'PENDING_REVIEW' || l.status === 'APPROVED'; }
+  buyerSales(i: MyMarketItem) {
+    return i.listing ? this.market.salesOf(i.listing._id) : [];
+  }
 
-  unlist(l: Listing): void {
-    this.market.unlist(l._id, this.auth.user()!._id);
+  canEdit(i: MyMarketItem): boolean { return !!i.listing && i.status !== 'UNLISTED'; }
+  canUnlist(i: MyMarketItem): boolean { return i.status === 'PENDING_REVIEW' || i.status === 'APPROVED'; }
+
+  continueEditing(i: MyMarketItem): void {
+    if (i.design) this.router.navigate(['/editor/designs', i.design._id]);
+  }
+
+  sell(i: MyMarketItem): void {
+    this.router.navigate(['/market/my-listings/new'], { queryParams: { designId: i.design?._id } });
+  }
+
+  unlist(i: MyMarketItem): void {
+    if (!i.listing) return;
+    this.market.unlist(i.listing._id, this.auth.user()!._id);
     this.confirmUnlist.set(null);
-    this.showToast(`Đã gỡ “${l.title}” khỏi Marketplace.`);
+    this.showToast(`Đã gỡ “${i.listing.title}” khỏi Marketplace.`);
   }
 
-  newListing(): void { this.router.navigate(['/market/my-listings/new']); }
+  private match(i: MyMarketItem, f: Filter): boolean {
+    if (f === 'ALL') return true;
+    if (f === 'SOLD') return i.soldCount > 0;
+    return i.status === f;
+  }
 
   private showToast(text: string): void {
     clearTimeout(this.toastTimer);

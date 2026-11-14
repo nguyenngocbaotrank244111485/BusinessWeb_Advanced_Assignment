@@ -6,10 +6,10 @@ import { MarketDetail } from './market-detail/market-detail';
 import { MyListings } from './my-listings/my-listings';
 import { ListingForm } from './listing-form/listing-form';
 
-/** /market/... – xem công khai; bán (tin của tôi, đăng/sửa) cần đăng nhập */
+/** /market/... – C05, C06 xem công khai; C20 My marketplace (gồm form đăng/sửa tin) cần đăng nhập */
 const routes: Routes = [
   { path: '', component: MarketList, title: 'Marketplace | PrintiFy' },
-  { path: 'my-listings', component: MyListings, canActivate: [authGuard], title: 'Tin đăng của tôi | PrintiFy' },
+  { path: 'my-listings', component: MyListings, canActivate: [authGuard], title: 'My marketplace | PrintiFy' },
   { path: 'my-listings/new', component: ListingForm, canActivate: [authGuard], title: 'Đăng bán thiết kế | PrintiFy' },
   { path: 'my-listings/:listingId/edit', component: ListingForm, canActivate: [authGuard], title: 'Sửa tin đăng | PrintiFy' },
   { path: ':listingId', component: MarketDetail, title: 'Chi tiết thiết kế | PrintiFy' },

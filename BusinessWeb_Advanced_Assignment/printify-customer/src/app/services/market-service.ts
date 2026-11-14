@@ -1,7 +1,7 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, forkJoin, map, of } from 'rxjs';
-import { CopyrightReport, Design, Listing, ListingInput } from '../models/market.model';
+import { CopyrightReport, Design, DesignSale, Listing, ListingInput, MyMarketItem } from '../models/market.model';
 import { PrintArea, Product } from '../models/product.model';
 
 const LOCAL_LISTINGS_KEY = 'printify_market_listings';
@@ -20,6 +20,7 @@ export class MarketService {
 
   private readonly _listings = signal<Listing[]>([]);
   private readonly _designs = signal<Design[]>([]);
+  private readonly _sales = signal<DesignSale[]>([]);
   readonly feeRate = signal(DEFAULT_FEE_RATE);
   /** Vùng in (tỉ lệ 0–1 trên ảnh sản phẩm) để ghép mockup: print-areas.json, ưu tiên product.printArea nếu có */
   private readonly printAreas = signal<Record<string, PrintArea>>({});
@@ -47,6 +48,49 @@ export class MarketService {
 
   getDesign(id: string): Design | undefined {
     return this._designs().find((d) => d._id === id);
+  }
+
+  /** Lượt bán còn hiệu lực của 1 tin (bỏ lượt đã đảo do hoàn tiền) */
+  salesOf(listingId: string): DesignSale[] {
+    return this._sales()
+      .filter((s) => s.listingId === listingId && s.status !== 'REVERSED')
+      .sort((a, b) => b.recordedAt.localeCompare(a.recordedAt));
+  }
+
+  /**
+   * C20 – My marketplace: thiết kế nháp (chưa đăng) + tất cả tin đã đăng của user.
+   * "Đã bán" không phải trạng thái riêng mà là số lượt bán của tin.
+   */
+  myMarket(userId: string): MyMarketItem[] {
+    const listings = this.myListings(userId);
+    const listed = new Set(listings.filter((l) => l.status !== 'UNLISTED').map((l) => l.designId));
+    const drafts: MyMarketItem[] = this._designs()
+      .filter((d) => d.userId === userId && !d.listingId && !listed.has(d._id))
+      .map((d) => ({
+        key: 'd_' + d._id,
+        status: 'EDITING',
+        design: d,
+        title: 'Thiết kế chưa đăng bán',
+        imageUrl: this.imageUrl(d.previewUrl),
+        soldCount: 0,
+        earned: 0,
+        updatedAt: d.updatedAt ?? d.createdAt,
+      }));
+    const items: MyMarketItem[] = listings.map((l) => {
+      const sales = this.salesOf(l._id);
+      return {
+        key: 'l_' + l._id,
+        status: l.status,
+        design: this.getDesign(l.designId),
+        listing: l,
+        title: l.title,
+        imageUrl: this.imageUrl(l.watermarkUrl),
+        soldCount: sales.length,
+        earned: sales.reduce((sum, s) => sum + s.sellerPrice - (s.reversedAmount || 0), 0),
+        updatedAt: l.updatedAt ?? l.createdAt,
+      };
+    });
+    return [...drafts, ...items].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
   }
 
   myListings(userId: string): Listing[] {
@@ -193,6 +237,8 @@ export class MarketService {
       listings: get<Listing>('listings.json', 'market_listings.json'),
       demoListings: get<Listing>('listings-demo.json'),
       designs: get<Design>('designs.json'),
+      sales: get<DesignSale>('designSales.json'),
+      demoSales: get<DesignSale>('designSales-demo.json'),
       demoDesigns: get<Design>('designs-demo.json'),
       config: this.http
         .get<{ platformFeeRate?: number }>('/dataset/appConfig.json')
@@ -202,7 +248,8 @@ export class MarketService {
         .pipe(catchError(() => of({} as Record<string, PrintArea>))),
     })
       .pipe(
-        map(({ listings, demoListings, designs, demoDesigns, config, areas }) => {
+        map(({ listings, demoListings, designs, demoDesigns, sales, demoSales, config, areas }) => {
+          this._sales.set(this.mergeById([...sales, ...demoSales]));
           if (config.platformFeeRate != null) this.feeRate.set(config.platformFeeRate);
           this.printAreas.set(areas);
           return {

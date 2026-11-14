@@ -36,7 +36,7 @@
       <section class="info">
         <div class="tags">@for (t of l.tags; track t) { <span>#{{ t }}</span> }</div>
         <h1>{{ l.title }}</h1>
-        <div class="seller"><span class="avatar" aria-hidden="true">{{ sellerName().charAt(0) }}</span>Thiết kế bởi <b>{{ sellerName() }}</b></div>
+        <div class="seller"><span class="avatar" aria-hidden="true">{{ sellerName().charAt(0) }}</span>Thiết kế bởi <b>{{ sellerName() }}</b>@if (soldCount()) { <span class="sold">· 🔥 {{ soldCount() }} lượt đã dùng</span> }</div>
         <p class="desc">{{ l.description }}</p>
 
         @if (printable().length) {
@@ -78,7 +78,7 @@
         <div class="actions">
           @if (isOwner()) {
             <button type="button" class="btn btn-primary" disabled>Đây là thiết kế của bạn</button>
-            <a class="btn btn-ghost" routerLink="/market/my-listings">Quản lý tin của tôi</a>
+            <a class="btn btn-ghost" routerLink="/market/my-listings">Mở My marketplace</a>
           } @else {
             <button type="button" class="btn btn-primary" (click)="useDesign()" [disabled]="!selected()">
               ✏️ Dùng thiết kế này trên {{ selected()?.name ?? 'sản phẩm' }}

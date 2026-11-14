@@ -45,6 +45,7 @@ export class MarketDetail {
   readonly visible = computed(() => !!this.listing() && (this.listing()!.status === 'APPROVED' || this.isOwner()));
   readonly sellerName = computed(() => this.users().find((u) => u._id === this.listing()?.sellerId)?.name ?? 'Người dùng PrintiFy');
   readonly feePercent = computed(() => Math.round(this.market.feeRate() * 100));
+  readonly soldCount = computed(() => (this.listing() ? this.market.salesOf(this.listing()!._id).length : 0));
 
   /** Sản phẩm in được thiết kế này */
   readonly printable = computed(() => this.market.mockupProducts(this.products(), this.listing()?.productId));

@@ -22,6 +22,7 @@ button { font: inherit; cursor: pointer; }
 h1 { margin: 12px 0 10px; font-size: clamp(26px, 3.4vw, 36px); line-height: 1.2; letter-spacing: -.03em; color: var(--pf-ink); }
 .seller { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--pf-muted); }
 .seller b { color: var(--pf-ink); }
+.sold { color: var(--pf-accent); font-weight: 700; }
 .avatar { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--pf-gradient); color: #fff; font-weight: 800; font-size: 13px; }
 .desc { margin: 14px 0; color: var(--pf-muted); line-height: 1.7; }
 

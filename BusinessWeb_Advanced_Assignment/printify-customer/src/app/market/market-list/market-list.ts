@@ -18,7 +18,7 @@ import { ProductService } from '../../services/product-service';
 export class MarketList {
   readonly market = inject(MarketService);
   private readonly ps = inject(ProductService);
-  private readonly auth = inject(AuthService);
+  readonly auth = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
@@ -33,6 +33,10 @@ export class MarketList {
   ];
   readonly keyword = signal('');
   readonly sort = signal('newest');
+  /** all = thiết kế của mọi người (C06), mine = thiết kế của tôi đang bán (C20) */
+  readonly scope = signal<'all' | 'mine'>('all');
+  readonly myId = computed(() => this.auth.user()?._id ?? '');
+  readonly myCount = computed(() => this.market.approved().filter((l) => l.sellerId === this.myId()).length);
   readonly page = signal(1);
   readonly notFound = signal('');
 
@@ -43,6 +47,7 @@ export class MarketList {
   readonly filtered = computed(() => {
     const kw = this.normalize(this.keyword());
     const list = this.market.approved().filter((l) => {
+      if (this.scope() === 'mine' && l.sellerId !== this.myId()) return false;
       if (!kw) return true;
       const hay = [l.title, l.description, ...l.tags, this.sellerName(l.sellerId)].join(' ');
       return this.normalize(hay).includes(kw);
@@ -65,6 +70,7 @@ export class MarketList {
     this.route.queryParamMap.pipe(takeUntilDestroyed(destroyRef)).subscribe((q) => {
       this.keyword.set(q.get('q') ?? '');
       this.sort.set(q.get('sort') ?? 'newest');
+      this.scope.set(q.get('scope') === 'mine' ? 'mine' : 'all');
       this.page.set(Number(q.get('page')) || 1);
       this.notFound.set(q.get('notfound') ?? '');
     });
@@ -78,11 +84,13 @@ export class MarketList {
   }
 
   onType(value: string): void { this.typed$.next(value); }
+  onScope(scope: 'all' | 'mine'): void { this.updateQuery({ scope: scope === 'mine' ? 'mine' : null, page: null, notfound: null }); }
   onSort(value: string): void { this.updateQuery({ sort: value === 'newest' ? null : value, page: null }); }
   onPage(p: number): void {
     this.updateQuery({ page: p > 1 ? p : null });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+  goMine(): void { this.router.navigate(['/market/my-listings']); }
   clearFilters(): void { this.router.navigate([], { relativeTo: this.route, queryParams: {} }); }
 
   private updateQuery(params: Record<string, string | number | null>): void {

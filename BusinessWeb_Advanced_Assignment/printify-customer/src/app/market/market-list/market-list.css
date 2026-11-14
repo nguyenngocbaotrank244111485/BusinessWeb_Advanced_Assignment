@@ -14,6 +14,10 @@ h1 { margin: 10px 0 6px; font-size: clamp(28px, 4vw, 40px); letter-spacing: -.04
 
 .content { padding-block: 26px 64px; }
 .notice { margin-bottom: 14px; padding: 12px 14px; border-radius: var(--pf-radius); background: var(--pf-pink-50); color: var(--pf-accent); font-size: 13px; font-weight: 600; }
+.scope { display: flex; gap: 6px; margin-bottom: 14px; border-bottom: 1px solid var(--pf-line); }
+.scope button { padding: 10px 14px; border: 0; border-bottom: 3px solid transparent; background: none; font: inherit; font-size: 14px; font-weight: 700; color: var(--pf-muted); cursor: pointer; margin-bottom: -1px; }
+.scope button small { margin-left: 4px; padding: 1px 7px; border-radius: 999px; background: var(--pf-pink-50); color: var(--pf-accent); font-size: 11px; }
+.scope button.active { color: var(--pf-primary); border-bottom-color: var(--pf-primary); }
 .toolbar { display: flex; gap: 12px; flex-wrap: wrap; }
 .search { flex: 1; min-width: 220px; display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; background: #fff; border: 1px solid var(--pf-line); border-radius: var(--pf-radius); color: var(--pf-muted); }
 .search:focus-within { border-color: var(--pf-lavender); box-shadow: 0 0 0 3px var(--pf-pink-50); }

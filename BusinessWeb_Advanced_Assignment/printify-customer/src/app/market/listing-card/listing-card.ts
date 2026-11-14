@@ -14,4 +14,6 @@ export class ListingCard {
   @Input() sellerName = '';
   /** Số sản phẩm có thể in thiết kế (0 = ẩn nhãn) */
   @Input() printableCount = 0;
+  /** Tin của chính người đang xem */
+  @Input() mine = false;
 }

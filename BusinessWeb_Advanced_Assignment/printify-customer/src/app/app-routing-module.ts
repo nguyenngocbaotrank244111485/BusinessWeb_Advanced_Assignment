@@ -33,6 +33,7 @@ const routes: Routes = [
       { path: 'cart', component: NotFound, data: { title: 'Giỏ hàng' } },
       { path: 'checkout', component: NotFound, data: { title: 'Thanh toán' } },
       { path: 'editor/:productId', component: NotFound, data: { title: 'Thiết kế sản phẩm' } },
+      { path: 'editor/designs/:designId', component: NotFound, data: { title: 'Chỉnh sửa thiết kế' } },
       { path: 'about', component: NotFound, data: { title: 'Giới thiệu' } },
       // Đăng nhập tạm để demo – thay bằng trang đăng nhập thật của Trân Phạm
       { path: 'auth/login', component: DemoLogin, title: 'Đăng nhập | PrintiFy' },

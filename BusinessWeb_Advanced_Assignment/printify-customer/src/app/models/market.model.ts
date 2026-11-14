@@ -68,3 +68,36 @@ export interface ListingInput {
   sellerPrice: number;
   acceptedCopyright: boolean;
 }
+
+/** Một lượt bán thiết kế (designSales): ghi khi đơn của người mua đã thanh toán */
+export interface DesignSale {
+  _id: string;
+  orderId: string;
+  orderItemId: string;
+  listingId: string;
+  sellerId: string;
+  buyerId: string;
+  productId?: string; // sản phẩm người mua đã in
+  sellerPrice: number;
+  platformFee: number;
+  buyerDesignFee: number;
+  status: 'RECORDED' | 'REVERSED' | string;
+  reversedAmount: number;
+  reversedAt: string | null;
+  recordedAt: string;
+}
+
+/** Một dòng trong "My marketplace" (C20): thiết kế nháp hoặc tin đã đăng */
+export type MyMarketStatus = 'EDITING' | ListingStatus;
+
+export interface MyMarketItem {
+  key: string;
+  status: MyMarketStatus;
+  design?: Design;
+  listing?: Listing;
+  title: string;
+  imageUrl: string;
+  soldCount: number; // số lượt bán (đã trừ lượt bị hoàn)
+  earned: number; // tiền người bán đã nhận
+  updatedAt: string;
+}
