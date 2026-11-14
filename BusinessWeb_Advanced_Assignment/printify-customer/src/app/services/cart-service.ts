@@ -123,6 +123,18 @@ export class CartService {
     this.save(this._items().map((i) => (i.key === key ? { ...i, selected: !i.selected } : i)));
   }
 
+  /** Bỏ mọi dòng giỏ gắn với 1 thiết kế (khi thiết kế bị xóa). Trả về số dòng đã bỏ */
+  removeByDesign(designId: string): number {
+    const before = this._items().length;
+    this.save(this._items().filter((i) => i.designId !== designId));
+    return before - this._items().length;
+  }
+
+  /** Số dòng giỏ đang dùng 1 thiết kế */
+  linesWithDesign(designId: string): number {
+    return this._items().filter((i) => i.designId === designId).length;
+  }
+
   remove(key: string): void {
     this.save(this._items().filter((i) => i.key !== key));
   }

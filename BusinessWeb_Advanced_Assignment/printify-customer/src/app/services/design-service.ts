@@ -6,6 +6,8 @@ import { PrintArea, Product } from '../models/product.model';
 import { MarketService } from './market-service';
 
 export const LOCAL_DESIGNS_KEY = 'printify_designs';
+/** Thiết kế đã xóa (kể cả thiết kế có sẵn trong designs.json) */
+export const DELETED_DESIGNS_KEY = 'printify_designs_deleted';
 const LOCAL_REPRINTS_KEY = 'printify_sample_reprints';
 /** Vùng in mặc định khi sản phẩm chưa khai báo (tỉ lệ 0–1 trên ảnh) */
 const DEFAULT_AREA: PrintArea = { x: 0.3, y: 0.3, width: 0.4, height: 0.4 };
@@ -46,7 +48,10 @@ export class DesignService {
       demo: get<DesignDoc[]>('designs-demo.json'),
     }).pipe(
       map(({ base, demo }) => {
-        this._designs.set(this.mergeById([...base, ...demo, ...this.readLocal<DesignDoc>(LOCAL_DESIGNS_KEY)]));
+        const deleted = new Set(this.readLocal<string>(DELETED_DESIGNS_KEY));
+        this._designs.set(
+          this.mergeById([...base, ...demo, ...this.readLocal<DesignDoc>(LOCAL_DESIGNS_KEY)]).filter((d) => !deleted.has(d._id)),
+        );
       }),
       shareReplay(1),
     );
@@ -136,6 +141,18 @@ export class DesignService {
     const now = new Date().toISOString();
     const doc: DesignDoc = { ...src, _id: this.newId(), createdAt: now, updatedAt: now };
     return this.save(doc) ? doc : null;
+  }
+
+  /** Xóa thiết kế của chính mình (DELETE /api/designs/:id). false = không có quyền / lỗi lưu */
+  remove(id: string, userId: string): boolean {
+    const doc = this.get(id);
+    if (!doc || doc.userId !== userId) return false;
+    const local = this.readLocal<DesignDoc>(LOCAL_DESIGNS_KEY).filter((d) => d._id !== id);
+    const deleted = [...new Set([...this.readLocal<string>(DELETED_DESIGNS_KEY), id])];
+    if (!this.writeLocal(LOCAL_DESIGNS_KEY, local) || !this.writeLocal(DELETED_DESIGNS_KEY, deleted)) return false;
+    this._designs.set(this._designs().filter((d) => d._id !== id));
+    this.market.removeDesign(id);
+    return true;
   }
 
   requestReprint(req: SampleReprintRequest): boolean {

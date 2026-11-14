@@ -1,0 +1,109 @@
+<section class="card">
+  <header class="head">
+    <div>
+      <h1>Thiết kế của tôi</h1>
+      <p>Các thiết kế bạn đã lưu từ trình thiết kế. Mỗi thiết kế gắn với một sản phẩm.</p>
+    </div>
+    <a routerLink="/products" class="btn primary">＋ Thiết kế mới</a>
+  </header>
+
+  <div class="toolbar">
+    <label class="search">
+      <span aria-hidden="true">⌕</span>
+      <input type="search" placeholder="Tìm theo tên sản phẩm, mã thiết kế…" [value]="query()" (input)="query.set($any($event.target).value)" aria-label="Tìm thiết kế" />
+    </label>
+    <select [value]="productFilter()" (change)="productFilter.set($any($event.target).value)" aria-label="Lọc theo sản phẩm">
+      <option value="">Tất cả sản phẩm</option>
+      @for (o of productOptions(); track o.id) { <option [value]="o.id">{{ o.name }}</option> }
+    </select>
+    <select [value]="source()" (change)="source.set($any($event.target).value)" aria-label="Lọc theo nguồn thiết kế">
+      <option value="">Tất cả thiết kế ({{ sourceCounts().all }})</option>
+      <option value="mine">Do tôi thiết kế ({{ sourceCounts().mine }})</option>
+      <option value="market">Từ Marketplace ({{ sourceCounts().market }})</option>
+    </select>
+    <select [value]="order()" (change)="order.set($any($event.target).value)" aria-label="Sắp xếp theo ngày">
+      <option value="newest">Mới nhất → cũ nhất</option>
+      <option value="oldest">Cũ nhất → mới nhất</option>
+    </select>
+  </div>
+
+  @if (loading()) {
+    <div class="grid">@for (i of [1, 2, 3, 4]; track i) { <div class="sk"></div> }</div>
+  } @else if (visible().length) {
+    <p class="count">{{ visible().length }} thiết kế</p>
+    <div class="grid">
+      @for (c of visible(); track c.doc._id) {
+        <article class="design">
+          <button type="button" class="del" (click)="askDelete(c)" title="Xóa thiết kế" [attr.aria-label]="'Xóa thiết kế ' + c.productName">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6l1 2h4v2H4V5h4l1-2Zm-3 6h12l-1 12H7L6 9Zm4 2v8h2v-8h-2Zm4 0v8h2v-8h-2Z"/></svg>
+          </button>
+          <button type="button" class="thumb" (click)="edit(c)" [attr.aria-label]="'Sửa thiết kế ' + c.productName">
+            <img [src]="c.doc.previewUrl || c.product?.img_display" [alt]="'Thiết kế trên ' + c.productName" loading="lazy" (error)="imgFallback($event, c)" />
+            <span class="tags">
+              @if (c.twoSided) { <span class="tag">2 mặt</span> }
+              @if (c.bought) { <span class="tag market">Mua từ Marketplace</span> }
+              @if (c.listing) { <span class="tag status" [attr.data-status]="c.listing.status">{{ statusLabels[c.listing.status] }}</span> }
+            </span>
+          </button>
+          <div class="info">
+            <button type="button" class="pname" (click)="viewProduct(c)" [disabled]="!c.product">{{ c.productName }}</button>
+            <span class="meta">Cập nhật {{ c.updatedAt | date: 'HH:mm dd/MM/yyyy' }}</span>
+            @if (c.doc.color) { <span class="meta">Màu {{ ps.colorLabel(c.doc.color) }}{{ c.doc.size ? ' · size ' + c.doc.size : '' }}</span> }
+          </div>
+          <div class="actions">
+            <button type="button" class="act" (click)="edit(c)">✏️ Sửa</button>
+            <button type="button" class="act" (click)="duplicate(c)" title="Tạo bản sao của thiết kế này (cùng sản phẩm)">⧉ Tạo bản sao</button>
+            @if (!c.bought) {
+              <button type="button" class="act sell" (click)="sell(c)">{{ c.listing ? '🏷️ Xem tin' : '✨ Đăng bán' }}</button>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  } @else if (cards().length) {
+    <div class="empty">
+      <div class="empty-icon" aria-hidden="true">🔍</div>
+      <p>Không có thiết kế nào khớp bộ lọc.</p>
+      <button type="button" class="btn ghost" (click)="clearFilters()">Xóa bộ lọc</button>
+    </div>
+  } @else {
+    <div class="empty">
+      <div class="empty-icon" aria-hidden="true">🎨</div>
+      <p>Bạn chưa có thiết kế nào. Chọn một sản phẩm và bắt đầu thiết kế nhé!</p>
+      <a routerLink="/products" class="btn primary">Chọn sản phẩm để thiết kế</a>
+    </div>
+  }
+</section>
+
+@if (confirmDelete(); as c) {
+  <div class="backdrop" (click)="confirmDelete.set(null)">
+    <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="del-title" (click)="$event.stopPropagation()">
+      <div class="warn-icon" aria-hidden="true">⚠️</div>
+      @if (blocksDelete(c)) {
+        <h2 id="del-title">Chưa thể xóa thiết kế này</h2>
+        <p>Thiết kế đang có tin <b>{{ statusLabels[c.listing!.status] | lowercase }}</b> trên Marketplace. Hãy gỡ tin đăng trước rồi mới xóa thiết kế.</p>
+        <div class="modal-actions">
+          <button type="button" class="btn ghost" (click)="confirmDelete.set(null)">Đóng</button>
+          <button type="button" class="btn primary" (click)="confirmDelete.set(null); sell(c)">Đến tin đăng của tôi</button>
+        </div>
+      } @else {
+        <h2 id="del-title">Bạn có chắc chắn muốn xóa?</h2>
+        <div class="del-preview">
+          <img [src]="c.doc.previewUrl || c.product?.img_display" alt="" />
+          <div><b>{{ c.productName }}</b><span>Cập nhật {{ c.updatedAt | date: 'HH:mm dd/MM/yyyy' }}</span></div>
+        </div>
+        <p>Thiết kế sẽ bị xóa vĩnh viễn và <b>không thể khôi phục</b>.</p>
+        @if (cartLines(c)) { <p class="note">Có {{ cartLines(c) }} sản phẩm trong giỏ hàng đang dùng thiết kế này, chúng cũng sẽ bị bỏ khỏi giỏ.</p> }
+        @if (c.listing) { <p class="note">Tin đăng đã {{ statusLabels[c.listing.status] | lowercase }} của thiết kế này vẫn được giữ trong lịch sử.</p> }
+        <div class="modal-actions">
+          <button type="button" class="btn ghost" (click)="confirmDelete.set(null)">Hủy</button>
+          <button type="button" class="btn danger" (click)="doDelete()">🗑 Xóa thiết kế</button>
+        </div>
+      }
+    </div>
+  </div>
+}
+
+@if (toast(); as t) {
+  <div class="toast" [class.error]="t.type === 'error'" role="status">{{ t.text }}</div>
+}
