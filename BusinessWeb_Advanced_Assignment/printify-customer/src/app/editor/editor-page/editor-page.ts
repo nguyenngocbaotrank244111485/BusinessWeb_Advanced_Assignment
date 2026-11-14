@@ -1077,6 +1077,7 @@ export class EditorPage implements AfterViewInit, OnDestroy {
       designId: doc._id,
       previewUrl: doc.previewUrl,
       listingId: doc.listingId,
+      listingTitle: this.listing()?.title,
       designFee: this.designFee(),
     });
     this.confirmCart.set(false);

@@ -1,0 +1,27 @@
+:host { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 16px; }
+.backdrop { position: absolute; inset: 0; background: rgba(46, 37, 56, .5); }
+.dialog { position: relative; width: min(420px, 100%); max-height: calc(100vh - 32px); overflow-y: auto; box-sizing: border-box; display: grid; gap: 12px; padding: 24px 22px; border-radius: 22px; background: #fff; box-shadow: 0 30px 60px #2e253866; text-align: center; }
+button { font: inherit; cursor: pointer; }
+.x { position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; border: 0; border-radius: 50%; background: var(--pf-soft); color: var(--pf-muted); }
+h2 { margin: 0; font-size: 21px; color: var(--pf-ink); }
+.sub { margin: -6px 0 0; font-size: 14px; color: var(--pf-muted); }
+.timer { display: grid; grid-template-columns: 1fr auto; gap: 6px 10px; align-items: center; padding: 10px 14px; border-radius: var(--pf-radius); background: var(--pf-soft); font-size: 13px; color: var(--pf-muted); text-align: left; }
+.timer b { font-size: 22px; color: var(--pf-primary); font-variant-numeric: tabular-nums; }
+.timer.low b { color: var(--pf-danger); }
+.bar { grid-column: 1 / -1; height: 6px; border-radius: 3px; background: var(--pf-line); overflow: hidden; }
+.bar div { height: 100%; background: var(--pf-gradient); transition: width 1s linear; }
+.qr { justify-self: center; width: min(240px, 70vw); aspect-ratio: 1; object-fit: contain; border-radius: 16px; }
+.info { margin: 0; display: grid; gap: 8px; text-align: left; }
+.info div { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; }
+.info dt { color: var(--pf-muted); }
+.info dd { margin: 0; display: flex; align-items: center; gap: 8px; color: var(--pf-ink); text-align: right; }
+.info dd button { padding: 3px 8px; border: 1px solid var(--pf-line); border-radius: 8px; background: #fff; font-size: 12px; color: var(--pf-primary); font-weight: 700; }
+.warn { margin: 0; padding: 8px 10px; border-radius: var(--pf-radius-sm); background: #fdf0d8; color: #8a5a00; font-size: 12px; text-align: left; }
+.actions { display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px; }
+.primary, .ghost { height: 48px; border-radius: var(--pf-radius); font-weight: 800; }
+.primary { border: 0; background: var(--pf-gradient); color: #fff; }
+.ghost { border: 1px solid var(--pf-line); background: #fff; color: var(--pf-ink); }
+.done { display: grid; gap: 12px; justify-items: center; padding: 8px 0; }
+.done p { margin: 0; font-size: 14px; color: var(--pf-muted); line-height: 1.6; }
+.done .primary { width: 100%; }
+.big { font-size: 44px; }

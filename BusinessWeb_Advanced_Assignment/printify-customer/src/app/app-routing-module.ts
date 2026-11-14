@@ -4,6 +4,7 @@ import { PrintifyHomepage } from './printify-homepage/printify-homepage';
 import { ShopLayout } from './core/layout/shop-layout/shop-layout';
 import { NotFound } from './core/not-found/not-found';
 import { DemoLogin } from './core/demo-login/demo-login';
+import { authGuard } from './core/guards/auth-guard';
 import { SurveyQuestionsComponent } from './survey-questions-component/survey-questions-component';
 import { customerAuthGuard } from './guards/customer-auth';
 
@@ -44,13 +45,24 @@ const routes: Routes = [
   // Tài khoản (C18 + sidebar cho C11, C14, C19): tải lazy
   { path: 'account', loadChildren: () => import('./account/account-module').then((m) => m.AccountModule) },
 
+  // C12 Giỏ hàng (khách vãng lai dùng được) và C13 Checkout (cần đăng nhập) – tải lazy
+  {
+    path: 'cart',
+    component: ShopLayout,
+    loadChildren: () => import('./cart/cart-module').then((m) => m.CartModule),
+  },
+  {
+    path: 'checkout',
+    component: ShopLayout,
+    canActivate: [authGuard],
+    loadChildren: () => import('./cart/checkout-module').then((m) => m.CheckoutModule),
+  },
+
   // Các màn hình chưa xây dựng: tạm hiện trang "đang xây dựng".
   {
     path: '',
     component: ShopLayout,
     children: [
-      { path: 'cart', component: NotFound, data: { title: 'Giỏ hàng' } },
-      { path: 'checkout', component: NotFound, data: { title: 'Thanh toán' } },
       { path: 'about', component: NotFound, data: { title: 'Giới thiệu' } },
       // Đăng nhập demo bằng dữ liệu mock (khi chưa chạy server)
       { path: 'auth/demo-login', component: DemoLogin, title: 'Đăng nhập demo | PrintiFy' },

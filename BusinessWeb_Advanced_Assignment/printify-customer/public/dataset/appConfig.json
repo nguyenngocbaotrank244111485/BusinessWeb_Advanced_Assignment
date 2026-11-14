@@ -12,5 +12,5 @@
   "otpExpirySeconds": 60,
   "otpResendCooldownSeconds": 60,
   "customerIdleSessionMinutes": 120,
-  "qrImageUrl": "/images/qr/static-qr.png"
+  "qrImageUrl": "/dataset/images/qr/printify-qr.png"
 }

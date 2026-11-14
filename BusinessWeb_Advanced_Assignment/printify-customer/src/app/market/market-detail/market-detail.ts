@@ -6,6 +6,7 @@ import { LISTING_STATUS_LABELS, Listing } from '../../models/market.model';
 import { PrintArea, Product } from '../../models/product.model';
 import { PublicUser } from '../../models/user.model';
 import { AuthService } from '../../services/auth-service';
+import { CartService } from '../../services/cart-service';
 import { MarketService } from '../../services/market-service';
 import { ProductService } from '../../services/product-service';
 import { ReportPayload } from '../report-dialog/report-dialog';
@@ -24,6 +25,7 @@ export class MarketDetail {
   readonly market = inject(MarketService);
   readonly auth = inject(AuthService);
   readonly ps = inject(ProductService);
+  private readonly cart = inject(CartService);
   private readonly router = inject(Router);
 
   readonly statusLabels = LISTING_STATUS_LABELS;
@@ -101,6 +103,21 @@ export class MarketDetail {
       return;
     }
     this.router.navigate(['/editor', p._id], { queryParams: { listingId: l._id } });
+  }
+
+  /** Thêm vào giỏ bản đặt thiết kế mặc định (đổi màu/size trong giỏ; chỉnh vị trí ở Editor sau) */
+  addToCart(): void {
+    const l = this.listing();
+    const p = this.selected();
+    if (!l || !p || this.isOwner()) return;
+    if (!this.auth.isLoggedIn()) {
+      this.router.navigate(['/auth/login'], { queryParams: { returnUrl: this.router.url } });
+      return;
+    }
+    const v = p.variants.find((x) => x.stock > 0);
+    if (!v) return this.showToast('error', `${p.name} đang hết hàng, bạn chọn sản phẩm khác nhé.`);
+    const ok = this.cart.addWithListing(p, v, l, this.market.artUrl(l.designId));
+    this.showToast(ok ? 'ok' : 'error', ok ? `Đã thêm ${p.name} in “${l.title}” vào giỏ!` : 'Số lượng trong giỏ đã đạt tối đa tồn kho.');
   }
 
   openReport(): void {

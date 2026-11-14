@@ -1,0 +1,119 @@
+<main class="page">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a routerLink="/">Trang chủ</a><span>/</span>Giỏ hàng</nav>
+    <h1>Giỏ hàng <small>{{ cart.count() }} sản phẩm</small></h1>
+
+    @if (returnedIssue() && blocking().length) {
+      <div class="alert" role="alert">Một số sản phẩm vừa đổi giá hoặc không đủ hàng. Bạn kiểm tra lại các dòng được đánh dấu rồi đặt hàng nhé.</div>
+    }
+
+    @if (loading()) {
+      <div class="skeleton"></div>
+    } @else if (lines().length === 0) {
+      <app-empty-state icon="🛒" title="Giỏ hàng đang trống" message="Chọn phôi bạn thích hoặc một thiết kế trên Marketplace để bắt đầu nhé."
+        actionText="Xem sản phẩm" (action)="goProducts()"></app-empty-state>
+    } @else {
+      <div class="layout">
+        <!-- ===== TRÁI: danh sách ===== -->
+        <section class="items" aria-label="Sản phẩm trong giỏ">
+          <div class="bar">
+            <label class="check"><input type="checkbox" [checked]="allSelected()" (change)="cart.setAllSelected($any($event.target).checked)" />
+              Chọn tất cả ({{ lines().length }})</label>
+            @if (selectedLines().length) {
+              @if (confirmRemoveSelected()) {
+                <span class="confirm">Xóa {{ selectedLines().length }} dòng đã chọn?
+                  <button type="button" class="danger" (click)="removeSelected()">Xóa</button>
+                  <button type="button" (click)="confirmRemoveSelected.set(false)">Không</button></span>
+              } @else {
+                <button type="button" class="link" (click)="confirmRemoveSelected.set(true)">Xóa đã chọn</button>
+              }
+            }
+          </div>
+
+          @for (l of lines(); track l.item.key) {
+            <article class="line" [class.has-issue]="l.issue" [class.off]="!l.item.selected">
+              <input type="checkbox" class="sel" [checked]="l.item.selected" (change)="cart.toggleSelected(l.item.key)"
+                [attr.aria-label]="'Chọn ' + l.item.name" />
+              <a class="thumb" [routerLink]="['/products', l.item.slug || l.item.productId]">
+                <img [src]="l.item.imageUrl" [alt]="l.item.name" appImgFallback />
+                @if (l.item.listingId && l.item.designArtUrl) { <img class="art" [src]="l.item.designArtUrl" alt="" /> }
+              </a>
+              <div class="info">
+                <a class="name" [routerLink]="['/products', l.item.slug || l.item.productId]">{{ l.item.name }}</a>
+                @if (l.item.listingId) {
+                  <a class="design" [routerLink]="['/market', l.item.listingId]">🎨 Thiết kế: {{ l.item.listingTitle || 'Marketplace' }} · +{{ l.item.designFee | vnd }}/dòng</a>
+                } @else if (l.item.designId) {
+                  <a class="design" [routerLink]="['/editor/designs', l.item.designId]">✏️ Thiết kế của bạn · Sửa thiết kế</a>
+                } @else {
+                  <span class="design plain">Sản phẩm thô (chưa in thiết kế)</span>
+                }
+
+                @if (l.product) {
+                  <div class="variant">
+                    <label>Màu
+                      <select (change)="onColor(l, $any($event.target).value)">
+                        @for (c of colors(l); track c) {
+                          <option [value]="c" [selected]="c === l.item.color">{{ ps.colorLabel(c) }}</option>
+                        }
+                      </select>
+                    </label>
+                    @if (sizes(l, l.item.color).length) {
+                      <label>Size
+                        <select (change)="onSize(l, $any($event.target).value)">
+                          @for (s of sizes(l, l.item.color); track s) {
+                            <option [value]="s" [selected]="s === l.item.size" [disabled]="stockOf(l, l.item.color, s) === 0">{{ s }}{{ stockOf(l, l.item.color, s) === 0 ? ' (hết)' : '' }}</option>
+                          }
+                        </select>
+                      </label>
+                    }
+                  </div>
+                }
+
+                @switch (l.issue) {
+                  @case ('UNAVAILABLE') { <p class="issue">Sản phẩm này đã ngừng bán. Bạn xóa khỏi giỏ để tiếp tục nhé.</p> }
+                  @case ('OUT_OF_STOCK') { <p class="issue">Màu/size này đã hết hàng. Chọn màu hoặc size khác nhé.</p> }
+                  @case ('INSUFFICIENT_STOCK') { <p class="issue">Chỉ còn {{ l.currentStock }} sản phẩm. Giảm số lượng để tiếp tục.</p> }
+                  @case ('PRICE_CHANGED') {
+                    <p class="issue warn">Giá đã đổi từ {{ l.item.unitPrice | vnd }} thành {{ l.currentPrice | vnd }}.
+                      <button type="button" class="link" (click)="acceptPrice(l)">Đồng ý giá mới</button></p>
+                  }
+                }
+              </div>
+
+              <div class="price">
+                <span class="unit">{{ l.currentPrice | vnd }}</span>
+                <div class="qty" role="group" [attr.aria-label]="'Số lượng ' + l.item.name">
+                  <button type="button" (click)="setQty(l, l.item.quantity - 1)" [disabled]="l.item.quantity <= 1" aria-label="Giảm">−</button>
+                  <input type="number" min="1" [max]="maxQty" [value]="l.item.quantity" (change)="setQty(l, +$any($event.target).value)" aria-label="Số lượng" />
+                  <button type="button" (click)="setQty(l, l.item.quantity + 1)" [disabled]="l.item.quantity >= l.currentStock || l.item.quantity >= maxQty" aria-label="Tăng">+</button>
+                </div>
+                <b class="line-total">{{ l.currentPrice * l.item.quantity + (l.item.designFee || 0) | vnd }}</b>
+                <button type="button" class="remove" (click)="remove(l)" [attr.aria-label]="'Xóa ' + l.item.name">Xóa</button>
+              </div>
+            </article>
+          }
+
+          <a class="continue" routerLink="/products">← Tiếp tục mua sắm</a>
+        </section>
+
+        <!-- ===== PHẢI: tóm tắt ===== -->
+        <aside class="side">
+          <app-order-summary [totals]="totals()" [itemCount]="selectedQty()" [threshold]="cfg().discountThresholdVnd"
+            [discountPercent]="cfg().discountRate * 100">
+            @if (blocking().length) {
+              <p class="block-msg">{{ blocking().length }} dòng đã chọn cần xử lý trước khi đặt hàng.</p>
+            }
+            <button type="button" class="btn-checkout" (click)="checkout()" [disabled]="!selectedLines().length || blocking().length">
+              Tiếp tục thanh toán ({{ selectedLines().length }})
+            </button>
+            @if (!auth.isLoggedIn()) { <p class="login-hint">Bạn sẽ đăng nhập ở bước tiếp theo, giỏ hàng vẫn được giữ nguyên.</p> }
+          </app-order-summary>
+        </aside>
+      </div>
+    }
+  </div>
+
+  @if (undo(); as u) {
+    <div class="toast" role="status">Đã xóa “{{ u.name }}”. <button type="button" (click)="undoRemove()">Hoàn tác</button></div>
+  }
+</main>
