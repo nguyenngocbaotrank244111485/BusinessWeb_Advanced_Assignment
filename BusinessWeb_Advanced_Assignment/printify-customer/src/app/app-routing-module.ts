@@ -27,6 +27,13 @@ const routes: Routes = [
     canActivate: [customerAuthGuard],
   },
 
+  // C10 Design Editor (lazy, toàn màn hình, không navbar)
+  { path: 'editor', loadChildren: () => import('./editor/editor-module').then((m) => m.EditorModule) },
+  {
+    path: 'account/orders/:orderId/items/:itemId/edit',
+    loadChildren: () => import('./editor/editor-module').then((m) => m.EditorSampleModule),
+  },
+
   // Marketplace: tải lazy (Ch.IV 4.4.2)
   {
     path: 'market',
@@ -41,8 +48,6 @@ const routes: Routes = [
     children: [
       { path: 'cart', component: NotFound, data: { title: 'Giỏ hàng' } },
       { path: 'checkout', component: NotFound, data: { title: 'Thanh toán' } },
-      { path: 'editor/:productId', component: NotFound, data: { title: 'Thiết kế sản phẩm' } },
-      { path: 'editor/designs/:designId', component: NotFound, data: { title: 'Chỉnh sửa thiết kế' } },
       { path: 'about', component: NotFound, data: { title: 'Giới thiệu' } },
       // Đăng nhập demo bằng dữ liệu mock (khi chưa chạy server)
       { path: 'auth/demo-login', component: DemoLogin, title: 'Đăng nhập demo | PrintiFy' },

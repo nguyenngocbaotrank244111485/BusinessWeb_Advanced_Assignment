@@ -15,6 +15,8 @@ export interface CartItem {
   imageUrl: string;
   stock: number;
   designId: string | null; // null = sản phẩm thô (chưa thiết kế)
+  listingId?: string | null; // thiết kế mua từ Marketplace
+  designFee?: number; // phí thiết kế Marketplace, tính 1 lần / dòng
   selected: boolean; // tick chọn để đặt hàng
   addedAt: string;
 }
@@ -72,6 +74,40 @@ export class CartService {
       });
     }
     this.save(list);
+    return true;
+  }
+
+  /**
+   * Thêm sản phẩm đã thiết kế (C10). Mỗi thiết kế là 1 dòng riêng;
+   * thêm lại cùng thiết kế + biến thể thì cập nhật số lượng và ảnh xem trước.
+   */
+  addDesigned(
+    product: Product,
+    variant: ProductVariant,
+    quantity: number,
+    design: { designId: string; previewUrl: string; listingId?: string | null; designFee?: number },
+  ): boolean {
+    if (quantity < 1 || quantity > variant.stock) return false;
+    const key = `${product._id}__${variant._id}__${design.designId}`;
+    const item: CartItem = {
+      key,
+      productId: product._id,
+      variantId: variant._id,
+      name: product.name,
+      category: product.category,
+      color: variant.color,
+      size: variant.size,
+      unitPrice: product.price,
+      quantity,
+      imageUrl: design.previewUrl || variant.imageUrl || product.img_display,
+      stock: variant.stock,
+      designId: design.designId,
+      listingId: design.listingId ?? null,
+      designFee: design.designFee ?? 0,
+      selected: true,
+      addedAt: new Date().toISOString(),
+    };
+    this.save([item, ...this._items().filter((i) => i.key !== key)]);
     return true;
   }
 

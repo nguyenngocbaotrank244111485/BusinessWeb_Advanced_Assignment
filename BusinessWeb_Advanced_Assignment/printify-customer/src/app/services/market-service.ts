@@ -224,6 +224,11 @@ export class MarketService {
     );
   }
 
+  /** Editor (C10) lưu thiết kế mới -> có ngay trong My marketplace / form đăng bán */
+  upsertDesign(design: Design): void {
+    this._designs.set(this.mergeById([...this._designs(), design]));
+  }
+
   // ---------- nội bộ ----------
 
   private load(): void {
@@ -254,7 +259,7 @@ export class MarketService {
           this.printAreas.set(areas);
           return {
             listings: this.mergeById([...listings, ...demoListings, ...this.readLocal<Listing>(LOCAL_LISTINGS_KEY)]),
-            designs: this.mergeById([...designs, ...demoDesigns]),
+            designs: this.mergeById([...designs, ...demoDesigns, ...this.readLocal<Design>('printify_designs')]),
           };
         }),
       )

@@ -1,0 +1,379 @@
+<div class="editor">
+  <!-- ===== TOPBAR ===== -->
+  <header class="topbar">
+    <a class="brand" routerLink="/" aria-label="PrintiFy - Trang chủ">Print<span>iFy</span></a>
+    <button type="button" class="tb-btn ghost back" (click)="back()">← Quay lại</button>
+
+    @if (product(); as p) {
+      <div class="tb-product">
+        @switch (mode()) {
+          @case ('SAMPLE_EDIT') { <span class="mode-chip sample">Sửa mẫu · {{ orderId() }}</span> }
+          @case ('EDIT') { <span class="mode-chip">Đang sửa thiết kế</span> }
+          @default { <span class="mode-chip new">Thiết kế mới</span> }
+        }
+        <strong>{{ p.name }}</strong>
+        <span class="tb-meta">{{ ps.colorLabel(color()) }}@if (size()) { · {{ size() }} }</span>
+      </div>
+    }
+
+    <div class="tb-history">
+      <button type="button" class="icon-btn" (click)="undo()" [disabled]="!canUndo()" title="Hoàn tác (Ctrl+Z)" aria-label="Hoàn tác">↶</button>
+      <button type="button" class="icon-btn" (click)="redo()" [disabled]="!canRedo()" title="Làm lại (Ctrl+Y)" aria-label="Làm lại">↷</button>
+    </div>
+
+    <div class="tb-actions">
+      <button type="button" class="tb-btn ghost" (click)="openPreview()" [disabled]="loading() || !!fatal()">👁 Xem trước</button>
+      @if (mode() === 'SAMPLE_EDIT') {
+        <button type="button" class="tb-btn primary" (click)="requestReprint()" [disabled]="loading() || !!fatal()">↻ Gửi yêu cầu in lại</button>
+      } @else {
+        <button type="button" class="tb-btn ghost" (click)="save()" [disabled]="loading() || !!fatal()" title="Ctrl+S">
+          💾 Lưu@if (dirty()) {<span class="dot" aria-label="chưa lưu"></span>}
+        </button>
+        <button type="button" class="tb-btn primary" (click)="askAddToCart()" [disabled]="loading() || !!fatal()">🛒 Thêm vào giỏ</button>
+      }
+    </div>
+  </header>
+
+  @if (fatal()) {
+    <div class="fatal">
+      <div class="fatal-card">
+        <div class="fatal-icon" aria-hidden="true">⚠️</div>
+        <h1>Không mở được trình thiết kế</h1>
+        <p>{{ fatal() }}</p>
+        <div class="fatal-actions">
+          <a routerLink="/products" class="tb-btn primary">Xem sản phẩm</a>
+          <a routerLink="/" class="tb-btn ghost">Về trang chủ</a>
+        </div>
+      </div>
+    </div>
+  }
+
+  <div class="body" [class.hidden]="!!fatal()">
+    <!-- ===== CÔNG CỤ TRÁI ===== -->
+    <nav class="tools" aria-label="Công cụ">
+      <button type="button" class="tool" (click)="pickImage()" title="Tải ảnh lên (JPG/PNG/WebP ≤ 5MB)"><span>🖼</span>Ảnh</button>
+      <button type="button" class="tool" (click)="addText()" title="Thêm chữ"><span class="t">T</span>Chữ</button>
+      <button type="button" class="tool" [class.active]="drawing()" (click)="toggleDraw()" title="Bút vẽ tự do (B)" [attr.aria-pressed]="drawing()"><span>✎</span>Vẽ</button>
+      <div class="tool-sep"></div>
+      <div class="tool-wrap">
+        <button type="button" class="tool" [class.active]="shapeMenu()" (click)="toggleShapeMenu()" title="Hình khối" [attr.aria-expanded]="shapeMenu()"><span>◆</span>Khối</button>
+        @if (shapeMenu()) {
+          <div class="shape-backdrop" (click)="shapeMenu.set(false)"></div>
+          <div class="shape-menu" role="menu" aria-label="Chọn hình khối">
+            <div class="shape-menu-title">Chọn hình khối</div>
+            <div class="shape-grid">
+              @for (sh of shapes; track sh.key) {
+                <button type="button" role="menuitem" class="shape-item" (click)="addShape(sh)" [title]="sh.label" [attr.aria-label]="sh.label">
+                  <svg viewBox="-4 -4 108 108" aria-hidden="true"><path [attr.d]="sh.d" [attr.fill]="sh.fill" /></svg>
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+      <div class="tool-sep"></div>
+      <button type="button" class="tool danger" (click)="deleteSelected()" [disabled]="!selected()" title="Xóa (Delete)"><span>✕</span>Xóa</button>
+      <button type="button" class="tool" (click)="clearAll()" [disabled]="!layers().length" title="Xóa tất cả"><span>🗑</span>Xóa hết</button>
+      <input #fileInput type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" hidden (change)="onFile($event)" />
+    </nav>
+
+    <!-- ===== CANVAS ===== -->
+    <main class="stage-area">
+      <div class="banners">
+      @if (draftOffer(); as d) {
+        <div class="banner">
+          <span>Có bản nháp tự lưu lúc {{ d.savedAt | date: 'HH:mm dd/MM' }}. Khôi phục?</span>
+          <button type="button" class="link-btn" (click)="restoreDraft()">Khôi phục</button>
+          <button type="button" class="link-btn muted" (click)="discardDraft()">Bỏ qua</button>
+        </div>
+      }
+      @if (listing(); as l) {
+        <div class="banner info">✨ Đang dùng thiết kế Marketplace “{{ l.title }}” · phí thiết kế {{ l.buyerDesignFee | vnd }}</div>
+      }
+      @if (outOfBounds()) {
+        <div class="banner warn" role="alert">⚠️ Có đối tượng nằm ngoài vùng in – phần đó sẽ không được in.</div>
+      }
+      </div>
+
+      <div class="stage-scroll">
+        <div class="stage-wrap">
+          <canvas #canvasEl></canvas>
+          @if (loading()) {
+            <div class="stage-loading"><span class="spinner"></span>Đang tải sản phẩm…</div>
+          }
+        </div>
+      </div>
+
+      <div class="bottom-bar">
+        @if (sides().length > 1) {
+          <div class="side-switch" role="tablist" aria-label="Mặt in">
+            @for (sd of sides(); track sd.key) {
+              <button type="button" role="tab" [class.active]="side() === sd.key" [attr.aria-selected]="side() === sd.key" (click)="switchSide(sd.key)">
+                {{ sd.label }}@if (sideCounts()[sd.key]) {<small>{{ sideCounts()[sd.key] }}</small>}
+              </button>
+            }
+          </div>
+        }
+        <div class="zoom">
+          <button type="button" (click)="setZoom(zoom() - 0.1)" aria-label="Thu nhỏ">−</button>
+          <span>{{ zoom() * 100 | number: '1.0-0' }}%</span>
+          <button type="button" (click)="setZoom(zoom() + 0.1)" aria-label="Phóng to">+</button>
+          <button type="button" class="reset" (click)="setZoom(1)">100%</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- ===== PANEL PHẢI ===== -->
+    <aside class="panel">
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" [class.active]="tab() === 'design'" (click)="tab.set('design')">Thiết kế</button>
+        <button type="button" role="tab" [class.active]="tab() === 'product'" (click)="tab.set('product')">Sản phẩm</button>
+        <button type="button" role="tab" [class.active]="tab() === 'layers'" (click)="tab.set('layers')">Layers <small>{{ layers().length }}</small></button>
+        <button type="button" role="tab" [class.active]="tab() === 'templates'" (click)="tab.set('templates')">Mẫu</button>
+      </div>
+
+      <div class="panel-body">
+        @switch (tab()) {
+          <!-- ---------- Thiết kế ---------- -->
+          @case ('design') {
+            @if (drawing()) {
+              <section class="sec">
+                <h3>Bút vẽ</h3>
+                <div class="grid2">
+                  <label>Màu nét<input type="color" [value]="brushColor()" (input)="setBrush('color', $any($event.target).value)" /></label>
+                  <label>Độ dày: {{ brushWidth() }}px<input type="range" min="1" max="60" [value]="brushWidth()" (input)="setBrush('width', $any($event.target).value)" /></label>
+                </div>
+                <div class="brush-preview"><span [style.width.px]="brushWidth()" [style.height.px]="brushWidth()" [style.background]="brushColor()"></span></div>
+                <p class="hint">Kéo chuột trên khung để vẽ, mỗi nét là 1 layer. Nhấn Esc hoặc bấm lại “Vẽ” để thoát.</p>
+                <button type="button" class="small-btn" (click)="toggleDraw(false)">✓ Xong, quay lại chọn đối tượng</button>
+              </section>
+            } @else if (props(); as pr) {
+              <section class="sec">
+                <h3>Vị trí & hiển thị</h3>
+                <div class="grid2">
+                  <label>X<input type="number" [value]="pr.x" (change)="setProp('left', $any($event.target).value)" /></label>
+                  <label>Y<input type="number" [value]="pr.y" (change)="setProp('top', $any($event.target).value)" /></label>
+                  <label>Xoay (°)<input type="number" [value]="pr.angle" (change)="setProp('angle', $any($event.target).value)" /></label>
+                  <label>Độ mờ<input type="range" min="0" max="100" [value]="pr.opacity" (change)="setProp('opacity', $any($event.target).value)" /></label>
+                </div>
+                <button type="button" class="small-btn" (click)="centerSelected()">⊕ Căn giữa vùng in</button>
+              </section>
+
+              @if (pr.isText) {
+                <section class="sec">
+                  <h3>Định dạng chữ</h3>
+                  <label class="row">Font
+                    <select [value]="pr.fontFamily" (change)="setText('fontFamily', $any($event.target).value)">
+                      @for (f of fonts; track f) { <option [value]="f" [style.font-family]="f">{{ f }}</option> }
+                    </select>
+                  </label>
+                  <div class="grid2">
+                    <label>Cỡ chữ<input type="number" min="8" max="200" [value]="pr.fontSize" (change)="setText('fontSize', $any($event.target).value)" /></label>
+                    <label>Màu chữ<input type="color" [value]="pr.fill" (input)="setText('fill', $any($event.target).value)" /></label>
+                  </div>
+                  <div class="seg">
+                    <button type="button" [class.on]="pr.bold" (click)="toggleText('bold')" aria-label="In đậm"><b>B</b></button>
+                    <button type="button" [class.on]="pr.italic" (click)="toggleText('italic')" aria-label="In nghiêng"><i>I</i></button>
+                    <button type="button" [class.on]="pr.underline" (click)="toggleText('underline')" aria-label="Gạch chân"><u>U</u></button>
+                    <span class="seg-sep"></span>
+                    <button type="button" [class.on]="pr.textAlign === 'left'" (click)="setText('textAlign', 'left')" aria-label="Canh trái">⇤</button>
+                    <button type="button" [class.on]="pr.textAlign === 'center'" (click)="setText('textAlign', 'center')" aria-label="Canh giữa">↔</button>
+                    <button type="button" [class.on]="pr.textAlign === 'right'" (click)="setText('textAlign', 'right')" aria-label="Canh phải">⇥</button>
+                  </div>
+                  <p class="hint">Nhấp đúp vào chữ trên khung để sửa nội dung.</p>
+                </section>
+              }
+
+              @if (pr.isPath) {
+                <section class="sec">
+                  <h3>Nét vẽ</h3>
+                  <div class="grid2">
+                    <label>Màu nét<input type="color" [value]="pr.stroke" (input)="setStroke('stroke', $any($event.target).value)" /></label>
+                    <label>Độ dày<input type="number" min="1" max="60" [value]="pr.strokeWidth" (change)="setStroke('strokeWidth', $any($event.target).value)" /></label>
+                  </div>
+                </section>
+              }
+
+              @if (pr.isShape) {
+                <section class="sec">
+                  <h3>Màu khối</h3>
+                  <input type="color" class="color-full" [value]="pr.fill" (input)="setProp('fill', $any($event.target).value)" />
+                </section>
+              }
+
+              <button type="button" class="danger-btn" (click)="deleteSelected()">🗑 Xóa đối tượng này</button>
+            } @else {
+              <div class="empty">
+                <div class="empty-icon" aria-hidden="true">👆</div>
+                <p>Chọn một đối tượng trên khung để chỉnh sửa</p>
+                <p class="muted">hoặc dùng thanh công cụ bên trái để thêm ảnh, chữ, hình khối.</p>
+              </div>
+              <ul class="rules">
+                <li>Chỉ phần nằm trong <b>khung nét đứt</b> mới được in.</li>
+                <li>Ảnh JPG/PNG/WebP, tối đa 5 MB.</li>
+                <li>Phím tắt: Ctrl+Z / Ctrl+Y, Delete, Ctrl+S, B (bút vẽ).</li>
+                <li>Bản nháp tự lưu mỗi 30 giây.</li>
+              </ul>
+            }
+          }
+
+          <!-- ---------- Sản phẩm ---------- -->
+          @case ('product') {
+            @if (product(); as p) {
+              <section class="sec">
+                <h3>Màu sắc: <b class="val">{{ ps.colorLabel(color()) }}</b></h3>
+                <div class="colors">
+                  @for (c of colors(); track c) {
+                    <button type="button" class="color-dot" [class.active]="c === color()" [style.background]="ps.colorSwatch(c)"
+                      (click)="changeColor(c)" [attr.aria-label]="ps.colorLabel(c)" [attr.aria-pressed]="c === color()" [title]="ps.colorLabel(c)"></button>
+                  }
+                </div>
+                @if (sizes().length) {
+                  <h3 class="mt">Kích thước: <b class="val">{{ size() || 'chưa chọn' }}</b></h3>
+                  <div class="sizes">
+                    @for (s of sizes(); track s) {
+                      <button type="button" class="size-btn" [class.active]="s === size()" [disabled]="sizeStock(s) === 0"
+                        [attr.aria-pressed]="s === size()" (click)="changeSize(s)">{{ s }}</button>
+                    }
+                  </div>
+                }
+                @if (mode() === 'SAMPLE_EDIT') { <p class="hint">Đổi màu/size của đơn đã đặt cần liên hệ hỗ trợ; ở đây chỉ dùng để xem trước.</p> }
+              </section>
+              <section class="sec">
+                <h3>Số lượng</h3>
+                <div class="qty">
+                  <button type="button" (click)="changeQty(-1)" [disabled]="qty() <= 1 || mode() === 'SAMPLE_EDIT'" aria-label="Giảm">−</button>
+                  <span>{{ qty() }}</span>
+                  <button type="button" (click)="changeQty(1)" [disabled]="qty() >= stock() || mode() === 'SAMPLE_EDIT'" aria-label="Tăng">+</button>
+                </div>
+                @if (variant()) {
+                  <p class="stock" [class.out]="stock() === 0">{{ stock() > 0 ? 'Còn ' + stock() + ' sản phẩm' : 'Tạm hết hàng' }}</p>
+                } @else if (sizes().length) {
+                  <p class="stock out">Chọn kích thước để xem tồn kho</p>
+                }
+              </section>
+              <section class="sec summary">
+                <h3>Tóm tắt</h3>
+                <div class="sum-row"><span>Đơn giá</span><b>{{ p.price | vnd }}</b></div>
+                <div class="sum-row"><span>Số lượng</span><b>× {{ qty() }}</b></div>
+                @if (designFee()) { <div class="sum-row"><span>Phí thiết kế Marketplace</span><b>{{ designFee() | vnd }}</b></div> }
+                <div class="sum-row total"><span>Tạm tính</span><b>{{ total() | vnd }}</b></div>
+              </section>
+              @if (mode() === 'SAMPLE_EDIT') {
+                <button type="button" class="cta" (click)="requestReprint()">↻ Gửi yêu cầu in lại mẫu</button>
+                <p class="hint center">{{ reprintFee() ? 'Phí in lại: ' + ps.formatPrice(reprintFee()) : 'Lần in lại đầu tiên miễn phí' }}</p>
+              } @else {
+                <button type="button" class="cta" (click)="askAddToCart()">🛒 Xác nhận & thêm vào giỏ</button>
+                @if (canPublish() && p.allowMarketplace) {
+                  <button type="button" class="cta outline" (click)="publish()">✨ Đăng bán thiết kế này</button>
+                }
+              }
+            }
+          }
+
+          <!-- ---------- Layers ---------- -->
+          @case ('layers') {
+            @if (layers().length) {
+              <ul class="layers">
+                @for (l of layers(); track l.obj; let first = $first; let last = $last) {
+                  <li [class.active]="l.obj === selected()" [class.hidden-layer]="!l.obj.visible">
+                    <button type="button" class="layer-main" (click)="selectLayer(l.obj)">
+                      <span class="layer-icon">{{ l.icon }}</span><span class="layer-name">{{ l.label }}</span>
+                    </button>
+                    <button type="button" class="mini" (click)="moveLayer(l.obj, 'up')" [disabled]="first" title="Đưa lên">▲</button>
+                    <button type="button" class="mini" (click)="moveLayer(l.obj, 'down')" [disabled]="last" title="Đưa xuống">▼</button>
+                    <button type="button" class="mini" (click)="toggleVisible(l.obj)" [title]="l.obj.visible ? 'Ẩn' : 'Hiện'">{{ l.obj.visible ? '👁' : '◌' }}</button>
+                    <button type="button" class="mini danger" (click)="removeLayer(l.obj)" title="Xóa">✕</button>
+                  </li>
+                }
+              </ul>
+              <p class="hint">Layer trên cùng của danh sách nằm trên cùng khi in.</p>
+            } @else {
+              <div class="empty"><div class="empty-icon" aria-hidden="true">📑</div><p>Chưa có layer nào</p></div>
+            }
+          }
+
+          <!-- ---------- Mẫu ---------- -->
+          @case ('templates') {
+            @if (templates().length) {
+              <div class="tpl-grid">
+                @for (t of templates(); track t._id) {
+                  <button type="button" class="tpl" (click)="applyTemplate(t)">
+                    <span class="tpl-thumb"><img [src]="t.previewUrl" [alt]="t.name" appImgFallback /></span>
+                    <span class="tpl-name">{{ t.name }}</span>
+                    <span class="tpl-desc">{{ t.description }}</span>
+                  </button>
+                }
+              </div>
+            } @else {
+              <div class="empty"><div class="empty-icon" aria-hidden="true">🧩</div><p>Sản phẩm này chưa có mẫu thiết kế sẵn.</p>
+                <a routerLink="/market" [queryParams]="{ productId: product()?._id }" class="link-btn">Khám phá Marketplace →</a></div>
+            }
+          }
+        }
+      </div>
+    </aside>
+  </div>
+
+  <!-- ===== MODAL: Xem trước ===== -->
+  @if (preview(); as shots) {
+    <div class="modal-backdrop" (click)="preview.set(null)">
+      <div class="modal" role="dialog" aria-modal="true" aria-label="Xem trước thiết kế" (click)="$event.stopPropagation()">
+        <div class="modal-head">
+          <h2>Xem trước</h2>
+          <button type="button" class="icon-btn" (click)="preview.set(null)" aria-label="Đóng">✕</button>
+        </div>
+        <div class="preview-grid" [class.two]="shots.length > 1">
+          @for (shot of shots; track shot.label) {
+            <figure>
+              <img class="preview-img" [src]="shot.src" [alt]="'Xem trước ' + shot.label" />
+              @if (shots.length > 1) { <figcaption>{{ shot.label }}</figcaption> }
+            </figure>
+          }
+        </div>
+        <p class="hint center">Ảnh minh họa trên ảnh sản phẩm – màu in thực tế có thể chênh lệch nhẹ.</p>
+      </div>
+    </div>
+  }
+
+  <!-- ===== MODAL: Xác nhận thêm giỏ ===== -->
+  @if (confirmCart() && product(); as p) {
+    <div class="modal-backdrop" (click)="confirmCart.set(false)">
+      <div class="modal small" role="dialog" aria-modal="true" aria-label="Xác nhận thêm vào giỏ" (click)="$event.stopPropagation()">
+        <div class="modal-head"><h2>Thêm vào giỏ hàng?</h2></div>
+        <div class="sum-row"><span>Sản phẩm</span><b>{{ p.name }}</b></div>
+        <div class="sum-row"><span>Màu / size</span><b>{{ ps.colorLabel(color()) }}{{ size() ? ' / ' + size() : '' }}</b></div>
+        <div class="sum-row"><span>Số lượng</span><b>{{ qty() }}</b></div>
+        @if (sides().length > 1) {
+          <div class="sum-row"><span>Mặt in</span><b>{{ sideCounts().front && sideCounts().back ? 'Trước + sau' : sideCounts().back ? 'Chỉ mặt sau' : 'Chỉ mặt trước' }}</b></div>
+        }
+        @if (designFee()) { <div class="sum-row"><span>Phí thiết kế</span><b>{{ designFee() | vnd }}</b></div> }
+        <div class="sum-row total"><span>Tạm tính</span><b>{{ total() | vnd }}</b></div>
+        <p class="hint">Thiết kế sẽ được lưu vào “Thiết kế của tôi” và gắn với dòng giỏ hàng.</p>
+        <div class="modal-actions">
+          <button type="button" class="tb-btn ghost" (click)="confirmCart.set(false)">Tiếp tục chỉnh</button>
+          <button type="button" class="tb-btn primary" (click)="addToCart()">Thêm vào giỏ</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ===== MODAL: Rời trang khi chưa lưu ===== -->
+  @if (leavePrompt()) {
+    <div class="modal-backdrop">
+      <div class="modal small" role="alertdialog" aria-modal="true" aria-label="Thay đổi chưa lưu">
+        <div class="modal-head"><h2>Bạn có thay đổi chưa lưu</h2></div>
+        <p>Lưu thiết kế trước khi rời khỏi trình thiết kế?</p>
+        <div class="modal-actions">
+          <button type="button" class="tb-btn ghost" (click)="leave('stay')">Ở lại</button>
+          <button type="button" class="tb-btn ghost danger-text" (click)="leave('discard')">Rời, không lưu</button>
+          @if (mode() !== 'SAMPLE_EDIT') { <button type="button" class="tb-btn primary" (click)="leave('save')">Lưu & rời</button> }
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (toast(); as t) {
+    <div class="toast" [class.error]="t.type === 'error'" [class.warn]="t.type === 'warn'" role="status">{{ t.text }}</div>
+  }
+</div>
