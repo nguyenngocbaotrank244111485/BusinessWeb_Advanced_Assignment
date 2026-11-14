@@ -1,0 +1,104 @@
+<main class="page">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a routerLink="/market">Marketplace</a><span>/</span>
+      <a routerLink="/market/my-listings">My marketplace</a><span>/</span>
+      {{ isEdit ? 'Sửa tin' : 'Đăng bán thiết kế' }}
+    </nav>
+    <h1>{{ isEdit ? 'Sửa tin đăng' : 'Đăng bán thiết kế' }}</h1>
+    <p class="lead">{{ isEdit ? 'Sau khi lưu, tin sẽ được gửi duyệt lại.' : 'Chọn một thiết kế bạn tự tạo. Tin sẽ hiện công khai sau khi PrintiFy duyệt.' }}</p>
+
+    @if (!market.loaded()) {
+      <div class="skeleton"></div>
+    } @else if (!isEdit && designs().length === 0) {
+      <app-empty-state icon="🎨" title="Bạn chưa có thiết kế nào để đăng bán"
+        message="Mỗi thiết kế chỉ đăng bán một lần. Hãy tạo thiết kế mới trong Editor rồi quay lại nhé."
+        actionText="Chọn sản phẩm để thiết kế" (action)="goProducts()"></app-empty-state>
+    } @else {
+      <form class="layout" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <!-- TRÁI: chọn thiết kế + xem trước -->
+        <section class="left">
+          <h2>1. Thiết kế</h2>
+          @if (selectedDesign(); as d) {
+            <div class="preview">
+              <app-watermark-image [src]="market.imageUrl(d.previewUrl)" [alt]="'Thiết kế ' + d._id" [rounded]="true"></app-watermark-image>
+              @if (previewProducts().length) {
+                <div class="mock-head"><b>Người mua in được trên {{ printableCount() }} sản phẩm</b><span>Ví dụ:</span></div>
+                <div class="mocks">
+                  @for (p of previewProducts(); track p._id) {
+                    <figure>
+                      <app-design-mockup [product]="p" [area]="areaOf(p)" [art]="market.artUrl(d._id)" [fallbackArt]="market.imageUrl(d.previewUrl)"></app-design-mockup>
+                      <figcaption>{{ p.name }}</figcaption>
+                    </figure>
+                  }
+                </div>
+              }
+            </div>
+          }
+          @if (!isEdit) {
+            <div class="design-grid" role="radiogroup" aria-label="Chọn thiết kế">
+              @for (d of designs(); track d._id) {
+                <button type="button" role="radio" class="design" [class.active]="form.controls.designId.value === d._id"
+                  [attr.aria-checked]="form.controls.designId.value === d._id" (click)="pickDesign(d)">
+                  <img [src]="market.imageUrl(d.previewUrl)" alt="" appImgFallback />
+                  <span>{{ productOf(d)?.name ?? d.productId }}</span>
+                </button>
+              }
+            </div>
+            <p class="note">Thiết kế dựng từ tin bạn đã mua của người khác sẽ không xuất hiện ở đây.</p>
+          } @else {
+            <p class="note">Khi sửa tin, bạn không đổi được thiết kế.</p>
+          }
+        </section>
+
+        <!-- PHẢI: thông tin + giá -->
+        <section class="right">
+          <h2>2. Thông tin tin đăng</h2>
+
+          <label for="lf-title">Tiêu đề <span class="count" [class.over]="titleLength() > 100">{{ titleLength() }}/100</span></label>
+          <input id="lf-title" type="text" formControlName="title" placeholder="Ví dụ: Đà Lạt hoàng hôn" maxlength="120" />
+          @if (form.controls.title.touched && form.controls.title.invalid) {
+            <small class="err">{{ form.controls.title.hasError('maxlength') ? 'Tiêu đề tối đa 100 ký tự.' : 'Bạn nhập tiêu đề nhé.' }}</small>
+          }
+
+          <label for="lf-desc">Mô tả</label>
+          <textarea id="lf-desc" rows="4" formControlName="description" placeholder="Phong cách, màu sắc, hợp với ai..."></textarea>
+          @if (form.controls.description.touched && form.controls.description.invalid) {
+            <small class="err">Mô tả từ 10 đến 500 ký tự.</small>
+          }
+
+          <label for="lf-tags">Tags <span class="opt">(phân cách bằng dấu phẩy, tối đa 8)</span></label>
+          <input id="lf-tags" type="text" formControlName="tags" placeholder="đà lạt, núi, hoàng hôn" />
+
+          <h2>3. Giá</h2>
+          <label for="lf-price">Giá bạn nhận mỗi lần thiết kế được dùng (đ)</label>
+          <input id="lf-price" type="number" formControlName="sellerPrice" [min]="minPrice" [max]="maxPrice" step="1000" />
+          @if (form.controls.sellerPrice.touched && form.controls.sellerPrice.invalid) {
+            <small class="err">Giá từ {{ minPrice | vnd }} đến {{ maxPrice | vnd }}.</small>
+          }
+          <div class="fee-box">
+            <div class="row"><span>Bạn nhận</span><span>{{ (form.controls.sellerPrice.value || 0) | vnd }}</span></div>
+            <div class="row"><span>Phí sàn PrintiFy ({{ feePercent() }}%)</span><span>+ {{ fees().platformFee | vnd }}</span></div>
+            <div class="row total"><span>Người mua trả</span><span>{{ fees().buyerDesignFee | vnd }}</span></div>
+            <p>Tính một lần cho mỗi dòng sản phẩm trong đơn của người mua.</p>
+          </div>
+
+          <label class="check">
+            <input type="checkbox" formControlName="acceptedCopyright" />
+            <span>Tôi cam kết thiết kế này do tôi tự tạo hoặc có quyền sử dụng, và chịu trách nhiệm nếu vi phạm bản quyền.</span>
+          </label>
+          @if (form.controls.acceptedCopyright.touched && form.controls.acceptedCopyright.invalid) {
+            <small class="err">Bạn cần cam kết bản quyền để gửi duyệt.</small>
+          }
+
+          @if (error()) { <p class="form-error" role="alert">{{ error() }}</p> }
+
+          <div class="actions">
+            <a routerLink="/market/my-listings" class="ghost">Hủy</a>
+            <button type="submit" class="primary">{{ isEdit ? 'Lưu & gửi duyệt lại' : 'Gửi duyệt' }}</button>
+          </div>
+        </section>
+      </form>
+    }
+  </div>
+</main>

@@ -1,0 +1,57 @@
+<main class="page">
+  <section class="page-head">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb"><a routerLink="/">Trang chủ</a><span>/</span>Sản phẩm</nav>
+      <h1>Sản phẩm</h1>
+      <p>Chọn phôi bạn thích, rồi tự thiết kế theo cách của bạn.</p>
+    </div>
+  </section>
+
+  <div class="container layout">
+    <app-filter-bar
+      [categories]="categories()" [total]="products().length"
+      [category]="category()" [minPrice]="minPrice()" [maxPrice]="maxPrice()" [hasFilter]="hasFilter()"
+      (categoryChange)="onCategory($event)" (priceChange)="onPrice($event)" (clear)="clearFilters()">
+    </app-filter-bar>
+
+    <section class="results" aria-live="polite">
+      @if (notFound()) {
+        <div class="notice" role="alert">Không tìm thấy sản phẩm “{{ notFound() }}” hoặc sản phẩm đã ngừng bán. Mời bạn xem các sản phẩm khác nhé.</div>
+      }
+
+      <div class="toolbar">
+        <app-search-box class="grow" [value]="keyword()" (search)="onSearch($event)"></app-search-box>
+        <label class="sort-box">
+          <span>Sắp xếp</span>
+          <select (change)="onSort($any($event.target).value)" aria-label="Sắp xếp">
+            @for (o of sortOptions; track o.value) {
+              <option [value]="o.value" [selected]="sort() === o.value">{{ o.label }}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      @if (loading()) {
+        <div class="grid">
+          @for (i of [1, 2, 3, 4]; track i) { <div class="skeleton"></div> }
+        </div>
+      } @else if (error()) {
+        <app-empty-state icon="⚠️" title="Có lỗi xảy ra" [message]="error()"></app-empty-state>
+      } @else {
+        <p class="count">Tìm thấy <b>{{ filtered().length }}</b> sản phẩm @if (keyword()) { cho “{{ keyword() }}” }</p>
+
+        @if (filtered().length === 0) {
+          <app-empty-state icon="🔍" title="Không có sản phẩm phù hợp" message="Thử đổi từ khóa hoặc bỏ bớt bộ lọc nhé."
+            actionText="Xóa bộ lọc" (action)="clearFilters()"></app-empty-state>
+        } @else {
+          <div class="grid">
+            @for (p of paged(); track p._id) {
+              <app-product-card [product]="p"></app-product-card>
+            }
+          </div>
+          <app-pagination [page]="page()" [totalPages]="totalPages()" (pageChange)="onPage($event)"></app-pagination>
+        }
+      }
+    </section>
+  </div>
+</main>

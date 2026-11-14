@@ -1,0 +1,48 @@
+:host { display: block; background: var(--pf-soft); min-height: 100vh; }
+.container { width: min(1180px, calc(100% - 32px)); margin-inline: auto; }
+a { text-decoration: none; color: inherit; }
+
+.banner { background: linear-gradient(110deg, #faf6fe 0%, var(--pf-orchid) 55%, var(--pf-pink-200) 100%); padding: 30px 0 34px; }
+.banner-inner { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.banner-copy { max-width: 620px; }
+.breadcrumb { display: flex; gap: 8px; font-size: 12px; color: var(--pf-muted); }
+.breadcrumb a:hover { color: var(--pf-primary); }
+h1 { margin: 10px 0 6px; font-size: clamp(28px, 4vw, 40px); letter-spacing: -.04em; color: var(--pf-ink); }
+.banner p { margin: 0; color: var(--pf-muted); font-size: 14px; line-height: 1.7; }
+.btn-sell { padding: 13px 20px; border-radius: var(--pf-radius); background: var(--pf-gradient); color: #fff; font-weight: 800; font-size: 14px; box-shadow: 0 12px 24px #8b57c42e; white-space: nowrap; }
+.btn-sell:hover { filter: brightness(1.05); }
+
+.content { padding-block: 26px 64px; }
+.notice { margin-bottom: 14px; padding: 12px 14px; border-radius: var(--pf-radius); background: var(--pf-pink-50); color: var(--pf-accent); font-size: 13px; font-weight: 600; }
+.scope { display: flex; gap: 6px; margin-bottom: 14px; border-bottom: 1px solid var(--pf-line); }
+.scope button { padding: 10px 14px; border: 0; border-bottom: 3px solid transparent; background: none; font: inherit; font-size: 14px; font-weight: 700; color: var(--pf-muted); cursor: pointer; margin-bottom: -1px; }
+.scope button small { margin-left: 4px; padding: 1px 7px; border-radius: 999px; background: var(--pf-pink-50); color: var(--pf-accent); font-size: 11px; }
+.scope button.active { color: var(--pf-primary); border-bottom-color: var(--pf-primary); }
+.toolbar { display: flex; gap: 12px; flex-wrap: wrap; }
+.search { flex: 1; min-width: 220px; display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; background: #fff; border: 1px solid var(--pf-line); border-radius: var(--pf-radius); color: var(--pf-muted); }
+.search:focus-within { border-color: var(--pf-lavender); box-shadow: 0 0 0 3px var(--pf-pink-50); }
+.search input { flex: 1; min-width: 0; border: 0; outline: 0; font: inherit; font-size: 14px; color: var(--pf-ink); }
+.select { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--pf-muted); }
+.select select { height: 44px; max-width: 240px; padding: 0 12px; border: 1px solid var(--pf-line); border-radius: var(--pf-radius); background: #fff; font: inherit; font-size: 13px; color: var(--pf-ink); }
+.count { margin: 18px 0 14px; font-size: 14px; color: var(--pf-muted); }
+.count b { color: var(--pf-ink); }
+app-empty-state { display: block; margin-top: 18px; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 18px; }
+.skeleton { aspect-ratio: .8; border-radius: var(--pf-radius-lg); background: linear-gradient(90deg, #f3eef8 25%, #fbf8fd 50%, #f3eef8 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; }
+@keyframes shimmer { to { background-position: -200% 0; } }
+
+.how { margin-top: 44px; padding: 22px; border-radius: var(--pf-radius-lg); background: #fff; border: 1px solid var(--pf-line); }
+.how h2 { margin: 0 0 14px; font-size: 18px; color: var(--pf-ink); }
+.how ol { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; counter-reset: step; }
+.how li { counter-increment: step; display: grid; gap: 4px; padding-left: 40px; position: relative; font-size: 13px; color: var(--pf-muted); }
+.how li::before { content: counter(step); position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--pf-pink-50); color: var(--pf-accent); font-weight: 800; }
+.how b { color: var(--pf-ink); font-size: 14px; }
+
+@media (max-width: 760px) { .how ol { grid-template-columns: 1fr; } }
+@media (max-width: 520px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .select > span { display: none; }
+  .select, .select select { width: 100%; max-width: none; }
+  .btn-sell { width: 100%; text-align: center; }
+}

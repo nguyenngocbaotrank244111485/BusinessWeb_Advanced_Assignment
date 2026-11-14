@@ -1,0 +1,123 @@
+<section class="survey-page">
+  <div class="survey-container">
+    <nav class="survey-breadcrumb" aria-label="Đường dẫn trang">
+      <a routerLink="/">Trang chủ</a>
+      <span aria-hidden="true">›</span>
+      <span>Khảo sát trải nghiệm</span>
+    </nav>
+
+    <header class="survey-intro">
+      <p class="survey-kicker">PrintiFy · KHẢO SÁT TAM</p>
+      <h1>Khảo sát trải nghiệm PrintiFy</h1>
+      <p>Chia sẻ trải nghiệm của bạn để PrintiFy nâng cao chất lượng thiết kế
+        và in ấn cá nhân hóa.</p>
+      <div class="survey-info">
+        <strong>Điều kiện tham gia:</strong> Tài khoản Customer đang hoạt động,
+        đã lưu ít nhất một thiết kế <strong>hoặc</strong> có ít nhất một đơn hàng
+        hoàn thành (COMPLETED), và chưa từng gửi khảo sát.
+      </div>
+      <p class="survey-caption">Thang đo: 1 = Hoàn toàn không đồng ý; 5 = Hoàn toàn đồng ý.</p>
+    </header>
+
+    @if (loading) {
+      <section class="survey-card" role="status">Đang tải câu hỏi...</section>
+    } @else if (submitted) {
+      <section class="survey-card survey-success" role="status">
+        <h2>Cảm ơn bạn đã chia sẻ! 💜</h2>
+        <p>PrintiFy đã ghi nhận khảo sát của bạn. Mỗi tài khoản chỉ được gửi một lần.</p>
+        <div class="survey-links">
+          <a routerLink="/">Trang chủ</a>
+          <a routerLink="/account/profile">Tài khoản</a>
+          <a routerLink="/account/orders">Đơn hàng</a>
+        </div>
+      </section>
+    } @else if (!status) {
+      <section class="survey-card" role="alert">
+        <p>{{ loadError }}</p>
+        <div class="survey-links">
+          <a routerLink="/auth/login">Đăng nhập</a>
+          <button type="button" (click)="loadQuestions()">Thử tải lại</button>
+        </div>
+      </section>
+    } @else {
+      @if (!status.canSubmit) {
+        <div class="survey-blocked" role="status">
+          <strong>Trạng thái khảo sát:</strong> {{ blockMessage }}
+        </div>
+        <div class="survey-links">
+          <a routerLink="/account/designs">Thiết kế của tôi</a>
+          <a routerLink="/account/orders">Đơn hàng của tôi</a>
+        </div>
+      } @else {
+        <div class="survey-progress" aria-live="polite">
+          Đã trả lời <strong>{{ answeredCount }}/{{ questions.length }}</strong> câu
+        </div>
+      }
+
+      <!-- Show all active questions read-only for ineligible/responded users. -->
+      <form [formGroup]="ratings" (ngSubmit)="submitSurvey()" novalidate>
+        @for (group of groups; track group.code; let groupIndex = $index) {
+          @if (group.questions.length > 0) {
+            <section class="survey-card" [attr.aria-labelledby]="'survey-group-' + group.code">
+              <div class="survey-group-heading">
+                <span class="survey-group-number">0{{ groupIndex + 1 }}</span>
+                <div>
+                  <h2 [id]="'survey-group-' + group.code">{{ group.title }}</h2>
+                  <p>{{ group.questions.length }} câu hỏi · Chọn một mức từ 1 đến 5</p>
+                </div>
+              </div>
+
+              @for (q of group.questions; track q._id) {
+                <fieldset class="survey-question">
+                  <legend>
+                    <span class="survey-q-index">{{ q.orderIndex }}.</span>
+                    {{ q.text }}
+                  </legend>
+                  <div class="survey-choices">
+                    @for (level of scale; track level) {
+                      <label class="survey-choice">
+                        <input
+                          type="radio"
+                          [name]="q._id"
+                          [formControlName]="q._id"
+                          [value]="level"
+                        />
+                        <span>{{ level }}</span>
+                      </label>
+                    }
+                  </div>
+                  @if (showValidation && ratings.get(q._id)?.invalid) {
+                    <p class="survey-field-error">Vui lòng chọn một mức đánh giá.</p>
+                  }
+                </fieldset>
+              }
+            </section>
+          }
+        }
+
+        @if (status.canSubmit) {
+          <section class="survey-card">
+            <label class="survey-comment-title" for="survey-comment">Ý kiến khác (không bắt buộc)</label>
+            <textarea
+              id="survey-comment"
+              [formControl]="comment"
+              rows="4"
+              maxlength="500"
+              placeholder="Bạn muốn PrintiFy cải thiện điều gì?"
+            ></textarea>
+            <p class="survey-caption">{{ comment.value.length }}/500 ký tự</p>
+          </section>
+          @if (submitError) {
+            <p class="survey-error" role="alert">{{ submitError }}</p>
+          }
+          <button class="survey-submit" type="submit"
+                  [disabled]="submitting || questions.length === 0">
+            {{ submitting ? 'Đang gửi khảo sát...' : 'Gửi khảo sát' }}
+          </button>
+        } @else if (submitError) {
+          <p class="survey-error" role="alert">{{ submitError }}</p>
+        }
+      </form>
+    }
+  </div>
+</section>

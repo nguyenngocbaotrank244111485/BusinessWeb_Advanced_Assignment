@@ -1,34 +1,163 @@
+
 [
   {
     "_id": "sq_pu_1",
     "dimension": "PU",
-    "text": "Trang web giúp tôi thiết kế sản phẩm nhanh hơn.",
+    "text": "PrintiFy giúp tôi tiết kiệm thời gian khi thiết kế hoặc mua sản phẩm in theo yêu cầu.",
     "scaleType": "LIKERT_5",
     "orderIndex": 1,
     "isActive": true
   },
   {
-    "_id": "sq_eou_1",
-    "dimension": "EOU",
-    "text": "Tôi thấy trình thiết kế dễ sử dụng.",
+    "_id": "sq_pu_2",
+    "dimension": "PU",
+    "text": "Tính năng tùy chỉnh sản phẩm trên PrintiFy hữu ích đối với tôi.",
     "scaleType": "LIKERT_5",
     "orderIndex": 2,
     "isActive": true
   },
   {
-    "_id": "sq_sat_1",
-    "dimension": "SAT",
-    "text": "Tôi hài lòng với trải nghiệm đặt hàng.",
+    "_id": "sq_pu_3",
+    "dimension": "PU",
+    "text": "Các công cụ trên PrintiFy hỗ trợ tôi lựa chọn sản phẩm hoặc lên ý tưởng thiết kế hiệu quả hơn.",
     "scaleType": "LIKERT_5",
     "orderIndex": 3,
     "isActive": true
   },
   {
-    "_id": "sq_pi_1",
-    "dimension": "PI",
-    "text": "Tôi sẵn sàng tiếp tục dùng trang web này.",
+    "_id": "sq_pu_4",
+    "dimension": "PU",
+    "text": "PrintiFy giúp tôi tìm sản phẩm hoặc lựa chọn thiết kế phù hợp nhanh hơn.",
     "scaleType": "LIKERT_5",
     "orderIndex": 4,
+    "isActive": true
+  },
+  {
+    "_id": "sq_pu_5",
+    "dimension": "PU",
+    "text": "Nhìn chung, PrintiFy giúp quá trình thiết kế hoặc mua sản phẩm của tôi hiệu quả hơn.",
+    "scaleType": "LIKERT_5",
+    "orderIndex": 5,
+    "isActive": true
+  },
+  {
+    "_id": "sq_eou_1",
+    "dimension": "EOU",
+    "text": "Tôi dễ dàng học cách sử dụng PrintiFy.",
+    "scaleType": "LIKERT_5",
+    "orderIndex": 6,
+    "isActive": true
+  },
+  {
+    "_id": "sq_eou_2",
+    "dimension": "EOU",
+    "text": "Giao diện PrintiFy rõ ràng và dễ hiểu.",
+    "scaleType": "LIKERT_5",
+    "orderIndex": 7,
+    "isActive": true
+  },
+  {
+    "_id": "sq_eou_3",
+    "dimension": "EOU",
+    "text": "Các thao tác lựa chọn và tùy chỉnh sản phẩm trên PrintiFy dễ thực hiện.",
+    "scaleType": "LIKERT_5",
+    "orderIndex": 8,
+    "isActive": true
+  },
+  {
+    "_id": "sq_eou_4",
+    "dimension": "EOU",
+    "text": "Tôi dễ dàng thực hiện các bước cần thiết để thiết kế hoặc đặt hàng trên PrintiFy.",
+    "scaleType": "LIKERT_5",
+    "orderIndex": 9,
+    "isActive": true
+  },
+  {
+    "_id": "sq_eou_5",
+    "dimension": "EOU",
+    "text": "Nhìn chung, PrintiFy dễ sử dụng.",
+    "scaleType": "LIKERT_5",
+    "orderIndex": 10,
+    "isActive": true
+  },
+  {
+    "_id": "sq_sat_1",
+    "dimension": "SAT",
+    "text": "Tôi hài lòng với trải nghiệm sử dụng các chức năng của PrintiFy.",
+    "scaleType": "LIKERT_5",
+    "orderIndex": 11,
+    "isActive": true
+  },
+  {
+    "_id": "sq_sat_2",
+    "dimension": "SAT",
+    "text": "Tôi hài lòng với tốc độ và độ ổn định của website PrintiFy.",
+    "scaleType": "LIKERT_5",
+    "orderIndex": 12,
+    "isActive": true
+  },
+  {
+    "_id": "sq_sat_3",
+    "dimension": "SAT",
+    "text": "Tôi hài lòng với các chức năng lựa chọn và tùy chỉnh sản phẩm trên PrintiFy.",
+    "scaleType": "LIKERT_5",
+    "orderIndex": 13,
+    "isActive": true
+  },
+  {
+    "_id": "sq_sat_4",
+    "dimension": "SAT",
+    "text": "Thông tin và hướng dẫn trên PrintiFy đáp ứng nhu cầu của tôi.",
+    "scaleType": "LIKERT_5",
+    "orderIndex": 14,
+    "isActive": true
+  },
+  {
+    "_id": "sq_sat_5",
+    "dimension": "SAT",
+    "text": "Nhìn chung, tôi hài lòng với PrintiFy.",
+    "scaleType": "LIKERT_5",
+    "orderIndex": 15,
+    "isActive": true
+  },
+  {
+    "_id": "sq_pi_1",
+    "dimension": "PI",
+    "text": "Tôi có ý định sử dụng PrintiFy trong những lần tiếp theo.",
+    "scaleType": "LIKERT_5",
+    "orderIndex": 16,
+    "isActive": true
+  },
+  {
+    "_id": "sq_pi_2",
+    "dimension": "PI",
+    "text": "Tôi sẵn sàng giới thiệu PrintiFy cho người khác.",
+    "scaleType": "LIKERT_5",
+    "orderIndex": 17,
+    "isActive": true
+  },
+  {
+    "_id": "sq_pi_3",
+    "dimension": "PI",
+    "text": "Tôi có ý định đặt mua sản phẩm tùy chỉnh thông qua PrintiFy trong tương lai.",
+    "scaleType": "LIKERT_5",
+    "orderIndex": 18,
+    "isActive": true
+  },
+  {
+    "_id": "sq_pi_4",
+    "dimension": "PI",
+    "text": "Tôi sẽ cân nhắc PrintiFy khi có nhu cầu sử dụng dịch vụ in ấn cá nhân hóa.",
+    "scaleType": "LIKERT_5",
+    "orderIndex": 19,
+    "isActive": true
+  },
+  {
+    "_id": "sq_pi_5",
+    "dimension": "PI",
+    "text": "Tôi dự định ưu tiên PrintiFy khi cần thiết kế hoặc đặt in sản phẩm cá nhân hóa trong tương lai.",
+    "scaleType": "LIKERT_5",
+    "orderIndex": 20,
     "isActive": true
   }
 ]

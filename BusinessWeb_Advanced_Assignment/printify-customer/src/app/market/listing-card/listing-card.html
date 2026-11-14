@@ -1,0 +1,17 @@
+<article class="card">
+  <a class="img" [routerLink]="['/market', listing._id]" [attr.aria-label]="'Xem thiết kế ' + listing.title">
+    <app-watermark-image [src]="imageUrl" [alt]="listing.title"></app-watermark-image>
+    @if (mine) { <span class="mine">Của bạn</span> }
+    @if (printableCount) {
+      <span class="product-chip">👕☕👜 In được trên {{ printableCount }} sản phẩm</span>
+    }
+  </a>
+  <div class="body">
+    <h3><a [routerLink]="['/market', listing._id]">{{ listing.title }}</a></h3>
+    <span class="seller">bởi {{ sellerName || 'Người dùng PrintiFy' }}</span>
+    <div class="foot">
+      <span class="fee"><small>Phí thiết kế</small><strong>{{ listing.buyerDesignFee | vnd }}</strong></span>
+      <a class="btn" [routerLink]="['/market', listing._id]">Xem →</a>
+    </div>
+  </div>
+</article>

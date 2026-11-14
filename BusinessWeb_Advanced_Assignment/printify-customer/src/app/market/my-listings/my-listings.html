@@ -1,0 +1,83 @@
+<main class="page">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a routerLink="/market">Marketplace</a><span>/</span>My marketplace</nav>
+    <header class="head">
+      <div>
+        <h1>My marketplace</h1>
+        <p>Quản lý thiết kế đang chỉnh sửa và các tin bạn đã đăng bán. Tin mới cần PrintiFy duyệt trước khi hiện công khai.</p>
+      </div>
+      <a class="btn-new" routerLink="/market">Xem Marketplace →</a>
+    </header>
+
+    <div class="stats">
+      <div><b>{{ count('EDITING') }}</b><span>đang chỉnh sửa</span></div>
+      <div><b>{{ count('APPROVED') }}</b><span>tin đang bán</span></div>
+      <div><b>{{ totalSold() }}</b><span>lượt bán</span></div>
+      <div><b>{{ totalEarned() | vnd }}</b><span>bạn đã nhận</span></div>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Lọc">
+      @for (f of filters; track f.value) {
+        <button type="button" role="tab" [attr.aria-selected]="filter() === f.value" [class.active]="filter() === f.value" (click)="filter.set(f.value)">
+          {{ f.label }} <small>{{ count(f.value) }}</small>
+        </button>
+      }
+    </div>
+
+    @if (!market.loaded()) {
+      <div class="skeleton"></div>
+    } @else if (visible().length === 0) {
+      <app-empty-state icon="🖼️" [title]="items().length ? 'Không có thiết kế ở mục này' : 'Bạn chưa có thiết kế nào'"
+        [message]="items().length ? '' : 'Tạo thiết kế trong Editor, rồi quay lại đây để đăng bán.'"></app-empty-state>
+    } @else {
+      <ul class="list">
+        @for (i of visible(); track i.key) {
+          <li class="row">
+            <img class="thumb" [src]="i.imageUrl" [alt]="i.title" appImgFallback />
+            <div class="main">
+              <div class="title-line">
+                <b>{{ i.status === 'EDITING' ? 'Bản nháp trên ' + productName(i.design?.productId) : i.title }}</b>
+                <app-status-badge [label]="labels[i.status]" [tone]="tones[i.status]"></app-status-badge>
+                @if (i.soldCount) { <app-status-badge [label]="'Đã bán ' + i.soldCount + ' lượt'" tone="info"></app-status-badge> }
+              </div>
+              @if (i.listing; as l) {
+                <span class="meta">Đăng {{ l.createdAt | date: 'dd/MM/yyyy' }} · Bạn nhận <b>{{ l.sellerPrice | vnd }}</b>/lượt · Người mua trả {{ l.buyerDesignFee | vnd }}</span>
+                @if (i.soldCount) {
+                  <button type="button" class="sales-link" (click)="openSales.set(openSales() === i.key ? null : i.key)">
+                    Đã nhận {{ i.earned | vnd }} · {{ openSales() === i.key ? 'Ẩn' : 'Xem' }} người mua
+                  </button>
+                }
+                @if (i.status === 'REJECTED' && l.reviewNote) { <p class="review">Lý do từ chối: {{ l.reviewNote }}</p> }
+              } @else {
+                <span class="meta">Sửa lần cuối {{ i.updatedAt | date: 'dd/MM/yyyy' }} · Chưa đăng bán, chỉ bạn nhìn thấy</span>
+              }
+              @if (openSales() === i.key) {
+                <ul class="sales">
+                  @for (s of buyerSales(i); track s._id) {
+                    <li><span>{{ s.recordedAt | date: 'dd/MM/yyyy HH:mm' }}</span><span>In trên {{ productName(s.productId) || 'sản phẩm' }}</span><b>+{{ s.sellerPrice | vnd }}</b></li>
+                  }
+                </ul>
+              }
+            </div>
+            <div class="actions">
+              @if (confirmUnlist() === i.key) {
+                <span class="confirm">Gỡ tin này?</span>
+                <button type="button" class="danger" (click)="unlist(i)">Gỡ</button>
+                <button type="button" (click)="confirmUnlist.set(null)">Không</button>
+              } @else if (i.status === 'EDITING') {
+                <button type="button" (click)="continueEditing(i)">Tiếp tục chỉnh sửa</button>
+                <button type="button" class="primary" (click)="sell(i)">Đăng bán</button>
+              } @else {
+                <a [routerLink]="['/market', i.listing!._id]">Xem</a>
+                @if (canEdit(i)) { <a [routerLink]="['/market/my-listings', i.listing!._id, 'edit']">{{ i.status === 'REJECTED' ? 'Sửa & gửi lại' : 'Sửa' }}</a> }
+                @if (canUnlist(i)) { <button type="button" (click)="confirmUnlist.set(i.key)">Gỡ</button> }
+              }
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+
+  @if (toast()) { <div class="toast" role="status">✅ {{ toast() }}</div> }
+</main>

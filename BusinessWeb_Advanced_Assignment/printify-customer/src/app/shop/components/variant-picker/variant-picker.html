@@ -1,0 +1,22 @@
+<div class="option">
+  <div class="option-label">Màu sắc: <b>{{ ps.colorLabel(color) }}</b></div>
+  <div class="colors">
+    @for (c of colors; track c) {
+      <button type="button" class="color-dot" [class.active]="c === color" [class.sold-out]="colorSoldOut(c)"
+        [style.background]="ps.colorSwatch(c)" (click)="pickColor(c)" [attr.aria-label]="ps.colorLabel(c)" [attr.aria-pressed]="c === color"
+        [title]="ps.colorLabel(c) + (colorSoldOut(c) ? ' (hết hàng)' : '')"></button>
+    }
+  </div>
+</div>
+
+@if (sizes.length) {
+  <div class="option">
+    <div class="option-label">Kích thước: <b>{{ size || 'chưa chọn' }}</b></div>
+    <div class="sizes">
+      @for (s of sizes; track s) {
+        <button type="button" class="size-btn" [class.active]="s === size" [disabled]="sizeStock(s) === 0"
+          [attr.aria-pressed]="s === size" (click)="sizeChange.emit(s)">{{ s }}</button>
+      }
+    </div>
+  </div>
+}

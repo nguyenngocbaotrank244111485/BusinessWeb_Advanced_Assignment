@@ -1,7 +1,7 @@
 {
   "app": "customer",
   "generatedFrom": "seed/out (build-seed.js)",
-  "note": "Dữ liệu tĩnh giai đoạn mock; sau khi có API thì lấy từ printify-server. Dự án thật không đặt dữ liệu bí mật trong public/.",
+  "note": "Dữ liệu tĩnh giai đoạn mock; sau khi có API thì lấy từ printify-server.",
   "files": [
     {
       "file": "appConfig.json",
