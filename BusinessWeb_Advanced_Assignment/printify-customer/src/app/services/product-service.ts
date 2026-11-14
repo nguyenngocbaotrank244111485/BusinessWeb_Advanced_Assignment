@@ -4,6 +4,7 @@ import { Observable, map, shareReplay } from 'rxjs';
 import {
   CATEGORY_LABELS,
   COLOR_LABELS,
+  COLOR_SWATCHES,
   Category,
   Product,
   ProductVariant,
@@ -123,6 +124,18 @@ export class ProductService {
 
   colorLabel(color: string): string {
     return COLOR_LABELS[color?.toLowerCase()] ?? color;
+  }
+
+  /** Giá trị CSS background cho chấm màu */
+  colorSwatch(color: string): string {
+    const c = color?.toLowerCase() ?? '';
+    if (COLOR_SWATCHES[c]) return COLOR_SWATCHES[c];
+    // màu 2 tông chưa khai báo: ghép 2 nửa
+    if (c.includes('-')) {
+      const [a, b] = c.split('-');
+      return `linear-gradient(135deg, ${a} 50%, ${b} 50%)`;
+    }
+    return c;
   }
 
   formatPrice(value: number): string {

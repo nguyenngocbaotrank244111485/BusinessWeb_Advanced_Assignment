@@ -70,4 +70,25 @@ export const COLOR_LABELS: Record<string, string> = {
   pink: 'Hồng',
   beige: 'Be',
   brown: 'Nâu',
+  cream: 'Kem',
+  silver: 'Bạc',
+  clear: 'Trong suốt',
+  'white-black': 'Trắng lòng đen',
+  'white-blue': 'Trắng lòng xanh',
+};
+
+/**
+ * Màu hiển thị cho chấm màu (swatch). Màu nào CSS đã hiểu sẵn (white, black...) thì khỏi khai báo.
+ * Màu 2 tông viết dạng "ngoài-trong", ví dụ white-black.
+ */
+export const COLOR_SWATCHES: Record<string, string> = {
+  beige: '#e8dcc4',
+  cream: '#f3e9d2',
+  gray: '#9a9aa2',
+  grey: '#9a9aa2',
+  navy: '#1f2a44',
+  silver: 'linear-gradient(135deg, #f4f4f6, #b9bbc2)',
+  clear: 'repeating-conic-gradient(#e6e1ee 0% 25%, #ffffff 0% 50%) 50% / 8px 8px',
+  'white-black': 'linear-gradient(135deg, #ffffff 50%, #1d1d1f 50%)',
+  'white-blue': 'linear-gradient(135deg, #ffffff 50%, #3a6fd8 50%)',
 };

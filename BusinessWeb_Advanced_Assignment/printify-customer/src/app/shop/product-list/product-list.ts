@@ -19,7 +19,7 @@ export class ProductList {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
-  readonly pageSize = 8;
+  readonly pageSize = 12;
   readonly sortOptions: { value: SortKey; label: string }[] = [
     { value: 'newest', label: 'Mới nhất' },
     { value: 'price-asc', label: 'Giá thấp → cao' },

@@ -10,7 +10,7 @@
     @if (!compact) {
       <div class="swatches" aria-label="Màu có sẵn">
         @for (c of ps.getColors(product); track c) {
-          <span class="swatch" [style.background]="c" [title]="ps.colorLabel(c)"></span>
+          <span class="swatch" [style.background]="ps.colorSwatch(c)" [title]="ps.colorLabel(c)"></span>
         }
       </div>
     }

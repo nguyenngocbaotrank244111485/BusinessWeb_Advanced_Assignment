@@ -3,7 +3,7 @@
   <div class="colors">
     @for (c of colors; track c) {
       <button type="button" class="color-dot" [class.active]="c === color" [class.sold-out]="colorSoldOut(c)"
-        [style.background]="c" (click)="pickColor(c)" [attr.aria-label]="ps.colorLabel(c)" [attr.aria-pressed]="c === color"
+        [style.background]="ps.colorSwatch(c)" (click)="pickColor(c)" [attr.aria-label]="ps.colorLabel(c)" [attr.aria-pressed]="c === color"
         [title]="ps.colorLabel(c) + (colorSoldOut(c) ? ' (hết hàng)' : '')"></button>
     }
   </div>

@@ -2,8 +2,10 @@
 a { text-decoration: none; color: inherit; }
 .card { height: 100%; background: #fff; border: 1px solid var(--pf-line); border-radius: var(--pf-radius-lg); overflow: hidden; display: flex; flex-direction: column; transition: transform .2s, box-shadow .2s; }
 .card:hover { transform: translateY(-3px); box-shadow: 0 16px 34px #8b57c41f; }
-.card-img { position: relative; aspect-ratio: 1; background: linear-gradient(140deg, #faf6fe, var(--pf-pink-50)); display: grid; place-items: center; }
-.card-img img { width: 100%; height: 100%; object-fit: contain; }
+.card-img { position: relative; display: block; aspect-ratio: 1; overflow: hidden; background: linear-gradient(140deg, #faf6fe, var(--pf-pink-50)); }
+/* ảnh dọc/ngang đều nằm gọn trong khung vuông */
+.card-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: transform .3s; }
+.card:hover .card-img img { transform: scale(1.04); }
 .tag { position: absolute; top: 10px; left: 10px; z-index: 1; padding: 4px 9px; border-radius: 8px; background: #fff; color: var(--pf-primary); font-size: 11px; font-weight: 750; }
 .tag-out { left: auto; right: 10px; background: var(--pf-danger); color: #fff; }
 .card-body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
